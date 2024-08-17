@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <math.h>
 #include <stdlib.h>
+#include <errno.h>
 
 typedef long double ld;
 
@@ -31,26 +32,10 @@ ld sq(ld x) {
 }
 
 bool isCorrectFormat(char s[], ld* res) {
-    int cnt = 0;
-    for (int i = 0; i < strlen(s) - 1; ++i) {
-        if (s[i] < '0' || '9' < s[i]) {
-            if (s[i] == '.') ++cnt;
-            bool si = s[i] == '+' || s[i] == '-';
-            if ((si && i) || cnt > 1 || (!si && s[i] != '.')) {
-                printf("si : %d, i : %d\n", si, i);
-                printf("%s", INCORRECT_NUM_FORM);
-                return false;
-            }
-        }
-    }
-
+    errno = 0;
     char* end;
     *res = strtod(s, &end);
-    if (sign(fabsl(*res) - MAX_KOEF_ABS) > 0) {
-        printf("error: %s", COEF_TOO_BIG);
-        return false;
-    }
-    return true;
+    return errno == 0 && *end == '\0' && fabsl(*res) < MAX_KOEF_ABS;
 }
 
 ld getCorrectCoef(char inputLine[]) {
@@ -58,12 +43,10 @@ ld getCorrectCoef(char inputLine[]) {
     char s[LINE_LEN];
     do {
         printf("%s", inputLine);
-        fgets(s, sizeof(s), stdin);
-        // printf("s : %s", s);
-        bool isOk = isCorrectFormat(s, &res);
-        if (isOk) {
+        scanf("%s", s);
+        if (isCorrectFormat(s, &res))
             return res;
-        }
+        printf("%s", INCORRECT_NUM_FORM);
     } while (true);
 }
 
@@ -121,14 +104,13 @@ ld GetVertY(struct QuadraticEquation* eq) {
     return -GetDiscriminant(eq) / (4 * eq->a);
 }
 
-void append(ld* res, int* len, ld elem) {
+void append(ld res[], int* len, ld elem) {
     *len = *len + 1;
-    res = realloc(res, sizeof(*res) * (*len));
     res[*len - 1] = elem;
 }
 
 // gets solutions of quadratic equation (without complex numbers)
-void GetSolutions(struct QuadraticEquation* eq, ld* res, int* len) {
+void GetSolutions(struct QuadraticEquation* eq, ld res[], int* len) {
     // case if this is linear equation
     if (sign(eq->a) == 0) {
         if (sign(eq->b) == 0) {
@@ -146,23 +128,20 @@ void GetSolutions(struct QuadraticEquation* eq, ld* res, int* len) {
 
     ld D = GetDiscriminant(eq);
     // no solutions
-    if (sign(D) < 0) {
-        return;
-    }
+    if (sign(D) < 0) return;
 
     ld x1 = (-eq->b - sqrtl(D)) / (2 * eq->a);
     ld x2 = (-eq->b + sqrtl(D)) / (2 * eq->a);
     append(res, len, x1);
 
     // we have 2 distinct solutions
-    if (sign(D) != 0) {
+    if (sign(D) != 0)
         append(res, len, x2);
-    }
 }
 
 void PrintSolutions(struct QuadraticEquation* eq) {
     int len = 0;
-    ld* res = malloc(0);
+    ld res[3];
     GetSolutions(eq, res, &len);
 
     if (len == 3) {
@@ -177,12 +156,12 @@ void PrintSolutions(struct QuadraticEquation* eq) {
             printf(", ");
     }
     printf(" }\n");
-    free(res);
 }
 
 int main() {
     struct QuadraticEquation equation;
 
+    printf("fdlskjf ajsdkjf; awks\n");
     ReadEquation(&equation);
     PrintEquation(&equation);
     // these two functions works only if it's quadratic equation (a != 0), otherwise assertion will be raised
