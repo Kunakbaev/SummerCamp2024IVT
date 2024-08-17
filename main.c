@@ -77,12 +77,12 @@ struct QuadraticEquationAnswer {
 // structure "methods"
 
 void readEquation(struct QuadraticEquation* eq);
-void printEquation(struct QuadraticEquation* eq);
-long double getPointValue(struct QuadraticEquation* eq, long double x);
-long double getDiscriminant(struct QuadraticEquation* eq);
-long double getVertX(struct QuadraticEquation* eq);
-long double getVertY(struct QuadraticEquation* eq);
-enum QuadEqRootState getSolutions(struct QuadraticEquation* eq, long double* root_1, long double* root_2);
+void printEquation(const struct QuadraticEquation* eq);
+long double getPointValue(const struct QuadraticEquation* eq, long double x);
+long double getDiscriminant(const struct QuadraticEquation* eq);
+long double getVertX(const struct QuadraticEquation* eq);
+long double getVertY(const struct QuadraticEquation* eq);
+void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer);
 void printSolutions(struct QuadraticEquationAnswer answer);
 void solveAndPrintEquation(struct QuadraticEquation* eq);
 
@@ -111,7 +111,7 @@ char getSignChar(long double koef) {
     return sign(koef) < 0 ? '-' : '+';
 }
 
-void printEquation(struct QuadraticEquation* eq) {
+void printEquation(const struct QuadraticEquation* eq) {
     long double a = eq->a, b = eq->b, c = eq->c;
     char bSign = getSignChar(b);
     char cSign = getSignChar(c);
@@ -127,16 +127,16 @@ void readEquation(struct QuadraticEquation* eq) {
     eq->c = getCorrectCoef("Print coefficient C: ");
 }
 
-long double getPointValue(struct QuadraticEquation* eq, long double x) {
+long double getPointValue(const struct QuadraticEquation* eq, long double x) {
     return eq->a * sq(x) + eq->b * x + eq->c;
 }
 
-long double getDiscriminant(struct QuadraticEquation* eq) {
+long double getDiscriminant(const struct QuadraticEquation* eq) {
     return sq(eq->b) - 4 * eq->a * eq->c;
 }
 
 // returns x coordinat of top of the parabola
-long double getVertX(struct QuadraticEquation* eq) {
+long double getVertX(const struct QuadraticEquation* eq) {
     if (sign(eq->a) != 0) {
         return -eq->b / (2 * eq->a);
     }
@@ -145,7 +145,7 @@ long double getVertX(struct QuadraticEquation* eq) {
 }
 
 // returns y coordinat of top of the parabola
-long double getVertY(struct QuadraticEquation* eq) {
+long double getVertY(const struct QuadraticEquation* eq) {
     if (sign(eq->a) != 0) {
         return -getDiscriminant(eq) / (4 * eq->a);
     }
@@ -154,31 +154,34 @@ long double getVertY(struct QuadraticEquation* eq) {
 }
 
 // gets solutions of quadratic equation (without complex numbers)
-enum QuadEqRootState getSolutions(struct QuadraticEquation* eq, long double* root_1, long double* root_2) {
+void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
     // case if this is linear equation
     if (sign(eq->a) == 0) {
         if (sign(eq->b) == 0) {
-            if (sign(eq->c) == 0) { // infinitely many solutions
-                return INFINITE_ROOTS;
-            }
-            return NO_ROOTS;
+            answer->numOfSols = sign(eq->c) ? NO_ROOTS : INFINITE_ROOTS;
+            return;
         }
 
-        *root_1 = -eq->c / eq->b;
-        return ONE_ROOT;
+        answer->root_1 = -eq->c / eq->b;
+        answer->numOfSols = ONE_ROOT;
+        return;
     }
 
     long double disc = getDiscriminant(eq);
     // negative disc -> no solutions
-    if (sign(disc) < 0) return NO_ROOTS;
+    if (sign(disc) < 0) {
+        answer->numOfSols = NO_ROOTS;
+        return;
+    }
 
-    *root_1 = (-eq->b - sqrtl(disc)) / (2 * eq->a);
+    answer->root_1 = (-eq->b - sqrtl(disc)) / (2 * eq->a);
     // we have 2 distinct solutions in case if disc != 0
     if (sign(disc) != 0) {
-        *root_2 = (-eq->b + sqrtl(disc)) / (2 * eq->a);
-        return TWO_ROOTS;
-    }
-    return ONE_ROOT;
+        answer->root_2 = (-eq->b + sqrtl(disc)) / (2 * eq->a);
+        answer->numOfSols = TWO_ROOTS;
+    } else
+        answer->numOfSols = ONE_ROOT;
+    return;
 }
 
 void printSolutions(struct QuadraticEquationAnswer answer) {
@@ -199,6 +202,6 @@ void printSolutions(struct QuadraticEquationAnswer answer) {
 
 void solveAndPrintEquation(struct QuadraticEquation* eq) {
     struct QuadraticEquationAnswer answer;
-    answer.numOfSols = getSolutions(eq, &answer.root_1, &answer.root_2);
+    getSolutions(eq, &answer);
     printSolutions(answer);
 }
