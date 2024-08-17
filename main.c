@@ -47,33 +47,64 @@ long double getCorrectCoef(char inputLine[]) {
     } while (true);
 }
 
-char getSignChar(long double koef) {
-    return sign(koef) < 0 ? '-' : '+';
-}
 
 
 
-
-
-// -------------------------- QUADRATIC EQUATION CLASS ---------------------------------------
-
+// -------------------------- QUADRATIC EQUATION "CLASS" ---------------------------------------
 
 
 // quadratic equation looks like this: a * x ^ 2 + b * x + c
 // where a, b, c are coefficients, some rational numbers
+
 struct QuadraticEquation {
     long double a, b, c;
 };
 
-void PrintEquation(struct QuadraticEquation* eq) {
+// structure "methods"
+
+void readEquation(struct QuadraticEquation* eq);
+void printEquation(struct QuadraticEquation* eq);
+long double getPointValue(struct QuadraticEquation* eq, long double x);
+long double getDiscriminant(struct QuadraticEquation* eq);
+long double getVertX(struct QuadraticEquation* eq);
+long double getVertY(struct QuadraticEquation* eq);
+void getSolutions(struct QuadraticEquation* eq, long double solutions[], int* len);
+void printSolutions(struct QuadraticEquation* eq);
+
+
+
+// ----------------------------- MAIN ----------------------------------------
+
+int main() {
+    struct QuadraticEquation equation;
+
+    readEquation(&equation);
+    printEquation(&equation);
+    // these two functions works only if it's quadratic equation (a != 0), otherwise assertion will be raised
+    printf("Coordinate X of top of parabola: %.10Lg\n", getVertX(&equation));
+    printf("Coordinate Y of top of parabola: %.10Lg\n", getVertY(&equation));
+    printf("Value at point 5: %.10Lg\n", getPointValue(&equation, 5));
+    printSolutions(&equation);
+
+    return 0;
+}
+
+
+
+
+char getSignChar(long double koef) {
+    return sign(koef) < 0 ? '-' : '+';
+}
+
+void printEquation(struct QuadraticEquation* eq) {
     long double a = eq->a, b = eq->b, c = eq->c;
     char bSign = getSignChar(b);
     char cSign = getSignChar(c);
     b = fabsl(b), c = fabsl(c);
-    printf("Your equation is: %.10Lf * x ^ 2 %c %.10Lf * x %c %.10Lf\n", a, bSign, b, cSign, c);
+    printf("Your equation is: %.10Lg * x ^ 2 %c %.10Lg * x %c %.10Lg\n", a, bSign, b, cSign, c);
 }
 
-void ReadEquation(struct QuadraticEquation* eq) {
+void readEquation(struct QuadraticEquation* eq) {
     printf("Equation is expected to look like this: A * x ^ 2 + B * x + C, "
            "where A, B, C are some rational coefficients\n");
     eq->a = getCorrectCoef("Print coefficient A: ");
@@ -81,24 +112,24 @@ void ReadEquation(struct QuadraticEquation* eq) {
     eq->c = getCorrectCoef("Print coefficient C: ");
 }
 
-long double GetPointValue(struct QuadraticEquation* eq, long double x) {
+long double getPointValue(struct QuadraticEquation* eq, long double x) {
     return eq->a * sq(x) + eq->b * x + eq->c;
 }
 
-long double GetDiscriminant(struct QuadraticEquation* eq) {
+long double getDiscriminant(struct QuadraticEquation* eq) {
     return sq(eq->b) - 4 * eq->a * eq->c;
 }
 
 // returns x coordinat of top of the parabola
-long double GetVertX(struct QuadraticEquation* eq) {
+long double getVertX(struct QuadraticEquation* eq) {
     assert(sign(eq->a) != 0);
     return -eq->b / (2 * eq->a);
 }
 
 // returns y coordinat of top of the parabola
-long double GetVertY(struct QuadraticEquation* eq) {
+long double getVertY(struct QuadraticEquation* eq) {
     assert(eq->a);
-    return -GetDiscriminant(eq) / (4 * eq->a);
+    return -getDiscriminant(eq) / (4 * eq->a);
 }
 
 void append(long double arr[], int* len, long double elem) {
@@ -107,7 +138,7 @@ void append(long double arr[], int* len, long double elem) {
 }
 
 // gets solutions of quadratic equation (without complex numbers)
-void GetSolutions(struct QuadraticEquation* eq, long double solutions[], int* len) {
+void getSolutions(struct QuadraticEquation* eq, long double solutions[], int* len) {
     // case if this is linear equation
     if (sign(eq->a) == 0) {
         if (sign(eq->b) == 0) {
@@ -123,7 +154,7 @@ void GetSolutions(struct QuadraticEquation* eq, long double solutions[], int* le
         return;
     }
 
-    long double disc = GetDiscriminant(eq);
+    long double disc = getDiscriminant(eq);
     // no solutions
     if (sign(disc) < 0) return;
 
@@ -136,10 +167,10 @@ void GetSolutions(struct QuadraticEquation* eq, long double solutions[], int* le
         append(solutions, len, root_2);
 }
 
-void PrintSolutions(struct QuadraticEquation* eq) {
+void printSolutions(struct QuadraticEquation* eq) {
     int len = 0;
     long double solutions[2];
-    GetSolutions(eq, solutions, &len);
+    getSolutions(eq, solutions, &len);
 
     if (len == 3) {
         printf("Infinetly many solutions\n");
@@ -148,23 +179,9 @@ void PrintSolutions(struct QuadraticEquation* eq) {
 
     printf("Solutions of equation : { ");
     for (int i = 0; i < len; ++i) {
-        printf("%.10Lf", solutions[i]);
+        printf("%.10Lg", solutions[i]);
         if (i != len - 1)
             printf(", ");
     }
     printf(" }\n");
-}
-
-int main() {
-    struct QuadraticEquation equation;
-
-    ReadEquation(&equation);
-    PrintEquation(&equation);
-    // these two functions works only if it's quadratic equation (a != 0), otherwise assertion will be raised
-    printf("Coordinate X of top of parabola: %.10Lf\n", GetVertX(&equation));
-    printf("Coordinate Y of top of parabola: %.10Lf\n", GetVertY(&equation));
-    printf("Value at point 5: %.10Lf\n", GetPointValue(&equation, 5));
-    PrintSolutions(&equation);
-
-    return 0;
 }
