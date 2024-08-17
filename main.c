@@ -10,8 +10,9 @@
 const long double EPS = 1e-9;
 const int LINE_LEN = 40;
 const long double MAX_KOEF_ABS = 1e18;
-const char* COEF_TOO_BIG = "Absolute value of coefficient is too big\n";
-const char* INCORRECT_NUM_FORM = "That's not a correct number\n";
+// const char* COEF_TOO_BIG = "Error: absolute value of coefficient is too big\n";
+const char* INCORRECT_NUM_FORM = "Error: that's not a correct number\n";
+const char* LINEAR_EQ_ERROR = "Error: this function can not be used with a linear equation\n";
 
 
 
@@ -43,7 +44,7 @@ long double getCorrectCoef(char inputLine[]) {
         scanf("%s", line);
         if (isCorrectFormat(line, &koef))
             return koef;
-        printf("%s", INCORRECT_NUM_FORM);
+        fprintf(stderr, "%s", INCORRECT_NUM_FORM);
     } while (true);
 }
 
@@ -76,7 +77,8 @@ long double getDiscriminant(struct QuadraticEquation* eq);
 long double getVertX(struct QuadraticEquation* eq);
 long double getVertY(struct QuadraticEquation* eq);
 enum QuadEqRootState getSolutions(struct QuadraticEquation* eq, long double* root_1, long double* root_2);
-void printSolutions(struct QuadraticEquation* eq);
+void printSolutions(long double root_1, long double root_2, enum QuadEqRootState numOfSols);
+void solveAndPrintEquation(struct QuadraticEquation* eq);
 
 
 
@@ -88,10 +90,10 @@ int main() {
     readEquation(&equation);
     printEquation(&equation);
     // these two functions works only if it's quadratic equation (a != 0), otherwise assertion will be raised
-    // printf("Coordinate X of top of parabola: %.10Lg\n", getVertX(&equation));
-    // printf("Coordinate Y of top of parabola: %.10Lg\n", getVertY(&equation));
-    // printf("Value at point 5: %.10Lg\n", getPointValue(&equation, 5));
-    printSolutions(&equation);
+    printf("Coordinate X of top of parabola: %.10Lg\n", getVertX(&equation));
+    printf("Coordinate Y of top of parabola: %.10Lg\n", getVertY(&equation));
+    printf("Value at point 5: %.10Lg\n", getPointValue(&equation, 5));
+    solveAndPrintEquation(&equation);
 
     return 0;
 }
@@ -129,14 +131,20 @@ long double getDiscriminant(struct QuadraticEquation* eq) {
 
 // returns x coordinat of top of the parabola
 long double getVertX(struct QuadraticEquation* eq) {
-    assert(sign(eq->a) != 0);
-    return -eq->b / (2 * eq->a);
+    if (sign(eq->a) != 0) {
+        return -eq->b / (2 * eq->a);
+    }
+    fprintf(stderr, "%s", LINEAR_EQ_ERROR);
+    return 0;
 }
 
 // returns y coordinat of top of the parabola
 long double getVertY(struct QuadraticEquation* eq) {
-    assert(eq->a);
-    return -getDiscriminant(eq) / (4 * eq->a);
+    if (sign(eq->a) != 0) {
+        return -getDiscriminant(eq) / (4 * eq->a);
+    }
+    fprintf(stderr, "%s", LINEAR_EQ_ERROR);
+    return 0;
 }
 
 // gets solutions of quadratic equation (without complex numbers)
@@ -167,10 +175,7 @@ enum QuadEqRootState getSolutions(struct QuadraticEquation* eq, long double* roo
     return ONE_ROOT;
 }
 
-void printSolutions(struct QuadraticEquation* eq) {
-    long double root_1, root_2;
-    enum QuadEqRootState numOfSols = getSolutions(eq, &root_1, &root_2);
-
+void printSolutions(long double root_1, long double root_2, enum QuadEqRootState numOfSols) {
     if (numOfSols == INFINITE_ROOTS) {
         printf("Infinetly many solutions\n");
         return;
@@ -183,6 +188,11 @@ void printSolutions(struct QuadraticEquation* eq) {
     if (numOfSols == TWO_ROOTS) {
         printf(", %.10Lg", root_2);
     }
-
     printf(" }\n");
+}
+
+void solveAndPrintEquation(struct QuadraticEquation* eq) {
+    long double root_1, root_2;
+    enum QuadEqRootState numOfSols = getSolutions(eq, &root_1, &root_2);
+    printSolutions(root_1, root_2, numOfSols);
 }
