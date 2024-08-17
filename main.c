@@ -68,6 +68,12 @@ enum QuadEqRootState {
     INFINITE_ROOTS,
 };
 
+struct QuadraticEquationAnswer {
+    long double root_1;
+    long double root_2;
+    enum QuadEqRootState numOfSols;
+};
+
 // structure "methods"
 
 void readEquation(struct QuadraticEquation* eq);
@@ -77,7 +83,7 @@ long double getDiscriminant(struct QuadraticEquation* eq);
 long double getVertX(struct QuadraticEquation* eq);
 long double getVertY(struct QuadraticEquation* eq);
 enum QuadEqRootState getSolutions(struct QuadraticEquation* eq, long double* root_1, long double* root_2);
-void printSolutions(long double root_1, long double root_2, enum QuadEqRootState numOfSols);
+void printSolutions(struct QuadraticEquationAnswer answer);
 void solveAndPrintEquation(struct QuadraticEquation* eq);
 
 
@@ -175,24 +181,24 @@ enum QuadEqRootState getSolutions(struct QuadraticEquation* eq, long double* roo
     return ONE_ROOT;
 }
 
-void printSolutions(long double root_1, long double root_2, enum QuadEqRootState numOfSols) {
-    if (numOfSols == INFINITE_ROOTS) {
+void printSolutions(struct QuadraticEquationAnswer answer) {
+    if (answer.numOfSols == INFINITE_ROOTS) {
         printf("Infinetly many solutions\n");
         return;
     }
 
     printf("Solutions of equation : { ");
-    if (numOfSols != NO_ROOTS) {
-        printf("%.10Lg", root_1);
+    if (answer.numOfSols != NO_ROOTS) {
+        printf("%.10Lg", answer.root_1);
     }
-    if (numOfSols == TWO_ROOTS) {
-        printf(", %.10Lg", root_2);
+    if (answer.numOfSols == TWO_ROOTS) {
+        printf(", %.10Lg", answer.root_2);
     }
     printf(" }\n");
 }
 
 void solveAndPrintEquation(struct QuadraticEquation* eq) {
-    long double root_1, root_2;
-    enum QuadEqRootState numOfSols = getSolutions(eq, &root_1, &root_2);
-    printSolutions(root_1, root_2, numOfSols);
+    struct QuadraticEquationAnswer answer;
+    answer.numOfSols = getSolutions(eq, &answer.root_1, &answer.root_2);
+    printSolutions(answer);
 }
