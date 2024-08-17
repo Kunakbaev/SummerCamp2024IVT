@@ -137,18 +137,16 @@ long double getDiscriminant(const struct QuadraticEquation* eq) {
 
 // returns x coordinat of top of the parabola
 long double getVertX(const struct QuadraticEquation* eq) {
-    if (sign(eq->a) != 0) {
+    if (sign(eq->a) != 0)
         return -eq->b / (2 * eq->a);
-    }
     fprintf(stderr, "%s", LINEAR_EQ_ERROR);
     return 0;
 }
 
 // returns y coordinat of top of the parabola
 long double getVertY(const struct QuadraticEquation* eq) {
-    if (sign(eq->a) != 0) {
+    if (sign(eq->a) != 0)
         return -getDiscriminant(eq) / (4 * eq->a);
-    }
     fprintf(stderr, "%s", LINEAR_EQ_ERROR);
     return 0;
 }
@@ -180,12 +178,11 @@ void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAn
 
     answer->root_1 = (-eq->b - sqrtl(disc)) / (2 * eq->a);
     // we have 2 distinct solutions in case if disc != 0
+    answer->numOfSols = ONE_ROOT;
     if (sign(disc) != 0) {
         answer->root_2 = (-eq->b + sqrtl(disc)) / (2 * eq->a);
         answer->numOfSols = TWO_ROOTS;
-    } else
-        answer->numOfSols = ONE_ROOT;
-    return;
+    }
 }
 
 void printSolutions(struct QuadraticEquationAnswer answer) {
@@ -195,12 +192,10 @@ void printSolutions(struct QuadraticEquationAnswer answer) {
     }
 
     printf("Solutions of equation : { ");
-    if (answer.numOfSols != NO_ROOTS) {
+    if (answer.numOfSols != NO_ROOTS)
         printf("%.10Lg", answer.root_1);
-    }
-    if (answer.numOfSols == TWO_ROOTS) {
+    if (answer.numOfSols == TWO_ROOTS)
         printf(", %.10Lg", answer.root_2);
-    }
     printf(" }\n");
 }
 
