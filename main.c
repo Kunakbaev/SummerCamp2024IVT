@@ -68,7 +68,7 @@ long double getPointValue(struct QuadraticEquation* eq, long double x);
 long double getDiscriminant(struct QuadraticEquation* eq);
 long double getVertX(struct QuadraticEquation* eq);
 long double getVertY(struct QuadraticEquation* eq);
-void getSolutions(struct QuadraticEquation* eq, long double solutions[], int* len);
+void getSolutions(struct QuadraticEquation* eq, long double* root_1, long double* root_2, int* cntSols);
 void printSolutions(struct QuadraticEquation* eq);
 
 
@@ -81,9 +81,9 @@ int main() {
     readEquation(&equation);
     printEquation(&equation);
     // these two functions works only if it's quadratic equation (a != 0), otherwise assertion will be raised
-    printf("Coordinate X of top of parabola: %.10Lg\n", getVertX(&equation));
-    printf("Coordinate Y of top of parabola: %.10Lg\n", getVertY(&equation));
-    printf("Value at point 5: %.10Lg\n", getPointValue(&equation, 5));
+    // printf("Coordinate X of top of parabola: %.10Lg\n", getVertX(&equation));
+    // printf("Coordinate Y of top of parabola: %.10Lg\n", getVertY(&equation));
+    // printf("Value at point 5: %.10Lg\n", getPointValue(&equation, 5));
     printSolutions(&equation);
 
     return 0;
@@ -132,56 +132,52 @@ long double getVertY(struct QuadraticEquation* eq) {
     return -getDiscriminant(eq) / (4 * eq->a);
 }
 
-void append(long double arr[], int* len, long double elem) {
-    *len = *len + 1;
-    arr[*len - 1] = elem;
-}
-
 // gets solutions of quadratic equation (without complex numbers)
-void getSolutions(struct QuadraticEquation* eq, long double solutions[], int* len) {
+void getSolutions(struct QuadraticEquation* eq, long double* root_1, long double* root_2, int* cntSols) {
     // case if this is linear equation
     if (sign(eq->a) == 0) {
         if (sign(eq->b) == 0) {
             if (sign(eq->c) == 0) // infinitely many solutions
-                *len = 3;
-            else // no solutions at all
-                *len = 0;
+                *cntSols = -1;
             return;
         }
 
-        long double root = -eq->c / eq->b;
-        append(solutions, len, root);
+        *cntSols = 1;
+        *root_1 = -eq->c / eq->b;
         return;
     }
 
     long double disc = getDiscriminant(eq);
-    // no solutions
+    // negative disc -> no solutions
     if (sign(disc) < 0) return;
 
-    long double root_1 = (-eq->b - sqrtl(disc)) / (2 * eq->a);
-    long double root_2 = (-eq->b + sqrtl(disc)) / (2 * eq->a);
-    append(solutions, len, root_1);
-
-    // we have 2 distinct solutions
-    if (sign(disc) != 0)
-        append(solutions, len, root_2);
+    *cntSols = 1;
+    *root_1 = (-eq->b - sqrtl(disc)) / (2 * eq->a);
+    printf("%.10Lg", *root_1);
+    // we have 2 distinct solutions in case if disc != 0
+    if (sign(disc) != 0) {
+        *cntSols = 2;
+        *root_2 = (-eq->b + sqrtl(disc)) / (2 * eq->a);
+    }
 }
 
 void printSolutions(struct QuadraticEquation* eq) {
-    int len = 0;
-    long double solutions[2];
-    getSolutions(eq, solutions, &len);
+    int cntSols = 0;
+    long double root_1, root_2;
+    getSolutions(eq, &root_1, &root_2, &cntSols);
 
-    if (len == 3) {
+    if (cntSols == -1) {
         printf("Infinetly many solutions\n");
         return;
     }
 
     printf("Solutions of equation : { ");
-    for (int i = 0; i < len; ++i) {
-        printf("%.10Lg", solutions[i]);
-        if (i != len - 1)
-            printf(", ");
+    if (cntSols >= 1) {
+        printf("%.10Lg", root_1);
     }
+    if (cntSols == 2) {
+        printf(", %.10Lg", root_2);
+    }
+
     printf(" }\n");
 }
