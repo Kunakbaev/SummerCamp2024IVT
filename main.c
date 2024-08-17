@@ -60,6 +60,13 @@ struct QuadraticEquation {
     long double a, b, c;
 };
 
+enum QuadEqRootState {
+    NO_ROOTS,
+    ONE_ROOT,
+    TWO_ROOTS,
+    INFINITE_ROOTS,
+};
+
 // structure "methods"
 
 void readEquation(struct QuadraticEquation* eq);
@@ -68,7 +75,7 @@ long double getPointValue(struct QuadraticEquation* eq, long double x);
 long double getDiscriminant(struct QuadraticEquation* eq);
 long double getVertX(struct QuadraticEquation* eq);
 long double getVertY(struct QuadraticEquation* eq);
-void getSolutions(struct QuadraticEquation* eq, long double* root_1, long double* root_2, int* cntSols);
+enum QuadEqRootState getSolutions(struct QuadraticEquation* eq, long double* root_1, long double* root_2);
 void printSolutions(struct QuadraticEquation* eq);
 
 
@@ -133,49 +140,47 @@ long double getVertY(struct QuadraticEquation* eq) {
 }
 
 // gets solutions of quadratic equation (without complex numbers)
-void getSolutions(struct QuadraticEquation* eq, long double* root_1, long double* root_2, int* cntSols) {
+enum QuadEqRootState getSolutions(struct QuadraticEquation* eq, long double* root_1, long double* root_2) {
     // case if this is linear equation
     if (sign(eq->a) == 0) {
         if (sign(eq->b) == 0) {
-            if (sign(eq->c) == 0) // infinitely many solutions
-                *cntSols = -1;
-            return;
+            if (sign(eq->c) == 0) { // infinitely many solutions
+                return INFINITE_ROOTS;
+            }
+            return NO_ROOTS;
         }
 
-        *cntSols = 1;
         *root_1 = -eq->c / eq->b;
-        return;
+        return ONE_ROOT;
     }
 
     long double disc = getDiscriminant(eq);
     // negative disc -> no solutions
-    if (sign(disc) < 0) return;
+    if (sign(disc) < 0) return NO_ROOTS;
 
-    *cntSols = 1;
     *root_1 = (-eq->b - sqrtl(disc)) / (2 * eq->a);
-    printf("%.10Lg", *root_1);
     // we have 2 distinct solutions in case if disc != 0
     if (sign(disc) != 0) {
-        *cntSols = 2;
         *root_2 = (-eq->b + sqrtl(disc)) / (2 * eq->a);
+        return TWO_ROOTS;
     }
+    return ONE_ROOT;
 }
 
 void printSolutions(struct QuadraticEquation* eq) {
-    int cntSols = 0;
     long double root_1, root_2;
-    getSolutions(eq, &root_1, &root_2, &cntSols);
+    enum QuadEqRootState numOfSols = getSolutions(eq, &root_1, &root_2);
 
-    if (cntSols == -1) {
+    if (numOfSols == INFINITE_ROOTS) {
         printf("Infinetly many solutions\n");
         return;
     }
 
     printf("Solutions of equation : { ");
-    if (cntSols >= 1) {
+    if (numOfSols != NO_ROOTS) {
         printf("%.10Lg", root_1);
     }
-    if (cntSols == 2) {
+    if (numOfSols == TWO_ROOTS) {
         printf(", %.10Lg", root_2);
     }
 
