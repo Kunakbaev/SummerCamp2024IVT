@@ -161,14 +161,7 @@ void solveLinearEquation(const struct QuadraticEquation* eq, struct QuadraticEqu
     answer->numOfSols = ONE_ROOT;
 }
 
-// gets solutions of quadratic equation (without complex numbers)
-void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
-    // case if this is linear equation
-    if (sign(eq->a) == 0) {
-        solveLinearEquation(eq, answer);
-        return;
-    }
-
+void solveQuadraticEquation(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
     long double disc = getDiscriminant(eq);
     // negative disc -> no solutions
     if (sign(disc) < 0) {
@@ -183,6 +176,16 @@ void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAn
         answer->root_2 = (-eq->b + sqrtl(disc)) / (2 * eq->a);
         answer->numOfSols = TWO_ROOTS;
     }
+}
+
+// gets solutions of quadratic equation (without complex numbers)
+void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
+    if (sign(eq->a) == 0) {
+        solveLinearEquation(eq, answer);
+        return;
+    }
+
+    solveQuadraticEquation(eq, answer);
 }
 
 void printSolutions(struct QuadraticEquationAnswer answer) {
