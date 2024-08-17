@@ -153,17 +153,21 @@ long double getVertY(const struct QuadraticEquation* eq) {
     return 0;
 }
 
+void solveLinearEquation(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
+    if (sign(eq->b) == 0) {
+        answer->numOfSols = sign(eq->c) ? NO_ROOTS : INFINITE_ROOTS;
+        return;
+    }
+
+    answer->root_1 = -eq->c / eq->b;
+    answer->numOfSols = ONE_ROOT;
+}
+
 // gets solutions of quadratic equation (without complex numbers)
 void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
     // case if this is linear equation
     if (sign(eq->a) == 0) {
-        if (sign(eq->b) == 0) {
-            answer->numOfSols = sign(eq->c) ? NO_ROOTS : INFINITE_ROOTS;
-            return;
-        }
-
-        answer->root_1 = -eq->c / eq->b;
-        answer->numOfSols = ONE_ROOT;
+        solveLinearEquation(eq, answer);
         return;
     }
 
