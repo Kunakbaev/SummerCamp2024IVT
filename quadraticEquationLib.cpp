@@ -131,14 +131,15 @@ static void solveQuadraticEquation(const struct QuadraticEquation* eq, struct Qu
         return;
     }
 
-    long double root = sqrtl(disc);
-    long double znam = 1 / (2 * eq->a);
-    answer->root_1 = (-eq->b - root) * znam;
+    long double discRoot = sqrtl(disc);
+    long double denom = 1 / (2 * eq->a);
+    answer->root_1 = (-eq->b - discRoot) * denom;
     // we have 2 distinct solutions in case if disc != 0
-    answer->numOfSols = ONE_ROOT;
     if (sign(disc) != 0) {
-        answer->root_2 = (-eq->b + root) * znam;
+        answer->root_2 = (-eq->b + discRoot) * denom;
         answer->numOfSols = TWO_ROOTS;
+    } else {
+        answer->numOfSols = ONE_ROOT;
     }
 }
 
