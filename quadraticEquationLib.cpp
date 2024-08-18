@@ -11,56 +11,61 @@
 
 
 // EPS = epsilon, regulates with what precision we work
-const long double EPS = 1e-9;
-const int LINE_LEN = 20;
-const long double MAX_KOEF_ABS = 1e18;
+const long double EPSILON = 1e-9;
+const int MAX_INPUT_LINE_LEN = 20;
+const long double MAX_KOEF_ABS_VALUE = 1e18;
 // const char* COEF_TOO_BIG = "Error: absolute value of coefficient is too big\n";
-const char* INCORRECT_NUM_FORM = "Error: that's not a correct number\n";
+const char* INCORRECT_NUM_FORMAT_ERROR = "Error: that's not a correct number\n";
 const char* LINEAR_EQ_ERROR = "Error: this function can not be used with a linear equation\n";
-const char* LINE_TOO_LONG = "Error: input line is too long\n";
+const char* LINE_TOO_LONG_ERROR = "Error: input line is too long\n";
 
 
 // ------------------------ HELPER FUNCTIONS ---------------------------------------
 
 // returns sign of variable x, we use it to avoid some precision problems
 static int sign(long double x) {
-    if (x < -EPS) return -1;
-    return x > EPS;
+    if (x < -EPSILON) return -1;
+    return x > EPSILON;
 }
 
 // returns square of variable x
-static long double sq(long double x) {
+static long double square(long double x) {
     return x * x;
 }
 
-static bool isCorrectFormat(const char line[], long double* koef) {
+static bool parseLongDoubleAndCheckValid(const char line[], long double* koef) {
     errno = 0;
     char* endPtr;
     *koef = strtod(line, &endPtr);
-    return errno == 0 && *endPtr == '\n' && fabsl(*koef) < MAX_KOEF_ABS;
+    return errno == 0 && *endPtr == '\n' && fabsl(*koef) < MAX_KOEF_ABS_VALUE;
 }
 
-static long double getCorrectCoef(const char inputLine[]) {
+static long double getCorrectCoef(const char messageLine[]) {
     long double koef = 0;
-    char line[LINE_LEN];
+    bool isGoodNumber = false;
 
     do {
-        printf("%s", inputLine);
+        printf("%s", messageLine);
 
-        int cnt = 0;
+        size_t inputLineLen = 0;
+        char line[MAX_INPUT_LINE_LEN];
         do {
-            fgets(line, LINE_LEN, stdin);
-            ++cnt;
+            fgets(line, MAX_INPUT_LINE_LEN, stdin);
+            inputLineLen += strlen(line);
         } while (line[strlen(line) - 1] != '\n');
-        if (cnt > 1) {
-            fprintf(stderr, LINE_TOO_LONG);
+
+        if (inputLineLen > MAX_INPUT_LINE_LEN) {
+            fprintf(stderr, "%s", LINE_TOO_LONG_ERROR);
             continue;
         }
 
-        if (isCorrectFormat(line, &koef))
-            return koef;
-        fprintf(stderr, "%s", INCORRECT_NUM_FORM);
-    } while (true);
+        if (parseLongDoubleAndCheckValid(line, &koef))
+            isGoodNumber = true;
+        else
+            fprintf(stderr, "%s", INCORRECT_NUM_FORMAT_ERROR);
+    } while (!isGoodNumber);
+
+    return koef;
 }
 
 static char getSignChar(long double koef) {
@@ -84,11 +89,11 @@ void readEquation(struct QuadraticEquation* eq) {
 }
 
 long double getPointValue(const struct QuadraticEquation* eq, long double x) {
-    return eq->a * sq(x) + eq->b * x + eq->c;
+    return eq->a * square(x) + eq->b * x + eq->c;
 }
 
 long double getDiscriminant(const struct QuadraticEquation* eq) {
-    return sq(eq->b) - 4 * eq->a * eq->c;
+    return square(eq->b) - 4 * eq->a * eq->c;
 }
 
 // returns x coordinat of top of the parabola
