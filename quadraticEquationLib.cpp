@@ -36,18 +36,16 @@ static bool isCorrectFormat(const char line[], long double* koef) {
     errno = 0;
     char* endPtr;
     *koef = strtod(line, &endPtr);
-    return errno == 0 && *endPtr == '\0' && fabsl(*koef) < MAX_KOEF_ABS;
+    return errno == 0 && *endPtr == '\n' && fabsl(*koef) < MAX_KOEF_ABS;
 }
 
 static long double getCorrectCoef(const char inputLine[]) {
     long double koef = 0;
     char line[LINE_LEN];
-    char INPUT_FORMAT[10] = "";
-    snprintf(INPUT_FORMAT, sizeof(INPUT_FORMAT), "%%%ds", LINE_LEN - 1);
 
     do {
         printf("%s", inputLine);
-        scanf(INPUT_FORMAT, line);
+        fgets(line, LINE_LEN - 1, stdin);
         if (isCorrectFormat(line, &koef))
             return koef;
         fprintf(stderr, "%s", INCORRECT_NUM_FORM);
@@ -116,11 +114,13 @@ static void solveQuadraticEquation(const struct QuadraticEquation* eq, struct Qu
         return;
     }
 
-    answer->root_1 = (-eq->b - sqrtl(disc)) / (2 * eq->a);
+    long double root = sqrtl(disc);
+    long double znam = 1 / (2 * eq->a);
+    answer->root_1 = (-eq->b - root) * znam;
     // we have 2 distinct solutions in case if disc != 0
     answer->numOfSols = ONE_ROOT;
     if (sign(disc) != 0) {
-        answer->root_2 = (-eq->b + sqrtl(disc)) / (2 * eq->a);
+        answer->root_2 = (-eq->b + root) * znam;
         answer->numOfSols = TWO_ROOTS;
     }
 }
