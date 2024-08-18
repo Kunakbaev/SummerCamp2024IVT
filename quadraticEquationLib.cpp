@@ -14,10 +14,11 @@
 const long double EPSILON = 1e-9;
 const int MAX_INPUT_LINE_LEN = 20;
 const long double MAX_KOEF_ABS_VALUE = 1e18;
+
 // const char* COEF_TOO_BIG = "Error: absolute value of coefficient is too big\n";
-const char* INCORRECT_NUM_FORMAT_ERROR = "Error: that's not a correct number\n";
+const char* INCORRECT_KOEF_FORMAT_ERROR = "Error: that's not a correct number\n";
 const char* LINEAR_EQ_ERROR = "Error: this function can not be used with a linear equation\n";
-const char* LINE_TOO_LONG_ERROR = "Error: input line is too long\n";
+const char* INPUT_LINE_TOO_LONG_ERROR = "Error: input line is too long\n";
 
 
 // ------------------------ HELPER FUNCTIONS ---------------------------------------
@@ -55,14 +56,14 @@ static long double getCorrectCoef(const char messageLine[]) {
         } while (line[strlen(line) - 1] != '\n');
 
         if (inputLineLen > MAX_INPUT_LINE_LEN) {
-            fprintf(stderr, "%s", LINE_TOO_LONG_ERROR);
+            fprintf(stderr, "%s", INPUT_LINE_TOO_LONG_ERROR);
             continue;
         }
 
         if (parseLongDoubleAndCheckValid(line, &koef))
             isGoodNumber = true;
         else
-            fprintf(stderr, "%s", INCORRECT_NUM_FORMAT_ERROR);
+            fprintf(stderr, "%s", INCORRECT_KOEF_FORMAT_ERROR);
     } while (!isGoodNumber);
 
     return koef;
