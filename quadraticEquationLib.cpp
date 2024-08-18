@@ -6,13 +6,13 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "quadraticEquationLib.h"
+#include "quadraticEquationLib.hpp"
 
 
 
 // EPS = epsilon, regulates with what precision we work
 const long double EPS = 1e-9;
-const int LINE_LEN = 40;
+const int LINE_LEN = 20;
 const long double MAX_KOEF_ABS = 1e18;
 // const char* COEF_TOO_BIG = "Error: absolute value of coefficient is too big\n";
 const char* INCORRECT_NUM_FORM = "Error: that's not a correct number\n";
@@ -44,7 +44,7 @@ static long double getCorrectCoef(const char inputLine[]) {
     char line[LINE_LEN];
     do {
         printf("%s", inputLine);
-        scanf("%s", line);
+        scanf("%19s", line);
         if (isCorrectFormat(line, &koef))
             return koef;
         fprintf(stderr, "%s", INCORRECT_NUM_FORM);

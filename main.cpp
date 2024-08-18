@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include "quadraticEquationLib.h"
+#include "quadraticEquationLib.hpp"
+#include <bits/stdc++.h>
 
 
 
@@ -7,6 +8,12 @@
 
 int main() {
     struct QuadraticEquation equation;
+
+    std::vector<int> myLifeInDreams(10);
+    myLifeInDreams.emplace_back(-1);
+    myLifeInDreams.resize(5);
+    std::sort(myLifeInDreams.begin(), myLifeInDreams.end());
+
 
     readEquation(&equation);
     printEquation(&equation);

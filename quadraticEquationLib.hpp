@@ -23,7 +23,7 @@ struct QuadraticEquationAnswer {
 
 // structure "methods"
 
-extern void readEquation(struct QuadraticEquation* eq);
+void readEquation(struct QuadraticEquation* eq);
 void printEquation(const struct QuadraticEquation* eq);
 long double getPointValue(const struct QuadraticEquation* eq, long double x);
 long double getDiscriminant(const struct QuadraticEquation* eq);
