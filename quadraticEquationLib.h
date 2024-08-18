@@ -30,6 +30,6 @@ long double getDiscriminant(const struct QuadraticEquation* eq);
 long double getVertX(const struct QuadraticEquation* eq);
 long double getVertY(const struct QuadraticEquation* eq);
 void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer);
-void printSolutions(struct QuadraticEquationAnswer answer);
-void solveAndPrintEquation(struct QuadraticEquation* eq);
+void printSolutions(const struct QuadraticEquationAnswer answer);
+void solveAndPrintEquation(const struct QuadraticEquation* eq);
 

@@ -32,14 +32,14 @@ static long double sq(long double x) {
     return x * x;
 }
 
-static bool isCorrectFormat(char line[], long double* koef) {
+static bool isCorrectFormat(const char line[], long double* koef) {
     errno = 0;
     char* endPtr;
     *koef = strtod(line, &endPtr);
     return errno == 0 && *endPtr == '\0' && fabsl(*koef) < MAX_KOEF_ABS;
 }
 
-static long double getCorrectCoef(char inputLine[]) {
+static long double getCorrectCoef(const char inputLine[]) {
     long double koef = 0;
     char line[LINE_LEN];
     do {
@@ -132,7 +132,7 @@ void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAn
     solveQuadraticEquation(eq, answer);
 }
 
-void printSolutions(struct QuadraticEquationAnswer answer) {
+void printSolutions(const struct QuadraticEquationAnswer answer) {
     if (answer.numOfSols == INFINITE_ROOTS) {
         printf("Infinetly many solutions\n");
         return;
@@ -146,7 +146,7 @@ void printSolutions(struct QuadraticEquationAnswer answer) {
     printf(" }\n");
 }
 
-void solveAndPrintEquation(struct QuadraticEquation* eq) {
+void solveAndPrintEquation(const struct QuadraticEquation* eq) {
     struct QuadraticEquationAnswer answer;
     getSolutions(eq, &answer);
     printSolutions(answer);
