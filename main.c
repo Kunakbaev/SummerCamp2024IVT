@@ -6,50 +6,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
-// EPS = epsilon, regulates with what precision we work
-const long double EPS = 1e-9;
-const int LINE_LEN = 40;
-const long double MAX_KOEF_ABS = 1e18;
-// const char* COEF_TOO_BIG = "Error: absolute value of coefficient is too big\n";
-const char* INCORRECT_NUM_FORM = "Error: that's not a correct number\n";
-const char* LINEAR_EQ_ERROR = "Error: this function can not be used with a linear equation\n";
-
-
-
-// ------------------------ HELPER FUNCTIONS ---------------------------------------
-
-// returns sign of variable x, we use it to avoid some precision problems
-int sign(long double x) {
-    if (x < -EPS) return -1;
-    return x > EPS;
-}
-
-// returns square of variable x
-long double sq(long double x) {
-    return x * x;
-}
-
-bool isCorrectFormat(char line[], long double* koef) {
-    errno = 0;
-    char* endPtr;
-    *koef = strtod(line, &endPtr);
-    return errno == 0 && *endPtr == '\0' && fabsl(*koef) < MAX_KOEF_ABS;
-}
-
-long double getCorrectCoef(char inputLine[]) {
-    long double koef = 0;
-    char line[LINE_LEN];
-    do {
-        printf("%s", inputLine);
-        scanf("%s", line);
-        if (isCorrectFormat(line, &koef))
-            return koef;
-        fprintf(stderr, "%s", INCORRECT_NUM_FORM);
-    } while (true);
-}
-
-
-
+#include "helperFunctions.h"
 
 // -------------------------- QUADRATIC EQUATION "CLASS" ---------------------------------------
 
@@ -91,6 +48,12 @@ void solveAndPrintEquation(struct QuadraticEquation* eq);
 // ----------------------------- MAIN ----------------------------------------
 
 int main() {
+#ifdef _DEBUG
+printf("DEBUG\n");
+#else
+printf("not DEBUG\n");
+#endif
+
     struct QuadraticEquation equation;
 
     readEquation(&equation);
@@ -107,7 +70,7 @@ int main() {
 
 
 
-char getSignChar(long double koef) {
+static char getSignChar(long double koef) {
     return sign(koef) < 0 ? '-' : '+';
 }
 
@@ -151,7 +114,7 @@ long double getVertY(const struct QuadraticEquation* eq) {
     return 0;
 }
 
-void solveLinearEquation(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
+static void solveLinearEquation(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
     if (sign(eq->b) == 0) {
         answer->numOfSols = sign(eq->c) ? NO_ROOTS : INFINITE_ROOTS;
         return;
@@ -161,7 +124,7 @@ void solveLinearEquation(const struct QuadraticEquation* eq, struct QuadraticEqu
     answer->numOfSols = ONE_ROOT;
 }
 
-void solveQuadraticEquation(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
+static void solveQuadraticEquation(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
     long double disc = getDiscriminant(eq);
     // negative disc -> no solutions
     if (sign(disc) < 0) {
