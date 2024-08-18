@@ -17,6 +17,7 @@ const long double MAX_KOEF_ABS = 1e18;
 // const char* COEF_TOO_BIG = "Error: absolute value of coefficient is too big\n";
 const char* INCORRECT_NUM_FORM = "Error: that's not a correct number\n";
 const char* LINEAR_EQ_ERROR = "Error: this function can not be used with a linear equation\n";
+const char* LINE_TOO_LONG = "Error: input line is too long\n";
 
 
 // ------------------------ HELPER FUNCTIONS ---------------------------------------
@@ -45,7 +46,17 @@ static long double getCorrectCoef(const char inputLine[]) {
 
     do {
         printf("%s", inputLine);
-        fgets(line, LINE_LEN - 1, stdin);
+
+        int cnt = 0;
+        do {
+            fgets(line, LINE_LEN, stdin);
+            ++cnt;
+        } while (line[strlen(line) - 1] != '\n');
+        if (cnt > 1) {
+            fprintf(stderr, LINE_TOO_LONG);
+            continue;
+        }
+
         if (isCorrectFormat(line, &koef))
             return koef;
         fprintf(stderr, "%s", INCORRECT_NUM_FORM);
