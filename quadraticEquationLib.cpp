@@ -42,9 +42,12 @@ static bool isCorrectFormat(const char line[], long double* koef) {
 static long double getCorrectCoef(const char inputLine[]) {
     long double koef = 0;
     char line[LINE_LEN];
+    char INPUT_FORMAT[10] = "";
+    snprintf(INPUT_FORMAT, sizeof(INPUT_FORMAT), "%%%ds", LINE_LEN - 1);
+
     do {
         printf("%s", inputLine);
-        scanf("%19s", line);
+        scanf(INPUT_FORMAT, line);
         if (isCorrectFormat(line, &koef))
             return koef;
         fprintf(stderr, "%s", INCORRECT_NUM_FORM);
