@@ -90,7 +90,6 @@ static long double getCorrectCoef(const char messageLine[]) {
 
 
 
-
 // -------------------- FUNCTIONS REALIZATIONS -------------------------------
 
 static char getSignChar(long double koef) {
@@ -103,7 +102,12 @@ void printEquation(const struct QuadraticEquation* eq) {
     char bSign = getSignChar(b);
     char cSign = getSignChar(c);
     b = fabsl(b), c = fabsl(c);
-    printf("Your equation is: %.10Lg * x ^ 2 %c %.10Lg * x %c %.10Lg\n", a, bSign, b, cSign, c);
+
+    int precision = eq->outputPrecision;
+    printf("Your equation is: %.*Lg * x ^ 2 %c %.*Lg * x %c %.*Lg\n",
+        precision, a,
+        bSign, precision, b,
+        cSign, precision, c);
 }
 
 void readEquation(struct QuadraticEquation* eq) {
@@ -190,7 +194,7 @@ void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAn
     solveQuadraticEquation(eq, answer);
 }
 
-void printSolutions(const struct QuadraticEquationAnswer answer) {
+void printSolutions(const struct QuadraticEquationAnswer answer, int precision = 10) {
     if (answer.numOfSols == INFINITE_ROOTS) {
         printf("Infinetly many solutions\n");
         return;
@@ -198,9 +202,9 @@ void printSolutions(const struct QuadraticEquationAnswer answer) {
 
     printf("Solutions of equation : { ");
     if (answer.numOfSols != NO_ROOTS)
-        printf("%.10Lg", answer.root_1);
+        printf("%.*Lg", precision, answer.root_1);
     if (answer.numOfSols == TWO_ROOTS)
-        printf(", %.10Lg", answer.root_2);
+        printf(", %.*Lg", precision, answer.root_2);
     printf(" }\n");
 }
 
@@ -208,6 +212,6 @@ void solveAndPrintEquation(const struct QuadraticEquation* eq) {
     assert(eq != NULL);
     struct QuadraticEquationAnswer answer;
     getSolutions(eq, &answer);
-    printSolutions(answer);
+    printSolutions(answer, eq->outputPrecision);
 }
 

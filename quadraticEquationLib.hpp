@@ -5,6 +5,7 @@
 // where a, b, c are coefficients, some rational numbers
 
 struct QuadraticEquation {
+    int outputPrecision = 10;
     long double a, b, c;
 };
 
