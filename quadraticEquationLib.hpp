@@ -22,7 +22,6 @@ struct QuadraticEquationAnswer {
 };
 
 // structure "methods"
-
 void readEquation(struct QuadraticEquation* eq);
 void printEquation(const struct QuadraticEquation* eq);
 long double getPointValue(const struct QuadraticEquation* eq, long double x);
