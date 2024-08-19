@@ -35,7 +35,7 @@ static long double square(long double x) {
 }
 
 static bool parseLongDoubleAndCheckValid(const char line[], long double* koef) {
-    assert(koef != NULL);
+    assert(line != NULL && koef != NULL);
     errno = 0;
     char* endPtr;
     *koef = strtod(line, &endPtr);
@@ -43,6 +43,7 @@ static bool parseLongDoubleAndCheckValid(const char line[], long double* koef) {
 }
 
 static long double getCorrectCoef(const char messageLine[]) {
+    assert(messageLine != NULL);
     long double koef = 0;
     bool isGoodNumber = false;
 
