@@ -10,15 +10,27 @@
 
 
 
-// EPS = epsilon, regulates with what precision we work
+/*
+
+EPS = epsilon, regulates with what precision we work
+should not be too small, otherwise there might be some errors with precision
+
+*/
 const long double EPSILON = 1e-9;
 const int MAX_INPUT_LINE_LEN = 25;
+
+/*
+
+MAX_KOEF_ABS_VALUE should be around 1e18, otherwise there might be errors with overflow
+(cause long double MAX is around 1e36 and we use square of inputed values)
+
+*/
 const long double MAX_KOEF_ABS_VALUE = 1e18;
 
-const char* KOEF_TOO_BIG_ERROR = "Error: absolute value of coefficient is too big\n";
+const char* VALUE_IS_TOO_BIG_ERROR =      "Error: absolute value of inputed number is too big\n";
 const char* INCORRECT_KOEF_FORMAT_ERROR = "Error: that's not a correct number\n";
-const char* LINEAR_EQ_ERROR = "Error: this function can not be used with a linear equation\n";
-const char* INPUT_LINE_TOO_LONG_ERROR = "Error: input line is too long\n";
+const char* LINEAR_EQ_ERROR =             "Error: this function can not be used with a linear equation\n";
+const char* INPUT_LINE_TOO_LONG_ERROR =   "Error: input line is too long\n";
 
 
 // ------------------------ HELPER FUNCTIONS ---------------------------------------
@@ -64,7 +76,7 @@ static long double getCorrectCoef(const char messageLine[]) {
 
         if (parseLongDoubleAndCheckValid(line, &koef)) {
             if (fabsl(koef) > MAX_KOEF_ABS_VALUE)
-                fprintf(stderr, "%s", KOEF_TOO_BIG_ERROR);
+                fprintf(stderr, "%s", VALUE_IS_TOO_BIG_ERROR);
             else
                 isGoodNumber = true;
         } else {
@@ -105,6 +117,10 @@ void readEquation(struct QuadraticEquation* eq) {
 
 long double getPointValue(const struct QuadraticEquation* eq, long double x) {
     assert(eq != NULL);
+    if (fabsl(x) > MAX_KOEF_ABS_VALUE) {
+        fprintf(stderr, "%s", VALUE_IS_TOO_BIG_ERROR);
+        return 0;
+    }
     return eq->a * square(x) + eq->b * x + eq->c;
 }
 
