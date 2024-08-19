@@ -194,7 +194,7 @@ void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAn
     solveQuadraticEquation(eq, answer);
 }
 
-void printSolutions(const struct QuadraticEquationAnswer answer, int precision = 10) {
+void printSolutions(const struct QuadraticEquationAnswer answer, int outputPrecision = 10) {
     if (answer.numOfSols == INFINITE_ROOTS) {
         printf("Infinetly many solutions\n");
         return;
@@ -202,9 +202,9 @@ void printSolutions(const struct QuadraticEquationAnswer answer, int precision =
 
     printf("Solutions of equation : { ");
     if (answer.numOfSols != NO_ROOTS)
-        printf("%.*Lg", precision, answer.root_1);
+        printf("%.*Lg", outputPrecision, answer.root_1);
     if (answer.numOfSols == TWO_ROOTS)
-        printf(", %.*Lg", precision, answer.root_2);
+        printf(", %.*Lg", outputPrecision, answer.root_2);
     printf(" }\n");
 }
 

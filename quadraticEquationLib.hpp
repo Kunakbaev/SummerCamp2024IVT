@@ -6,7 +6,7 @@
 
 struct QuadraticEquation {
     int outputPrecision = 10;
-    long double a, b, c;
+    long double a = 0, b = 0, c = 0;
 };
 
 enum QuadEqRootState {
@@ -17,9 +17,9 @@ enum QuadEqRootState {
 };
 
 struct QuadraticEquationAnswer {
-    long double root_1;
-    long double root_2;
-    enum QuadEqRootState numOfSols;
+    long double root_1 = 0;
+    long double root_2 = 0;
+    enum QuadEqRootState numOfSols = NO_ROOTS;
 };
 
 // structure "methods"
@@ -30,6 +30,6 @@ long double getDiscriminant(const struct QuadraticEquation* eq);
 long double getVertX(const struct QuadraticEquation* eq);
 long double getVertY(const struct QuadraticEquation* eq);
 void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer);
-void printSolutions(const struct QuadraticEquationAnswer answer);
+void printSolutions(const struct QuadraticEquationAnswer answer, int outputPrecision);
 void solveAndPrintEquation(const struct QuadraticEquation* eq);
 
