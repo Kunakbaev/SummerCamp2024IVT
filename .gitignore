@@ -2,3 +2,6 @@
 build
 main.exe
 main
+docs/html/*
+docs/latex/*
+!docs/html/index.html

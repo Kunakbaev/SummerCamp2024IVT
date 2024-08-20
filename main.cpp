@@ -1,6 +1,12 @@
+/*!
+
+    \brief class usecase file
+    In this file all methods of class are used to show how QuadraticEquation class works.
+
+*/
+
 #include <stdio.h>
 #include "quadraticEquationLib.hpp"
-
 
 
 // ----------------------------- MAIN ----------------------------------------
