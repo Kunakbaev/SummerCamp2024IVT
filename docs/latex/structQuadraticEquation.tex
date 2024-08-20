@@ -1,0 +1,147 @@
+\hypertarget{structQuadraticEquation}{}\doxysection{Quadratic\+Equation Struct Reference}
+\label{structQuadraticEquation}\index{QuadraticEquation@{QuadraticEquation}}
+
+
+main struct  
+
+
+
+
+{\ttfamily \#include $<$quadratic\+Equation\+Lib.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{structQuadraticEquation_ab15bd5240ff721b3642c0db13b5082ac}{read\+Equation}} (struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq)
+\item 
+void \mbox{\hyperlink{structQuadraticEquation_adb5b59614257fb21c92157a2c8fef592}{print\+Equation}} (const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq)
+\item 
+long double \mbox{\hyperlink{structQuadraticEquation_a35099c1645b505f2fc3c3f0307fea5f9}{get\+Point\+Value}} (const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq, long double x)
+\item 
+long double \mbox{\hyperlink{structQuadraticEquation_adca56bc8495c4a23dfaad6645ee40b37}{get\+Discriminant}} (const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq)
+\item 
+long double \mbox{\hyperlink{structQuadraticEquation_a488daccb7d6b172cd188993c148874b7}{get\+VertX}} (const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq)
+\item 
+long double \mbox{\hyperlink{structQuadraticEquation_a869f9fb6e33062b05aeda8d7bf323e97}{get\+VertY}} (const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq)
+\item 
+void \mbox{\hyperlink{structQuadraticEquation_ab361f8c6d449fe8d8d0ecb2760754daa}{get\+Solutions}} (const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq, struct \mbox{\hyperlink{structQuadraticEquationAnswer}{Quadratic\+Equation\+Answer}} $\ast$answer)
+\item 
+void \mbox{\hyperlink{structQuadraticEquation_aec0d8c7ef3303a4b5b63bcb63904a44c}{print\+Solutions}} (const struct \mbox{\hyperlink{structQuadraticEquationAnswer}{Quadratic\+Equation\+Answer}} answer, int \mbox{\hyperlink{structQuadraticEquation_a2034ec547cea3f1294301963cc746e2a}{output\+Precision}})
+\item 
+void \mbox{\hyperlink{structQuadraticEquation_a8ab497caaa6282ef48e73fcd3a8905e5}{solve\+And\+Print\+Equation}} (const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{structQuadraticEquation_a2034ec547cea3f1294301963cc746e2a}{output\+Precision}} = 10
+\begin{DoxyCompactList}\small\item\em states maximum number of digits of float numbers that will be outputed \end{DoxyCompactList}\item 
+long double \mbox{\hyperlink{structQuadraticEquation_a8862234a21bc18b85815ac8f24cf8c10}{a}} = 0
+\item 
+long double \mbox{\hyperlink{structQuadraticEquation_af42744af730a6c1f94cb4a27341d41aa}{b}} = 0
+\item 
+long double \mbox{\hyperlink{structQuadraticEquation_aa989d325a86aa2a3905b44f93437bfe8}{c}} = 0
+\begin{DoxyCompactList}\small\item\em a, b, c are coefficients, some rational numbers \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+main struct 
+
+Quadratic equation looks like this\+: a $\ast$ x $^\wedge$ 2 + b $\ast$ x + c.
+
+Class can find solutions of quadratic equation in rationals, also output\+Precisoin can be state (10 by default), helps outputing floating number. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{structQuadraticEquation_adca56bc8495c4a23dfaad6645ee40b37}\label{structQuadraticEquation_adca56bc8495c4a23dfaad6645ee40b37}} 
+\index{QuadraticEquation@{QuadraticEquation}!getDiscriminant@{getDiscriminant}}
+\index{getDiscriminant@{getDiscriminant}!QuadraticEquation@{QuadraticEquation}}
+\doxysubsubsection{\texorpdfstring{getDiscriminant()}{getDiscriminant()}}
+{\footnotesize\ttfamily long double get\+Discriminant (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{structQuadraticEquation_a35099c1645b505f2fc3c3f0307fea5f9}\label{structQuadraticEquation_a35099c1645b505f2fc3c3f0307fea5f9}} 
+\index{QuadraticEquation@{QuadraticEquation}!getPointValue@{getPointValue}}
+\index{getPointValue@{getPointValue}!QuadraticEquation@{QuadraticEquation}}
+\doxysubsubsection{\texorpdfstring{getPointValue()}{getPointValue()}}
+{\footnotesize\ttfamily long double get\+Point\+Value (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq,  }\item[{long double}]{x }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{structQuadraticEquation_ab361f8c6d449fe8d8d0ecb2760754daa}\label{structQuadraticEquation_ab361f8c6d449fe8d8d0ecb2760754daa}} 
+\index{QuadraticEquation@{QuadraticEquation}!getSolutions@{getSolutions}}
+\index{getSolutions@{getSolutions}!QuadraticEquation@{QuadraticEquation}}
+\doxysubsubsection{\texorpdfstring{getSolutions()}{getSolutions()}}
+{\footnotesize\ttfamily void get\+Solutions (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq,  }\item[{struct \mbox{\hyperlink{structQuadraticEquationAnswer}{Quadratic\+Equation\+Answer}} $\ast$}]{answer }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{structQuadraticEquation_a488daccb7d6b172cd188993c148874b7}\label{structQuadraticEquation_a488daccb7d6b172cd188993c148874b7}} 
+\index{QuadraticEquation@{QuadraticEquation}!getVertX@{getVertX}}
+\index{getVertX@{getVertX}!QuadraticEquation@{QuadraticEquation}}
+\doxysubsubsection{\texorpdfstring{getVertX()}{getVertX()}}
+{\footnotesize\ttfamily long double get\+VertX (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{structQuadraticEquation_a869f9fb6e33062b05aeda8d7bf323e97}\label{structQuadraticEquation_a869f9fb6e33062b05aeda8d7bf323e97}} 
+\index{QuadraticEquation@{QuadraticEquation}!getVertY@{getVertY}}
+\index{getVertY@{getVertY}!QuadraticEquation@{QuadraticEquation}}
+\doxysubsubsection{\texorpdfstring{getVertY()}{getVertY()}}
+{\footnotesize\ttfamily long double get\+VertY (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{structQuadraticEquation_adb5b59614257fb21c92157a2c8fef592}\label{structQuadraticEquation_adb5b59614257fb21c92157a2c8fef592}} 
+\index{QuadraticEquation@{QuadraticEquation}!printEquation@{printEquation}}
+\index{printEquation@{printEquation}!QuadraticEquation@{QuadraticEquation}}
+\doxysubsubsection{\texorpdfstring{printEquation()}{printEquation()}}
+{\footnotesize\ttfamily void print\+Equation (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{structQuadraticEquation_aec0d8c7ef3303a4b5b63bcb63904a44c}\label{structQuadraticEquation_aec0d8c7ef3303a4b5b63bcb63904a44c}} 
+\index{QuadraticEquation@{QuadraticEquation}!printSolutions@{printSolutions}}
+\index{printSolutions@{printSolutions}!QuadraticEquation@{QuadraticEquation}}
+\doxysubsubsection{\texorpdfstring{printSolutions()}{printSolutions()}}
+{\footnotesize\ttfamily void print\+Solutions (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquationAnswer}{Quadratic\+Equation\+Answer}}}]{answer,  }\item[{int}]{output\+Precision }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{structQuadraticEquation_ab15bd5240ff721b3642c0db13b5082ac}\label{structQuadraticEquation_ab15bd5240ff721b3642c0db13b5082ac}} 
+\index{QuadraticEquation@{QuadraticEquation}!readEquation@{readEquation}}
+\index{readEquation@{readEquation}!QuadraticEquation@{QuadraticEquation}}
+\doxysubsubsection{\texorpdfstring{readEquation()}{readEquation()}}
+{\footnotesize\ttfamily void read\+Equation (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{structQuadraticEquation_a8ab497caaa6282ef48e73fcd3a8905e5}\label{structQuadraticEquation_a8ab497caaa6282ef48e73fcd3a8905e5}} 
+\index{QuadraticEquation@{QuadraticEquation}!solveAndPrintEquation@{solveAndPrintEquation}}
+\index{solveAndPrintEquation@{solveAndPrintEquation}!QuadraticEquation@{QuadraticEquation}}
+\doxysubsubsection{\texorpdfstring{solveAndPrintEquation()}{solveAndPrintEquation()}}
+{\footnotesize\ttfamily void solve\+And\+Print\+Equation (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{structQuadraticEquation_a8862234a21bc18b85815ac8f24cf8c10}\label{structQuadraticEquation_a8862234a21bc18b85815ac8f24cf8c10}} 
+\index{QuadraticEquation@{QuadraticEquation}!a@{a}}
+\index{a@{a}!QuadraticEquation@{QuadraticEquation}}
+\doxysubsubsection{\texorpdfstring{a}{a}}
+{\footnotesize\ttfamily long double Quadratic\+Equation\+::a = 0}
+
+\mbox{\Hypertarget{structQuadraticEquation_af42744af730a6c1f94cb4a27341d41aa}\label{structQuadraticEquation_af42744af730a6c1f94cb4a27341d41aa}} 
+\index{QuadraticEquation@{QuadraticEquation}!b@{b}}
+\index{b@{b}!QuadraticEquation@{QuadraticEquation}}
+\doxysubsubsection{\texorpdfstring{b}{b}}
+{\footnotesize\ttfamily long double Quadratic\+Equation\+::b = 0}
+
+\mbox{\Hypertarget{structQuadraticEquation_aa989d325a86aa2a3905b44f93437bfe8}\label{structQuadraticEquation_aa989d325a86aa2a3905b44f93437bfe8}} 
+\index{QuadraticEquation@{QuadraticEquation}!c@{c}}
+\index{c@{c}!QuadraticEquation@{QuadraticEquation}}
+\doxysubsubsection{\texorpdfstring{c}{c}}
+{\footnotesize\ttfamily long double Quadratic\+Equation\+::c = 0}
+
+
+
+a, b, c are coefficients, some rational numbers 
+
+\mbox{\Hypertarget{structQuadraticEquation_a2034ec547cea3f1294301963cc746e2a}\label{structQuadraticEquation_a2034ec547cea3f1294301963cc746e2a}} 
+\index{QuadraticEquation@{QuadraticEquation}!outputPrecision@{outputPrecision}}
+\index{outputPrecision@{outputPrecision}!QuadraticEquation@{QuadraticEquation}}
+\doxysubsubsection{\texorpdfstring{outputPrecision}{outputPrecision}}
+{\footnotesize\ttfamily int Quadratic\+Equation\+::output\+Precision = 10}
+
+
+
+states maximum number of digits of float numbers that will be outputed 
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{quadraticEquationLib_8hpp}{quadratic\+Equation\+Lib.\+hpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,525 @@
+\hypertarget{quadraticEquationLib_8cpp}{}\doxysection{quadratic\+Equation\+Lib.\+cpp File Reference}
+\label{quadraticEquationLib_8cpp}\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+
+
+class containing realization of all methods from lib  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$assert.\+h$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$errno.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}quadratic\+Equation\+Lib.\+hpp\char`\"{}}\newline
+Include dependency graph for quadratic\+Equation\+Lib.\+cpp\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{quadraticEquationLib_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static int \mbox{\hyperlink{quadraticEquationLib_8cpp_a9e6aad672349ef83b154f13df5b2bf1d}{sign}} (long double x)
+\begin{DoxyCompactList}\small\item\em returns sign of variable x, we use it to avoid some precision problems \end{DoxyCompactList}\item 
+static long double \mbox{\hyperlink{quadraticEquationLib_8cpp_a7422b9f81b839e2ddcac0f4d9a98a445}{square}} (long double x)
+\begin{DoxyCompactList}\small\item\em returns square of variable x \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{quadraticEquationLib_8cpp_a172d0d2a0da28e7a23f99c70e8b85f0a}{parse\+Long\+Double\+And\+Check\+Valid}} (const char line\mbox{[}$\,$\mbox{]}, long double $\ast$koef)
+\begin{DoxyCompactList}\small\item\em parses long double from string and checks if it\textquotesingle{}s valid \end{DoxyCompactList}\item 
+static long double \mbox{\hyperlink{quadraticEquationLib_8cpp_a83fdf0ef580117c20e9ee8af6ca2aa32}{get\+Correct\+Koef}} (const char message\+Line\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em reads koef until it\textquotesingle{}s valid \end{DoxyCompactList}\item 
+static char \mbox{\hyperlink{quadraticEquationLib_8cpp_ad5125119631f1ac6b240c377f8bbfa46}{get\+Sign\+Char}} (long double koef)
+\begin{DoxyCompactList}\small\item\em helper function, gets char sign of koef \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{quadraticEquationLib_8cpp_adb5b59614257fb21c92157a2c8fef592}{print\+Equation}} (const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq)
+\begin{DoxyCompactList}\small\item\em prints given equation \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{quadraticEquationLib_8cpp_ab15bd5240ff721b3642c0db13b5082ac}{read\+Equation}} (struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq)
+\begin{DoxyCompactList}\small\item\em reads given equation \end{DoxyCompactList}\item 
+long double \mbox{\hyperlink{quadraticEquationLib_8cpp_a35099c1645b505f2fc3c3f0307fea5f9}{get\+Point\+Value}} (const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq, long double x)
+\begin{DoxyCompactList}\small\item\em gets function value at given point x \end{DoxyCompactList}\item 
+long double \mbox{\hyperlink{quadraticEquationLib_8cpp_adca56bc8495c4a23dfaad6645ee40b37}{get\+Discriminant}} (const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq)
+\begin{DoxyCompactList}\small\item\em returns discriminant of given equation \end{DoxyCompactList}\item 
+long double \mbox{\hyperlink{quadraticEquationLib_8cpp_a488daccb7d6b172cd188993c148874b7}{get\+VertX}} (const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq)
+\begin{DoxyCompactList}\small\item\em returns x coordinat of top of the parabola \end{DoxyCompactList}\item 
+long double \mbox{\hyperlink{quadraticEquationLib_8cpp_a869f9fb6e33062b05aeda8d7bf323e97}{get\+VertY}} (const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq)
+\begin{DoxyCompactList}\small\item\em returns y coordinat of top of the parabola \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{quadraticEquationLib_8cpp_abf950c78e1eea5898012c8d6a41bd8c9}{solve\+Linear\+Equation}} (const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq, struct \mbox{\hyperlink{structQuadraticEquationAnswer}{Quadratic\+Equation\+Answer}} $\ast$answer)
+\begin{DoxyCompactList}\small\item\em solves linear case of equation (a == 0) \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{quadraticEquationLib_8cpp_aa45077500b6fbfced0d7ecfa650dad8b}{solve\+Quadratic\+Equation}} (const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq, struct \mbox{\hyperlink{structQuadraticEquationAnswer}{Quadratic\+Equation\+Answer}} $\ast$answer)
+\begin{DoxyCompactList}\small\item\em solves not linear case of equation (a != 0) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{quadraticEquationLib_8cpp_ab361f8c6d449fe8d8d0ecb2760754daa}{get\+Solutions}} (const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq, struct \mbox{\hyperlink{structQuadraticEquationAnswer}{Quadratic\+Equation\+Answer}} $\ast$answer)
+\begin{DoxyCompactList}\small\item\em core function, gets solutions of quadratic equation \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{quadraticEquationLib_8cpp_a5a52f6ec71d5f7b351098d1626959239}{print\+Solutions}} (const struct \mbox{\hyperlink{structQuadraticEquationAnswer}{Quadratic\+Equation\+Answer}} answer, int output\+Precision=10)
+\begin{DoxyCompactList}\small\item\em prints found solutions \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{quadraticEquationLib_8cpp_a8ab497caaa6282ef48e73fcd3a8905e5}{solve\+And\+Print\+Equation}} (const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq)
+\begin{DoxyCompactList}\small\item\em solves equation and prints found solutions \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const long double \mbox{\hyperlink{quadraticEquationLib_8cpp_a3f51a4b8df89dcda6c2296c53d31c88b}{EPSILON}} = 1e-\/9
+\item 
+const int \mbox{\hyperlink{quadraticEquationLib_8cpp_a161d6cc6af9b7d90b062f3aaf3507d29}{MAX\+\_\+\+INPUT\+\_\+\+LINE\+\_\+\+LEN}} = 25
+\begin{DoxyCompactList}\small\item\em maximum length of input line \end{DoxyCompactList}\item 
+const long double \mbox{\hyperlink{quadraticEquationLib_8cpp_a575b937bde2bb4e3d31d5d9bcf413b14}{MAX\+\_\+\+KOEF\+\_\+\+ABS\+\_\+\+VALUE}} = 1e18
+\item 
+const char $\ast$ \mbox{\hyperlink{quadraticEquationLib_8cpp_a021995d767556b2406ca5802290cd44c}{VALUE\+\_\+\+IS\+\_\+\+TOO\+\_\+\+BIG\+\_\+\+ERROR}} = \char`\"{}Error\+: absolute value of inputed number is too big\textbackslash{}n\char`\"{}
+\begin{DoxyCompactList}\small\item\em error occures if absolute value of number is too big \end{DoxyCompactList}\item 
+const char $\ast$ \mbox{\hyperlink{quadraticEquationLib_8cpp_ae25f701b8510f9b1b9d481ccb7f022f1}{INCORRECT\+\_\+\+KOEF\+\_\+\+FORMAT\+\_\+\+ERROR}} = \char`\"{}Error\+: that\textquotesingle{}s not a correct number\textbackslash{}n\char`\"{}
+\begin{DoxyCompactList}\small\item\em error occures if inputed long double number is given in incorrect format \end{DoxyCompactList}\item 
+const char $\ast$ \mbox{\hyperlink{quadraticEquationLib_8cpp_a8322c89dce43c24256bfc1532835dfb0}{LINEAR\+\_\+\+EQ\+\_\+\+ERROR}} = \char`\"{}Error\+: this function can not be used with a linear equation\textbackslash{}n\char`\"{}
+\begin{DoxyCompactList}\small\item\em error occures if user tries to use functions that are only can be used if equation is square equation (a != 0) \end{DoxyCompactList}\item 
+const char $\ast$ \mbox{\hyperlink{quadraticEquationLib_8cpp_aee1fe983a743e61b6ca454fd36fcd5ac}{INPUT\+\_\+\+LINE\+\_\+\+TOO\+\_\+\+LONG\+\_\+\+ERROR}} = \char`\"{}Error\+: input line is too long\textbackslash{}n\char`\"{}
+\begin{DoxyCompactList}\small\item\em error occures if input line length exceeds MAX\+\_\+\+KOEF\+\_\+\+ABS\+\_\+\+VALUE \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+class containing realization of all methods from lib 
+
+This is main file, with all functionality of class. File contains realization of all methods of class \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_a83fdf0ef580117c20e9ee8af6ca2aa32}\label{quadraticEquationLib_8cpp_a83fdf0ef580117c20e9ee8af6ca2aa32}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!getCorrectKoef@{getCorrectKoef}}
+\index{getCorrectKoef@{getCorrectKoef}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{getCorrectKoef()}{getCorrectKoef()}}
+{\footnotesize\ttfamily static long double get\+Correct\+Koef (\begin{DoxyParamCaption}\item[{const char}]{message\+Line\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+reads koef until it\textquotesingle{}s valid 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em message\+Line} & Hint for user for what to input \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returns long double koefficient
+\end{DoxyReturn}
+This function\textquotesingle{}s purpose is too deal with all possible errors that can occur during user\textquotesingle{}s input 
+\begin{DoxyExceptions}{Exceptions}
+{\em line} & input line should not be NULL \\
+\hline
+{\em koef} & should not be NULL\\
+\hline
+\end{DoxyExceptions}
+do while loop, until good koefficient will be given 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{...\} \textcolor{keywordflow}{while} (!isGoodNumber);}
+
+\end{DoxyCode}
+
+
+line is readed until its length is small enough 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordflow}{do} \{}
+\DoxyCodeLine{    fgets(line, \mbox{\hyperlink{quadraticEquationLib_8cpp_a161d6cc6af9b7d90b062f3aaf3507d29}{MAX\_INPUT\_LINE\_LEN}}, stdin);}
+\DoxyCodeLine{    inputLineLen += strlen(line);}
+\DoxyCodeLine{\} \textcolor{keywordflow}{while} (line[strlen(line) -\/ 1] != \textcolor{charliteral}{'\(\backslash\)n'});}
+
+\end{DoxyCode}
+
+
+check for valid input format 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordflow}{if} (\mbox{\hyperlink{quadraticEquationLib_8cpp_a172d0d2a0da28e7a23f99c70e8b85f0a}{parseLongDoubleAndCheckValid}}(line, \&koef)) \{...}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_adca56bc8495c4a23dfaad6645ee40b37}\label{quadraticEquationLib_8cpp_adca56bc8495c4a23dfaad6645ee40b37}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!getDiscriminant@{getDiscriminant}}
+\index{getDiscriminant@{getDiscriminant}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{getDiscriminant()}{getDiscriminant()}}
+{\footnotesize\ttfamily long double get\+Discriminant (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq }\end{DoxyParamCaption})}
+
+
+
+returns discriminant of given equation 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em eq} & given equation \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+long double, found discriminant 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em eq} & should not be NULL\\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_a35099c1645b505f2fc3c3f0307fea5f9}\label{quadraticEquationLib_8cpp_a35099c1645b505f2fc3c3f0307fea5f9}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!getPointValue@{getPointValue}}
+\index{getPointValue@{getPointValue}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{getPointValue()}{getPointValue()}}
+{\footnotesize\ttfamily long double get\+Point\+Value (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq,  }\item[{long double}]{x }\end{DoxyParamCaption})}
+
+
+
+gets function value at given point x 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em eq} & function, which value is evaluated \\
+\hline
+\mbox{\texttt{ in}}  & {\em x} & x coordinat, at which value is get \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+y coordinat, found value at given point 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em eq} & should not be NULL\\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_ad5125119631f1ac6b240c377f8bbfa46}\label{quadraticEquationLib_8cpp_ad5125119631f1ac6b240c377f8bbfa46}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!getSignChar@{getSignChar}}
+\index{getSignChar@{getSignChar}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{getSignChar()}{getSignChar()}}
+{\footnotesize\ttfamily static char get\+Sign\+Char (\begin{DoxyParamCaption}\item[{long double}]{koef }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+helper function, gets char sign of koef 
+
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_ab361f8c6d449fe8d8d0ecb2760754daa}\label{quadraticEquationLib_8cpp_ab361f8c6d449fe8d8d0ecb2760754daa}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!getSolutions@{getSolutions}}
+\index{getSolutions@{getSolutions}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{getSolutions()}{getSolutions()}}
+{\footnotesize\ttfamily void get\+Solutions (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq,  }\item[{struct \mbox{\hyperlink{structQuadraticEquationAnswer}{Quadratic\+Equation\+Answer}} $\ast$}]{answer }\end{DoxyParamCaption})}
+
+
+
+core function, gets solutions of quadratic equation 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em eq} & given equation \\
+\hline
+\mbox{\texttt{ out}}  & {\em answer} & found roots and info about their cnt \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em eq} & should not be NULL \\
+\hline
+{\em answer} & should not be NULL\\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_a488daccb7d6b172cd188993c148874b7}\label{quadraticEquationLib_8cpp_a488daccb7d6b172cd188993c148874b7}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!getVertX@{getVertX}}
+\index{getVertX@{getVertX}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{getVertX()}{getVertX()}}
+{\footnotesize\ttfamily long double get\+VertX (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq }\end{DoxyParamCaption})}
+
+
+
+returns x coordinat of top of the parabola 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em eq} & given equation \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+long double, x coordinat of top of the parabola 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em eq} & should not be NULL\\
+\hline
+\end{DoxyExceptions}
+\begin{DoxyWarning}{Warning}
+eq-\/$>$a should not be 0
+\end{DoxyWarning}
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_a869f9fb6e33062b05aeda8d7bf323e97}\label{quadraticEquationLib_8cpp_a869f9fb6e33062b05aeda8d7bf323e97}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!getVertY@{getVertY}}
+\index{getVertY@{getVertY}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{getVertY()}{getVertY()}}
+{\footnotesize\ttfamily long double get\+VertY (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq }\end{DoxyParamCaption})}
+
+
+
+returns y coordinat of top of the parabola 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em eq} & given equation \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+long double, y coordinat of top of the parabola 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em eq} & should not be NULL\\
+\hline
+\end{DoxyExceptions}
+\begin{DoxyWarning}{Warning}
+eq-\/$>$a should not be 0
+\end{DoxyWarning}
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_a172d0d2a0da28e7a23f99c70e8b85f0a}\label{quadraticEquationLib_8cpp_a172d0d2a0da28e7a23f99c70e8b85f0a}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!parseLongDoubleAndCheckValid@{parseLongDoubleAndCheckValid}}
+\index{parseLongDoubleAndCheckValid@{parseLongDoubleAndCheckValid}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{parseLongDoubleAndCheckValid()}{parseLongDoubleAndCheckValid()}}
+{\footnotesize\ttfamily static bool parse\+Long\+Double\+And\+Check\+Valid (\begin{DoxyParamCaption}\item[{const char}]{line\mbox{[}$\,$\mbox{]},  }\item[{long double $\ast$}]{koef }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+parses long double from string and checks if it\textquotesingle{}s valid 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em line} & Input line that user gave in console \\
+\hline
+\mbox{\texttt{ out}}  & {\em koef} & Stores parsed long double koefficient \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean true, if given input line is valid 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em line} & input line should not be NULL \\
+\hline
+{\em koef} & should not be NULL\\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_adb5b59614257fb21c92157a2c8fef592}\label{quadraticEquationLib_8cpp_adb5b59614257fb21c92157a2c8fef592}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!printEquation@{printEquation}}
+\index{printEquation@{printEquation}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{printEquation()}{printEquation()}}
+{\footnotesize\ttfamily void print\+Equation (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq }\end{DoxyParamCaption})}
+
+
+
+prints given equation 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em eq} & Quadratic equation that will be printed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em eq} & should not be NULL\\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_a5a52f6ec71d5f7b351098d1626959239}\label{quadraticEquationLib_8cpp_a5a52f6ec71d5f7b351098d1626959239}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!printSolutions@{printSolutions}}
+\index{printSolutions@{printSolutions}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{printSolutions()}{printSolutions()}}
+{\footnotesize\ttfamily void print\+Solutions (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquationAnswer}{Quadratic\+Equation\+Answer}}}]{answer,  }\item[{int}]{output\+Precision = {\ttfamily 10} }\end{DoxyParamCaption})}
+
+
+
+prints found solutions 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em answer} & found roots and info about their cnt \\
+\hline
+\mbox{\texttt{ in}}  & {\em output\+Precision} & maximum number of digits after comma \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_ab15bd5240ff721b3642c0db13b5082ac}\label{quadraticEquationLib_8cpp_ab15bd5240ff721b3642c0db13b5082ac}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!readEquation@{readEquation}}
+\index{readEquation@{readEquation}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{readEquation()}{readEquation()}}
+{\footnotesize\ttfamily void read\+Equation (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq }\end{DoxyParamCaption})}
+
+
+
+reads given equation 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ out}}  & {\em eq} & equation that will be read \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em eq} & should not be NULL\\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_a9e6aad672349ef83b154f13df5b2bf1d}\label{quadraticEquationLib_8cpp_a9e6aad672349ef83b154f13df5b2bf1d}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!sign@{sign}}
+\index{sign@{sign}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{sign()}{sign()}}
+{\footnotesize\ttfamily static int sign (\begin{DoxyParamCaption}\item[{long double}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+returns sign of variable x, we use it to avoid some precision problems 
+
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_a8ab497caaa6282ef48e73fcd3a8905e5}\label{quadraticEquationLib_8cpp_a8ab497caaa6282ef48e73fcd3a8905e5}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!solveAndPrintEquation@{solveAndPrintEquation}}
+\index{solveAndPrintEquation@{solveAndPrintEquation}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{solveAndPrintEquation()}{solveAndPrintEquation()}}
+{\footnotesize\ttfamily void solve\+And\+Print\+Equation (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq }\end{DoxyParamCaption})}
+
+
+
+solves equation and prints found solutions 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em eq} & given equation \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em eq} & should not be NULL\\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_abf950c78e1eea5898012c8d6a41bd8c9}\label{quadraticEquationLib_8cpp_abf950c78e1eea5898012c8d6a41bd8c9}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!solveLinearEquation@{solveLinearEquation}}
+\index{solveLinearEquation@{solveLinearEquation}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{solveLinearEquation()}{solveLinearEquation()}}
+{\footnotesize\ttfamily static void solve\+Linear\+Equation (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq,  }\item[{struct \mbox{\hyperlink{structQuadraticEquationAnswer}{Quadratic\+Equation\+Answer}} $\ast$}]{answer }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+solves linear case of equation (a == 0) 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em eq} & given equation \\
+\hline
+\mbox{\texttt{ out}}  & {\em answer} & found roots and info about their cnt \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em eq} & should not be NULL \\
+\hline
+{\em answer} & should not be NULL\\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_aa45077500b6fbfced0d7ecfa650dad8b}\label{quadraticEquationLib_8cpp_aa45077500b6fbfced0d7ecfa650dad8b}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!solveQuadraticEquation@{solveQuadraticEquation}}
+\index{solveQuadraticEquation@{solveQuadraticEquation}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{solveQuadraticEquation()}{solveQuadraticEquation()}}
+{\footnotesize\ttfamily static void solve\+Quadratic\+Equation (\begin{DoxyParamCaption}\item[{const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq,  }\item[{struct \mbox{\hyperlink{structQuadraticEquationAnswer}{Quadratic\+Equation\+Answer}} $\ast$}]{answer }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+solves not linear case of equation (a != 0) 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em eq} & given equation \\
+\hline
+\mbox{\texttt{ out}}  & {\em answer} & found roots and info about their cnt \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em eq} & should not be NULL \\
+\hline
+{\em answer} & should not be NULL\\
+\hline
+\end{DoxyExceptions}
+negative disc -\/$>$ no solutions
+
+we have 2 distinct solutions in case if disc != 0\mbox{\Hypertarget{quadraticEquationLib_8cpp_a7422b9f81b839e2ddcac0f4d9a98a445}\label{quadraticEquationLib_8cpp_a7422b9f81b839e2ddcac0f4d9a98a445}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!square@{square}}
+\index{square@{square}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{square()}{square()}}
+{\footnotesize\ttfamily static long double square (\begin{DoxyParamCaption}\item[{long double}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+returns square of variable x 
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_a3f51a4b8df89dcda6c2296c53d31c88b}\label{quadraticEquationLib_8cpp_a3f51a4b8df89dcda6c2296c53d31c88b}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!EPSILON@{EPSILON}}
+\index{EPSILON@{EPSILON}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{EPSILON}{EPSILON}}
+{\footnotesize\ttfamily const long double EPSILON = 1e-\/9}
+
+epsilon, regulates with what precision we work
+
+Should not be too small, otherwise there might be some errors with precision \mbox{\Hypertarget{quadraticEquationLib_8cpp_ae25f701b8510f9b1b9d481ccb7f022f1}\label{quadraticEquationLib_8cpp_ae25f701b8510f9b1b9d481ccb7f022f1}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!INCORRECT\_KOEF\_FORMAT\_ERROR@{INCORRECT\_KOEF\_FORMAT\_ERROR}}
+\index{INCORRECT\_KOEF\_FORMAT\_ERROR@{INCORRECT\_KOEF\_FORMAT\_ERROR}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{INCORRECT\_KOEF\_FORMAT\_ERROR}{INCORRECT\_KOEF\_FORMAT\_ERROR}}
+{\footnotesize\ttfamily const char$\ast$ INCORRECT\+\_\+\+KOEF\+\_\+\+FORMAT\+\_\+\+ERROR = \char`\"{}Error\+: that\textquotesingle{}s not a correct number\textbackslash{}n\char`\"{}}
+
+
+
+error occures if inputed long double number is given in incorrect format 
+
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_aee1fe983a743e61b6ca454fd36fcd5ac}\label{quadraticEquationLib_8cpp_aee1fe983a743e61b6ca454fd36fcd5ac}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!INPUT\_LINE\_TOO\_LONG\_ERROR@{INPUT\_LINE\_TOO\_LONG\_ERROR}}
+\index{INPUT\_LINE\_TOO\_LONG\_ERROR@{INPUT\_LINE\_TOO\_LONG\_ERROR}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{INPUT\_LINE\_TOO\_LONG\_ERROR}{INPUT\_LINE\_TOO\_LONG\_ERROR}}
+{\footnotesize\ttfamily const char$\ast$ INPUT\+\_\+\+LINE\+\_\+\+TOO\+\_\+\+LONG\+\_\+\+ERROR = \char`\"{}Error\+: input line is too long\textbackslash{}n\char`\"{}}
+
+
+
+error occures if input line length exceeds MAX\+\_\+\+KOEF\+\_\+\+ABS\+\_\+\+VALUE 
+
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_a8322c89dce43c24256bfc1532835dfb0}\label{quadraticEquationLib_8cpp_a8322c89dce43c24256bfc1532835dfb0}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!LINEAR\_EQ\_ERROR@{LINEAR\_EQ\_ERROR}}
+\index{LINEAR\_EQ\_ERROR@{LINEAR\_EQ\_ERROR}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{LINEAR\_EQ\_ERROR}{LINEAR\_EQ\_ERROR}}
+{\footnotesize\ttfamily const char$\ast$ LINEAR\+\_\+\+EQ\+\_\+\+ERROR = \char`\"{}Error\+: this function can not be used with a linear equation\textbackslash{}n\char`\"{}}
+
+
+
+error occures if user tries to use functions that are only can be used if equation is square equation (a != 0) 
+
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_a161d6cc6af9b7d90b062f3aaf3507d29}\label{quadraticEquationLib_8cpp_a161d6cc6af9b7d90b062f3aaf3507d29}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!MAX\_INPUT\_LINE\_LEN@{MAX\_INPUT\_LINE\_LEN}}
+\index{MAX\_INPUT\_LINE\_LEN@{MAX\_INPUT\_LINE\_LEN}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{MAX\_INPUT\_LINE\_LEN}{MAX\_INPUT\_LINE\_LEN}}
+{\footnotesize\ttfamily const int MAX\+\_\+\+INPUT\+\_\+\+LINE\+\_\+\+LEN = 25}
+
+
+
+maximum length of input line 
+
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_a575b937bde2bb4e3d31d5d9bcf413b14}\label{quadraticEquationLib_8cpp_a575b937bde2bb4e3d31d5d9bcf413b14}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!MAX\_KOEF\_ABS\_VALUE@{MAX\_KOEF\_ABS\_VALUE}}
+\index{MAX\_KOEF\_ABS\_VALUE@{MAX\_KOEF\_ABS\_VALUE}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{MAX\_KOEF\_ABS\_VALUE}{MAX\_KOEF\_ABS\_VALUE}}
+{\footnotesize\ttfamily const long double MAX\+\_\+\+KOEF\+\_\+\+ABS\+\_\+\+VALUE = 1e18}
+
+should be around 1e18, otherwise there might be errors with overflow (cause long double MAX is around 1e36 and we use square of inputed values) \mbox{\Hypertarget{quadraticEquationLib_8cpp_a021995d767556b2406ca5802290cd44c}\label{quadraticEquationLib_8cpp_a021995d767556b2406ca5802290cd44c}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!VALUE\_IS\_TOO\_BIG\_ERROR@{VALUE\_IS\_TOO\_BIG\_ERROR}}
+\index{VALUE\_IS\_TOO\_BIG\_ERROR@{VALUE\_IS\_TOO\_BIG\_ERROR}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{VALUE\_IS\_TOO\_BIG\_ERROR}{VALUE\_IS\_TOO\_BIG\_ERROR}}
+{\footnotesize\ttfamily const char$\ast$ VALUE\+\_\+\+IS\+\_\+\+TOO\+\_\+\+BIG\+\_\+\+ERROR = \char`\"{}Error\+: absolute value of inputed number is too big\textbackslash{}n\char`\"{}}
+
+
+
+error occures if absolute value of number is too big 
+
