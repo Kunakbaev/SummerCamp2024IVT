@@ -1,8 +1,11 @@
 /**
     \file
-    \brief class containing all methods from lib
+    \brief class containing all methods from quadratic equation lib
     In this file prototypes of all methods of class QuadraticEquation are declared
 */
+
+// sign function is need in multiple files so it needs to be extern
+int sign(long double x);
 
 // -------------------------- QUADRATIC EQUATION "CLASS" ---------------------------------------
 
@@ -15,18 +18,21 @@
     Class can find solutions of quadratic equation in rationals,
     also outputPrecisoin can be state (10 by default), helps outputing floating number.
 */
+// FIXME: pochitat' ob typedef
 struct QuadraticEquation {
-    int outputPrecision = 10; ///< states maximum number of digits of float numbers that will be outputed
-    long double a = 0, b = 0, c = 0; ///< a, b, c are coefficients, some rational numbers
+    long double a; //
+    long double b; //
+    long double c; ///< a, b, c are coefficients, some rational numbers
+    int outputPrecision; ///< states maximum number of digits of float numbers that will be outputed
 };
 
 /**
     \brief This enum is used to understand what type of equation we have
 */
 enum QuadEqRootState {
-    NO_ROOTS, ///< equation has no solutions at all
-    ONE_ROOT, ///< equation has only one root
-    TWO_ROOTS, ///< equation has two roots
+    NO_ROOTS = 0, ///< equation has no solutions at all
+    ONE_ROOT = 1, ///< equation has only one root
+    TWO_ROOTS = 2, ///< equation has two roots
     INFINITE_ROOTS, ///< equation has infinetly many solutions
 };
 
@@ -37,19 +43,79 @@ enum QuadEqRootState {
 */
 
 struct QuadraticEquationAnswer {
-    long double root_1 = 0; ///< first root of equation
-    long double root_2 = 0; ///< second root of equation
-    enum QuadEqRootState numOfSols = NO_ROOTS; ///< number of solutions equation has
+    long double root_1; ///< first root of equation
+    long double root_2; ///< second root of equation
+    QuadEqRootState numOfSols; ///< number of solutions equation has
 };
 
 // structure "methods"
-void readEquation(struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
-void printEquation(const struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
-long double getPointValue(const struct QuadraticEquation* eq, long double x); ///< \memberof QuadraticEquation
-long double getDiscriminant(const struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
-long double getVertX(const struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
-long double getVertY(const struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
-void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer); ///< \memberof QuadraticEquation
-void printSolutions(const struct QuadraticEquationAnswer answer, int outputPrecision); ///< \memberof QuadraticEquation
-void solveAndPrintEquation(const struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
 
+/**
+    \brief reads given equation
+    \param[out] eq equation that will be read
+    \result void
+*/
+void readEquation(struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
+
+/**
+    \brief prints given equation
+    \param[in] eq Quadratic equation that will be printed
+    \result void
+*/
+void printEquation(const struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
+
+/**
+    \brief gets function value at given point x
+    \param[in] eq function, which value is evaluated
+    \param[in] x x coordinat, at which value is get
+    \result y coordinat, found value at given point
+*/
+long double getPointValue(const struct QuadraticEquation* eq, long double x); ///< \memberof QuadraticEquation
+
+/**
+    \brief sets output precision of give equation
+    \param[in] eq give equation
+    \param[in] outputPrecision precision when outputing numbers
+*/
+void setOutputPrecision(struct QuadraticEquation* eq, int outputPrecision); ///< \memberof QuadraticEquation
+
+/**
+    \brief returns discriminant of given equation
+    \param[in] eq given equation
+    \result found discriminant
+*/
+long double getDiscriminant(const struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
+
+/**
+    \brief returns x coordinat of top of the parabola
+    \param[in] eq given equation
+    \result x coordinat of top of the parabola
+*/
+long double getVertX(const struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
+
+/**
+    \brief returns y coordinat of top of the parabola
+    \param[in] eq given equation
+    \result y coordinat of top of the parabola
+*/
+long double getVertY(const struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
+
+/**
+    \brief core function, gets solutions of quadratic equation
+    \param[in] eq given equation
+    \param[out] answer found roots and info about their cnt
+*/
+void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer); ///< \memberof QuadraticEquation
+
+/**
+    \brief prints found solutions
+    \param[in] answer found roots and info about their cnt
+    \param[in] outputPrecision maximum number of digits after comma
+*/
+void printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrecision); ///< \memberof QuadraticEquation
+
+/**
+    \brief solves equation and prints found solutions
+    \param[in] eq given equation
+*/
+void solveAndPrintEquation(const struct QuadraticEquation* eq); ///< \memberof QuadraticEquation

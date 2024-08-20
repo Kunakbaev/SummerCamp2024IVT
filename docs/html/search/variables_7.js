@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['numofsols_72',['numOfSols',['../structQuadraticEquationAnswer.html#a700bec37a3f16adb37719001844493fd',1,'QuadraticEquationAnswer']]]
+  ['numofsols_108',['numOfSols',['../structQuadraticEquationAnswer.html#a1101cf73e93f34dc3a434ea0667e7c7a',1,'QuadraticEquationAnswer']]]
 ];

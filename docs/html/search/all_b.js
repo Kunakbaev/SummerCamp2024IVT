@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['quadeqrootstate_26',['QuadEqRootState',['../quadraticEquationLib_8hpp.html#ab0303d5e66a6b8908e8ab6ca7b2ef761',1,'quadraticEquationLib.hpp']]],
-  ['quadraticequation_27',['QuadraticEquation',['../structQuadraticEquation.html',1,'']]],
-  ['quadraticequationanswer_28',['QuadraticEquationAnswer',['../structQuadraticEquationAnswer.html',1,'']]],
-  ['quadraticequationlib_2ecpp_29',['quadraticEquationLib.cpp',['../quadraticEquationLib_8cpp.html',1,'']]],
-  ['quadraticequationlib_2ehpp_30',['quadraticEquationLib.hpp',['../quadraticEquationLib_8hpp.html',1,'']]]
+  ['parselongdoubleandcheckvalid_33',['parseLongDoubleAndCheckValid',['../quadraticEquationLib_8cpp.html#a53bf4e97503515f57e98bb66b6314c2a',1,'quadraticEquationLib.cpp']]],
+  ['printalltests_34',['printAllTests',['../testsGenerator_8cpp.html#a25ce3f21f5a445c2a1ca019f9e210314',1,'printAllTests():&#160;testsGenerator.cpp'],['../testsGenerator_8hpp.html#a25ce3f21f5a445c2a1ca019f9e210314',1,'printAllTests():&#160;testsGenerator.cpp']]],
+  ['printequation_35',['printEquation',['../structQuadraticEquation.html#adb5b59614257fb21c92157a2c8fef592',1,'QuadraticEquation::printEquation()'],['../quadraticEquationLib_8cpp.html#adb5b59614257fb21c92157a2c8fef592',1,'printEquation():&#160;quadraticEquationLib.cpp']]],
+  ['printsolutions_36',['printSolutions',['../structQuadraticEquation.html#a25e68b83403f9396c333d1425d3526d8',1,'QuadraticEquation::printSolutions()'],['../quadraticEquationLib_8cpp.html#a25e68b83403f9396c333d1425d3526d8',1,'printSolutions(const struct QuadraticEquationAnswer *answer, int outputPrecision):&#160;quadraticEquationLib.cpp']]],
+  ['printtest_37',['printTest',['../testsGenerator_8cpp.html#aaeaea8b75cd1061208763968519704ae',1,'printTest(const Test *test):&#160;testsGenerator.cpp'],['../testsGenerator_8hpp.html#aedadc05155cc8d4e15eaac638391c257',1,'printTest(const struct Test *test):&#160;testsGenerator.hpp']]],
+  ['printtestwithind_38',['printTestWithInd',['../testsGenerator_8cpp.html#adb60156eea0767b4dc5849726a9c31b0',1,'printTestWithInd(int testIndex):&#160;testsGenerator.cpp'],['../testsGenerator_8hpp.html#adb60156eea0767b4dc5849726a9c31b0',1,'printTestWithInd(int testIndex):&#160;testsGenerator.cpp']]]
 ];

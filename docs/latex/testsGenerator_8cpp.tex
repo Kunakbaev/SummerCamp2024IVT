@@ -1,0 +1,111 @@
+\hypertarget{testsGenerator_8cpp}{}\doxysection{tests\+Generator.\+cpp File Reference}
+\label{testsGenerator_8cpp}\index{testsGenerator.cpp@{testsGenerator.cpp}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$assert.\+h$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$errno.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}tests\+Generator.\+hpp\char`\"{}}\newline
+Include dependency graph for tests\+Generator.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{testsGenerator_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static int \mbox{\hyperlink{testsGenerator_8cpp_acc9ec84ec7d5f8d1f937774bcb648042}{get\+Cnt\+Of\+Tests}} ()
+\item 
+static bool \mbox{\hyperlink{testsGenerator_8cpp_acc9a568939d29aa6025bc31da133b92c}{check\+If\+Answer\+Equal}} (const \mbox{\hyperlink{structQuadraticEquationAnswer}{Quadratic\+Equation\+Answer}} $\ast$one, const \mbox{\hyperlink{structQuadraticEquationAnswer}{Quadratic\+Equation\+Answer}} $\ast$two)
+\item 
+\mbox{\hyperlink{structCheckOnTestsOutput}{Check\+On\+Tests\+Output}} \mbox{\hyperlink{testsGenerator_8cpp_ac4d0d82c0b1c1da5453c3426191d597e}{check\+On\+Tests}} (\mbox{\hyperlink{testsGenerator_8hpp_a5b829ca375e5fb58b6a6ad2f2d62a524}{get\+Solutions\+Func\+Ptr}} Get\+Solutions\+Func)
+\begin{DoxyCompactList}\small\item\em checks solution on all tests \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{testsGenerator_8cpp_aaeaea8b75cd1061208763968519704ae}{print\+Test}} (const \mbox{\hyperlink{structTest}{Test}} $\ast$test)
+\item 
+void \mbox{\hyperlink{testsGenerator_8cpp_a25ce3f21f5a445c2a1ca019f9e210314}{print\+All\+Tests}} ()
+\begin{DoxyCompactList}\small\item\em prints all tests \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{testsGenerator_8cpp_adb60156eea0767b4dc5849726a9c31b0}{print\+Test\+With\+Ind}} (int test\+Index)
+\begin{DoxyCompactList}\small\item\em prints test at given index \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const char $\ast$ \mbox{\hyperlink{testsGenerator_8cpp_a9cbb6ce8e09bd7e9e27408eb5604e38f}{TOO\+\_\+\+FEW\+\_\+\+TESTS\+\_\+\+ERROR}} = \char`\"{}Error\+: there are too few tests\textbackslash{}n\char`\"{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{testsGenerator_8cpp_acc9a568939d29aa6025bc31da133b92c}\label{testsGenerator_8cpp_acc9a568939d29aa6025bc31da133b92c}} 
+\index{testsGenerator.cpp@{testsGenerator.cpp}!checkIfAnswerEqual@{checkIfAnswerEqual}}
+\index{checkIfAnswerEqual@{checkIfAnswerEqual}!testsGenerator.cpp@{testsGenerator.cpp}}
+\doxysubsubsection{\texorpdfstring{checkIfAnswerEqual()}{checkIfAnswerEqual()}}
+{\footnotesize\ttfamily static bool check\+If\+Answer\+Equal (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structQuadraticEquationAnswer}{Quadratic\+Equation\+Answer}} $\ast$}]{one,  }\item[{const \mbox{\hyperlink{structQuadraticEquationAnswer}{Quadratic\+Equation\+Answer}} $\ast$}]{two }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{testsGenerator_8cpp_ac4d0d82c0b1c1da5453c3426191d597e}\label{testsGenerator_8cpp_ac4d0d82c0b1c1da5453c3426191d597e}} 
+\index{testsGenerator.cpp@{testsGenerator.cpp}!checkOnTests@{checkOnTests}}
+\index{checkOnTests@{checkOnTests}!testsGenerator.cpp@{testsGenerator.cpp}}
+\doxysubsubsection{\texorpdfstring{checkOnTests()}{checkOnTests()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structCheckOnTestsOutput}{Check\+On\+Tests\+Output}} check\+On\+Tests (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{testsGenerator_8hpp_a5b829ca375e5fb58b6a6ad2f2d62a524}{get\+Solutions\+Func\+Ptr}}}]{Get\+Solutions\+Func }\end{DoxyParamCaption})}
+
+
+
+checks solution on all tests 
+
+Runs given solution on all tests 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em Get\+Solutions\+Func} & pointer to function that solves quadratic equation \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+testing results, test on which solution failed 
+\end{DoxyReturn}
+\mbox{\Hypertarget{testsGenerator_8cpp_acc9ec84ec7d5f8d1f937774bcb648042}\label{testsGenerator_8cpp_acc9ec84ec7d5f8d1f937774bcb648042}} 
+\index{testsGenerator.cpp@{testsGenerator.cpp}!getCntOfTests@{getCntOfTests}}
+\index{getCntOfTests@{getCntOfTests}!testsGenerator.cpp@{testsGenerator.cpp}}
+\doxysubsubsection{\texorpdfstring{getCntOfTests()}{getCntOfTests()}}
+{\footnotesize\ttfamily static int get\+Cnt\+Of\+Tests (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{testsGenerator_8cpp_a25ce3f21f5a445c2a1ca019f9e210314}\label{testsGenerator_8cpp_a25ce3f21f5a445c2a1ca019f9e210314}} 
+\index{testsGenerator.cpp@{testsGenerator.cpp}!printAllTests@{printAllTests}}
+\index{printAllTests@{printAllTests}!testsGenerator.cpp@{testsGenerator.cpp}}
+\doxysubsubsection{\texorpdfstring{printAllTests()}{printAllTests()}}
+{\footnotesize\ttfamily void print\+All\+Tests (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+prints all tests 
+
+\mbox{\Hypertarget{testsGenerator_8cpp_aaeaea8b75cd1061208763968519704ae}\label{testsGenerator_8cpp_aaeaea8b75cd1061208763968519704ae}} 
+\index{testsGenerator.cpp@{testsGenerator.cpp}!printTest@{printTest}}
+\index{printTest@{printTest}!testsGenerator.cpp@{testsGenerator.cpp}}
+\doxysubsubsection{\texorpdfstring{printTest()}{printTest()}}
+{\footnotesize\ttfamily void print\+Test (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structTest}{Test}} $\ast$}]{test }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{testsGenerator_8cpp_adb60156eea0767b4dc5849726a9c31b0}\label{testsGenerator_8cpp_adb60156eea0767b4dc5849726a9c31b0}} 
+\index{testsGenerator.cpp@{testsGenerator.cpp}!printTestWithInd@{printTestWithInd}}
+\index{printTestWithInd@{printTestWithInd}!testsGenerator.cpp@{testsGenerator.cpp}}
+\doxysubsubsection{\texorpdfstring{printTestWithInd()}{printTestWithInd()}}
+{\footnotesize\ttfamily void print\+Test\+With\+Ind (\begin{DoxyParamCaption}\item[{int}]{test\+Index }\end{DoxyParamCaption})}
+
+
+
+prints test at given index 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em test\+Index} & given index of test \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{testsGenerator_8cpp_a9cbb6ce8e09bd7e9e27408eb5604e38f}\label{testsGenerator_8cpp_a9cbb6ce8e09bd7e9e27408eb5604e38f}} 
+\index{testsGenerator.cpp@{testsGenerator.cpp}!TOO\_FEW\_TESTS\_ERROR@{TOO\_FEW\_TESTS\_ERROR}}
+\index{TOO\_FEW\_TESTS\_ERROR@{TOO\_FEW\_TESTS\_ERROR}!testsGenerator.cpp@{testsGenerator.cpp}}
+\doxysubsubsection{\texorpdfstring{TOO\_FEW\_TESTS\_ERROR}{TOO\_FEW\_TESTS\_ERROR}}
+{\footnotesize\ttfamily const char$\ast$ TOO\+\_\+\+FEW\+\_\+\+TESTS\+\_\+\+ERROR = \char`\"{}Error\+: there are too few tests\textbackslash{}n\char`\"{}}
+

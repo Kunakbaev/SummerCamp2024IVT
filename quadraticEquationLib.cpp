@@ -7,7 +7,6 @@
 
 */
 
-
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
@@ -16,30 +15,21 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "quadraticEquationLib.hpp"
+#include "quadraticEquationLib.hpp" // FIXME: pochitat' ob posledovatelnosti include
 
-
-
-/**
-
-    epsilon, regulates with what precision we work
-
-    Should not be too small, otherwise there might be some errors with precision
-
-*/
-const long double EPSILON = 1e-9;
 const int MAX_INPUT_LINE_LEN = 25; ///< maximum length of input line
 
 /**
-
-    should be around 1e18, otherwise there might be errors with overflow
+    \warning should be around 1e18, otherwise there might be errors with overflow
     (cause long double MAX is around 1e36 and we use square of inputed values)
-
 */
-const long double MAX_KOEF_ABS_VALUE = 1e18;
+const long double MAX_KOEF_ABS_VALUE = 1e18; ///< maximum absolute value that koefficient can take
 
 /// @brief error occures if absolute value of number is too big
 const char* VALUE_IS_TOO_BIG_ERROR =      "Error: absolute value of inputed number is too big\n";
+
+/// @brief error occures if absolute value of number is too small
+const char* VALUE_IS_TOO_SMALL_ERROR =      "Error: absolute value of inputed number is too small\n";
 
 /// @brief error occures if inputed long double number is given in incorrect format
 const char* INCORRECT_KOEF_FORMAT_ERROR = "Error: that's not a correct number\n";
@@ -51,13 +41,19 @@ const char* LINEAR_EQ_ERROR =             "Error: this function can not be used 
 const char* INPUT_LINE_TOO_LONG_ERROR =   "Error: input line is too long\n";
 
 
-// ------------------------ HELPER FUNCTIONS ---------------------------------------
+/**
+    epsilon, regulates with what precision we work
+    \warning Should not be too small, otherwise there might be some errors with precision
+*/
+const long double EPSILON = 1e-9; ///< regulates with what precision we work
 
 /// @brief returns sign of variable x, we use it to avoid some precision problems
-static int sign(long double x) {
+int sign(long double x) {
     if (x < -EPSILON) return -1;
     return x > EPSILON;
 }
+
+// ------------------------ HELPER FUNCTIONS ---------------------------------------
 
 /// @brief returns square of variable x
 static long double square(long double x) {
@@ -69,9 +65,9 @@ static long double square(long double x) {
 
     \param[in] line Input line that user gave in console
     \param[out] koef Stores parsed long double koefficient
-    \result boolean true, if given input line is valid
+    \result true, if given input line is valid
 */
-static bool parseLongDoubleAndCheckValid(const char line[], long double* koef) {
+static bool parseLongDoubleAndCheckValid(const char* line, long double* koef) {
     ///\throw line input line should not be NULL
     ///\throw koef should not be NULL
     assert(line != NULL && koef != NULL);
@@ -89,7 +85,7 @@ static bool parseLongDoubleAndCheckValid(const char line[], long double* koef) {
 
     This function's purpose is too deal with all possible errors that can occur during user's input
 */
-static long double getCorrectKoef(const char messageLine[]) {
+static long double getCorrectKoef(const char* messageLine) {
     ///\throw line input line should not be NULL
     ///\throw koef should not be NULL
     assert(messageLine != NULL);
@@ -135,6 +131,8 @@ static long double getCorrectKoef(const char messageLine[]) {
         if (parseLongDoubleAndCheckValid(line, &koef)) {
             if (fabsl(koef) > MAX_KOEF_ABS_VALUE)
                 fprintf(stderr, "%s", VALUE_IS_TOO_BIG_ERROR);
+            else if (sign(koef) == 0 && fabsl(koef) != 0)
+                fprintf(stderr, "%s", VALUE_IS_TOO_SMALL_ERROR);
             else
                 isGoodNumber = true;
         } else {
@@ -155,16 +153,11 @@ static char getSignChar(long double koef) {
     return sign(koef) < 0 ? '-' : '+';
 }
 
-/**
-    \brief prints given equation
-    \param[in] eq Quadratic equation that will be printed
-    \result void
-*/
 void printEquation(const struct QuadraticEquation* eq) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
 
-    long double a = eq->a, b = eq->b, c = eq->c;
+    long double a = eq->a, b = eq->b, c = eq->c; // FIXME:
     char bSign = getSignChar(b);
     char cSign = getSignChar(c);
     b = fabsl(b), c = fabsl(c);
@@ -176,12 +169,6 @@ void printEquation(const struct QuadraticEquation* eq) {
         cSign, precision, c);
 }
 
-
-/**
-    \brief reads given equation
-    \param[out] eq equation that will be read
-    \result void
-*/
 void readEquation(struct QuadraticEquation* eq) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
@@ -203,18 +190,28 @@ long double getPointValue(const struct QuadraticEquation* eq, long double x) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
 
+    ///\warning x should not be too big or too small
     if (fabsl(x) > MAX_KOEF_ABS_VALUE) {
         fprintf(stderr, "%s", VALUE_IS_TOO_BIG_ERROR);
         return 0;
     }
+    if (sign(x) == 0 && fabsl(x) != 0) {
+        fprintf(stderr, "%s", VALUE_IS_TOO_SMALL_ERROR);
+        return 0;
+    }
+
     return eq->a * square(x) + eq->b * x + eq->c;
 }
 
-/**
-    \brief returns discriminant of given equation
-    \param[in] eq given equation
-    \result long double, found discriminant
-*/
+void setOutputPrecision(struct QuadraticEquation* eq, int outputPrecision) {
+    ///\throw eq should not be NULL
+    ///\throw outputPrecision should be >= 0
+    assert(eq != NULL);
+    assert(outputPrecision >= 0);
+
+    eq->outputPrecision = outputPrecision;
+}
+
 long double getDiscriminant(const struct QuadraticEquation* eq) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
@@ -222,11 +219,6 @@ long double getDiscriminant(const struct QuadraticEquation* eq) {
     return square(eq->b) - 4 * eq->a * eq->c;
 }
 
-/**
-    \brief returns x coordinat of top of the parabola
-    \param[in] eq given equation
-    \result long double, x coordinat of top of the parabola
-*/
 long double getVertX(const struct QuadraticEquation* eq) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
@@ -238,11 +230,6 @@ long double getVertX(const struct QuadraticEquation* eq) {
     return 0;
 }
 
-/**
-    \brief returns y coordinat of top of the parabola
-    \param[in] eq given equation
-    \result long double, y coordinat of top of the parabola
-*/
 long double getVertY(const struct QuadraticEquation* eq) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
@@ -254,13 +241,6 @@ long double getVertY(const struct QuadraticEquation* eq) {
     return 0;
 }
 
-
-/**
-    \brief solves linear case of equation (a == 0)
-    \param[in] eq given equation
-    \param[out] answer found roots and info about their cnt
-    \result void
-*/
 static void solveLinearEquation(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
     ///\throw eq should not be NULL
     ///\throw answer should not be NULL
@@ -279,7 +259,6 @@ static void solveLinearEquation(const struct QuadraticEquation* eq, struct Quadr
     \brief solves not linear case of equation (a != 0)
     \param[in] eq given equation
     \param[out] answer found roots and info about their cnt
-    \result void
 */
 static void solveQuadraticEquation(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
     ///\throw eq should not be NULL
@@ -293,6 +272,15 @@ static void solveQuadraticEquation(const struct QuadraticEquation* eq, struct Qu
         return;
     }
 
+    /**
+        we store this values, because they take a lot of time to compute (espessialy operation of square root).
+        So in case if we have a big number of calls to this function, it will not work too slow.
+        \code
+        long double discRoot = sqrtl(disc);
+        long double denom = 1 / (2 * eq->a);
+        \endcode
+    */
+
     long double discRoot = sqrtl(disc);
     long double denom = 1 / (2 * eq->a);
     answer->root_1 = (-eq->b - discRoot) * denom;
@@ -305,12 +293,6 @@ static void solveQuadraticEquation(const struct QuadraticEquation* eq, struct Qu
     }
 }
 
-/**
-    \brief core function, gets solutions of quadratic equation
-    \param[in] eq given equation
-    \param[out] answer found roots and info about their cnt
-    \result void
-*/
 void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
     ///\throw eq should not be NULL
     ///\throw answer should not be NULL
@@ -324,37 +306,29 @@ void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAn
     solveQuadraticEquation(eq, answer);
 }
 
-/**
-    \brief prints found solutions
-    \param[in] answer found roots and info about their cnt
-    \param[in] outputPrecision maximum number of digits after comma
-    \result void
-*/
-void printSolutions(const struct QuadraticEquationAnswer answer, int outputPrecision = 10) {
-    if (answer.numOfSols == INFINITE_ROOTS) {
+void printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrecision) {
+    ///\throw answer should not be NULL
+    assert(answer != NULL);
+
+    if (answer->numOfSols == INFINITE_ROOTS) { // FIXME: rewrite. Пусть он пишет сколько решений
         printf("Infinetly many solutions\n");
         return;
     }
 
-    printf("Solutions of equation : { ");
-    if (answer.numOfSols != NO_ROOTS)
-        printf("%.*Lg", outputPrecision, answer.root_1);
-    if (answer.numOfSols == TWO_ROOTS)
-        printf(", %.*Lg", outputPrecision, answer.root_2);
+    printf("Number of solutions: %d, solutions of equation : { ", answer->numOfSols);
+    if (answer->numOfSols != NO_ROOTS)
+        printf("%.*Lg", outputPrecision, answer->root_1);
+    if (answer->numOfSols == TWO_ROOTS)
+        printf(", %.*Lg", outputPrecision, answer->root_2);
     printf(" }\n");
 }
 
-/**
-    \brief solves equation and prints found solutions
-    \param[in] eq given equation
-    \result void
-*/
 void solveAndPrintEquation(const struct QuadraticEquation* eq) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
 
     struct QuadraticEquationAnswer answer;
     getSolutions(eq, &answer);
-    printSolutions(answer, eq->outputPrecision);
+    printSolutions(&answer, eq->outputPrecision);
 }
 

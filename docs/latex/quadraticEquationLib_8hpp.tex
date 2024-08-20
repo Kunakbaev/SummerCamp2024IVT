@@ -2,14 +2,15 @@
 \label{quadraticEquationLib_8hpp}\index{quadraticEquationLib.hpp@{quadraticEquationLib.hpp}}
 
 
-class containing all methods from lib In this file prototypes of all methods of class \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} are declared  
+class containing all methods from quadratic equation lib In this file prototypes of all methods of class \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} are declared  
 
 
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=300pt]{quadraticEquationLib_8hpp__dep__incl}
+\includegraphics[width=350pt]{quadraticEquationLib_8hpp__dep__incl}
 \end{center}
 \end{figure}
 \doxysubsection*{Classes}
@@ -22,16 +23,21 @@ struct \mbox{\hyperlink{structQuadraticEquationAnswer}{Quadratic\+Equation\+Answ
 \doxysubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
-enum \mbox{\hyperlink{quadraticEquationLib_8hpp_ab0303d5e66a6b8908e8ab6ca7b2ef761}{Quad\+Eq\+Root\+State}} \{ \mbox{\hyperlink{quadraticEquationLib_8hpp_ab0303d5e66a6b8908e8ab6ca7b2ef761ab9a321da349ac1355b717745736ad90c}{NO\+\_\+\+ROOTS}}
-, \mbox{\hyperlink{quadraticEquationLib_8hpp_ab0303d5e66a6b8908e8ab6ca7b2ef761a6700c0f6efd23571cb22aefd2510b1cf}{ONE\+\_\+\+ROOT}}
-, \mbox{\hyperlink{quadraticEquationLib_8hpp_ab0303d5e66a6b8908e8ab6ca7b2ef761a876622d3c0b008da13a3685c64714e81}{TWO\+\_\+\+ROOTS}}
+enum \mbox{\hyperlink{quadraticEquationLib_8hpp_ab0303d5e66a6b8908e8ab6ca7b2ef761}{Quad\+Eq\+Root\+State}} \{ \mbox{\hyperlink{quadraticEquationLib_8hpp_ab0303d5e66a6b8908e8ab6ca7b2ef761ab9a321da349ac1355b717745736ad90c}{NO\+\_\+\+ROOTS}} = 0
+, \mbox{\hyperlink{quadraticEquationLib_8hpp_ab0303d5e66a6b8908e8ab6ca7b2ef761a6700c0f6efd23571cb22aefd2510b1cf}{ONE\+\_\+\+ROOT}} = 1
+, \mbox{\hyperlink{quadraticEquationLib_8hpp_ab0303d5e66a6b8908e8ab6ca7b2ef761a876622d3c0b008da13a3685c64714e81}{TWO\+\_\+\+ROOTS}} = 2
 , \mbox{\hyperlink{quadraticEquationLib_8hpp_ab0303d5e66a6b8908e8ab6ca7b2ef761aa8e8d18b2a4bb297be3e39d332e146bb}{INFINITE\+\_\+\+ROOTS}}
  \}
 \begin{DoxyCompactList}\small\item\em This enum is used to understand what type of equation we have. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{quadraticEquationLib_8hpp_a9721fcc864d893b677962f7f0a5623ce}{sign}} (long double x)
+\begin{DoxyCompactList}\small\item\em returns sign of variable x, we use it to avoid some precision problems \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-class containing all methods from lib In this file prototypes of all methods of class \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} are declared 
+class containing all methods from quadratic equation lib In this file prototypes of all methods of class \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} are declared 
 
 
 
@@ -64,3 +70,16 @@ INFINITE\+\_\+\+ROOTS&equation has infinetly many solutions \\
 \hline
 
 \end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{quadraticEquationLib_8hpp_a9721fcc864d893b677962f7f0a5623ce}\label{quadraticEquationLib_8hpp_a9721fcc864d893b677962f7f0a5623ce}} 
+\index{quadraticEquationLib.hpp@{quadraticEquationLib.hpp}!sign@{sign}}
+\index{sign@{sign}!quadraticEquationLib.hpp@{quadraticEquationLib.hpp}}
+\doxysubsubsection{\texorpdfstring{sign()}{sign()}}
+{\footnotesize\ttfamily int sign (\begin{DoxyParamCaption}\item[{long double}]{x }\end{DoxyParamCaption})}
+
+
+
+returns sign of variable x, we use it to avoid some precision problems 
+
