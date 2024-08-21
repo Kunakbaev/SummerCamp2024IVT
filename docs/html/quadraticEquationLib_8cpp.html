@@ -120,6 +120,9 @@ Functions</h2></td></tr>
 <tr class="separator:adb5b59614257fb21c92157a2c8fef592"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab15bd5240ff721b3642c0db13b5082ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="quadraticEquationLib_8cpp.html#ab15bd5240ff721b3642c0db13b5082ac">readEquation</a> (struct <a class="el" href="structQuadraticEquation.html">QuadraticEquation</a> *eq)</td></tr>
 <tr class="separator:ab15bd5240ff721b3642c0db13b5082ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62042dd796d8c3edb2b3d3057c859fb6"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="quadraticEquationLib_8cpp.html#a62042dd796d8c3edb2b3d3057c859fb6">validateEquation</a> (const <a class="el" href="structQuadraticEquation.html">QuadraticEquation</a> *eq)</td></tr>
+<tr class="memdesc:a62042dd796d8c3edb2b3d3057c859fb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">checks if equation is valid  <a href="quadraticEquationLib_8cpp.html#a62042dd796d8c3edb2b3d3057c859fb6">More...</a><br /></td></tr>
+<tr class="separator:a62042dd796d8c3edb2b3d3057c859fb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a35099c1645b505f2fc3c3f0307fea5f9"><td class="memItemLeft" align="right" valign="top">long double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="quadraticEquationLib_8cpp.html#a35099c1645b505f2fc3c3f0307fea5f9">getPointValue</a> (const struct <a class="el" href="structQuadraticEquation.html">QuadraticEquation</a> *eq, long double x)</td></tr>
 <tr class="memdesc:a35099c1645b505f2fc3c3f0307fea5f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">gets function value at given point x  <a href="quadraticEquationLib_8cpp.html#a35099c1645b505f2fc3c3f0307fea5f9">More...</a><br /></td></tr>
 <tr class="separator:a35099c1645b505f2fc3c3f0307fea5f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -166,6 +169,9 @@ Variables</h2></td></tr>
 <tr class="memitem:aee1fe983a743e61b6ca454fd36fcd5ac"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="quadraticEquationLib_8cpp.html#aee1fe983a743e61b6ca454fd36fcd5ac">INPUT_LINE_TOO_LONG_ERROR</a> = &quot;Error: input line is too long\n&quot;</td></tr>
 <tr class="memdesc:aee1fe983a743e61b6ca454fd36fcd5ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">error occures if input line length exceeds MAX_COEF_ABS_VALUE  <a href="quadraticEquationLib_8cpp.html#aee1fe983a743e61b6ca454fd36fcd5ac">More...</a><br /></td></tr>
 <tr class="separator:aee1fe983a743e61b6ca454fd36fcd5ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cdadafdf0860047e0c1fe4ddec3b88b"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="quadraticEquationLib_8cpp.html#a8cdadafdf0860047e0c1fe4ddec3b88b">INVALID_EQUATION_ERROR</a> = &quot;Error: coefficients of equation are invalid\n&quot;</td></tr>
+<tr class="memdesc:a8cdadafdf0860047e0c1fe4ddec3b88b"><td class="mdescLeft">&#160;</td><td class="mdescRight">error occures if user changed coefficients to be invalid  <a href="quadraticEquationLib_8cpp.html#a8cdadafdf0860047e0c1fe4ddec3b88b">More...</a><br /></td></tr>
+<tr class="separator:a8cdadafdf0860047e0c1fe4ddec3b88b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f51a4b8df89dcda6c2296c53d31c88b"><td class="memItemLeft" align="right" valign="top">const long double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="quadraticEquationLib_8cpp.html#a3f51a4b8df89dcda6c2296c53d31c88b">EPSILON</a> = 1e-9</td></tr>
 <tr class="memdesc:a3f51a4b8df89dcda6c2296c53d31c88b"><td class="mdescLeft">&#160;</td><td class="mdescRight">regulates with what precision we work  <a href="quadraticEquationLib_8cpp.html#a3f51a4b8df89dcda6c2296c53d31c88b">More...</a><br /></td></tr>
 <tr class="separator:a3f51a4b8df89dcda6c2296c53d31c88b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -221,7 +227,7 @@ Variables</h2></td></tr>
 <div class="line">} <span class="keywordflow">while</span> (line[strlen(line) - 1] != <span class="charliteral">&#39;\n&#39;</span>);</div>
 <div class="ttc" id="aquadraticEquationLib_8cpp_html_a161d6cc6af9b7d90b062f3aaf3507d29"><div class="ttname"><a href="quadraticEquationLib_8cpp.html#a161d6cc6af9b7d90b062f3aaf3507d29">MAX_INPUT_LINE_LEN</a></div><div class="ttdeci">const int MAX_INPUT_LINE_LEN</div><div class="ttdoc">maximum length of input line</div><div class="ttdef"><b>Definition:</b> quadraticEquationLib.cpp:20</div></div>
 </div><!-- fragment --><p>check for valid input format </p><div class="fragment"><div class="line"><span class="keywordflow">if</span> (<a class="code" href="quadraticEquationLib_8cpp.html#accd6023a8ad7d97a8bfb2d024b14c914">parseLongDoubleAndCheckValid</a>(line, &amp;coef)) {...</div>
-<div class="ttc" id="aquadraticEquationLib_8cpp_html_accd6023a8ad7d97a8bfb2d024b14c914"><div class="ttname"><a href="quadraticEquationLib_8cpp.html#accd6023a8ad7d97a8bfb2d024b14c914">parseLongDoubleAndCheckValid</a></div><div class="ttdeci">static bool parseLongDoubleAndCheckValid(const char *line, long double *coef)</div><div class="ttdoc">parses long double from string and checks if it's valid</div><div class="ttdef"><b>Definition:</b> quadraticEquationLib.cpp:70</div></div>
+<div class="ttc" id="aquadraticEquationLib_8cpp_html_accd6023a8ad7d97a8bfb2d024b14c914"><div class="ttname"><a href="quadraticEquationLib_8cpp.html#accd6023a8ad7d97a8bfb2d024b14c914">parseLongDoubleAndCheckValid</a></div><div class="ttdeci">static bool parseLongDoubleAndCheckValid(const char *line, long double *coef)</div><div class="ttdoc">parses long double from string and checks if it's valid</div><div class="ttdef"><b>Definition:</b> quadraticEquationLib.cpp:73</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -748,6 +754,45 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="a62042dd796d8c3edb2b3d3057c859fb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62042dd796d8c3edb2b3d3057c859fb6">&#9670;&nbsp;</a></span>validateEquation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool validateEquation </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structQuadraticEquation.html">QuadraticEquation</a> *&#160;</td>
+          <td class="paramname"><em>eq</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>checks if equation is valid </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">eq</td><td>function, which value is evaluated </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>is equation valid </dd></dl>
+<p>checks that absolute value of coef is not too big and not too small </p><div class="fragment"><div class="line"><span class="keywordflow">if</span> (<a class="code" href="quadraticEquationLib_8cpp.html#a9721fcc864d893b677962f7f0a5623ce">sign</a>(coef - <a class="code" href="quadraticEquationLib_8cpp.html#aa4acaced8090a298990bd90e52d0a1a3">MAX_COEF_ABS_VALUE</a>) &gt; 0 ||</div>
+<div class="line">    (<a class="code" href="quadraticEquationLib_8cpp.html#a9721fcc864d893b677962f7f0a5623ce">sign</a>(coef) == 0 &amp;&amp; coef != 0)) {</div>
+<div class="ttc" id="aquadraticEquationLib_8cpp_html_a9721fcc864d893b677962f7f0a5623ce"><div class="ttname"><a href="quadraticEquationLib_8cpp.html#a9721fcc864d893b677962f7f0a5623ce">sign</a></div><div class="ttdeci">int sign(long double x)</div><div class="ttdoc">returns sign of variable x, we use it to avoid some precision problems</div><div class="ttdef"><b>Definition:</b> quadraticEquationLib.cpp:54</div></div>
+<div class="ttc" id="aquadraticEquationLib_8cpp_html_aa4acaced8090a298990bd90e52d0a1a3"><div class="ttname"><a href="quadraticEquationLib_8cpp.html#aa4acaced8090a298990bd90e52d0a1a3">MAX_COEF_ABS_VALUE</a></div><div class="ttdeci">const long double MAX_COEF_ABS_VALUE</div><div class="ttdoc">maximum absolute value that coefficient can take</div><div class="ttdef"><b>Definition:</b> quadraticEquationLib.cpp:26</div></div>
+</div><!-- fragment -->
+</div>
+</div>
 <h2 class="groupheader">Variable Documentation</h2>
 <a id="a3f51a4b8df89dcda6c2296c53d31c88b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3f51a4b8df89dcda6c2296c53d31c88b">&#9670;&nbsp;</a></span>EPSILON</h2>
@@ -795,6 +840,22 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>error occures if input line length exceeds MAX_COEF_ABS_VALUE </p>
+
+</div>
+</div>
+<a id="a8cdadafdf0860047e0c1fe4ddec3b88b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cdadafdf0860047e0c1fe4ddec3b88b">&#9670;&nbsp;</a></span>INVALID_EQUATION_ERROR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* INVALID_EQUATION_ERROR = &quot;Error: coefficients of equation are invalid\n&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>error occures if user changed coefficients to be invalid </p>
 
 </div>
 </div>

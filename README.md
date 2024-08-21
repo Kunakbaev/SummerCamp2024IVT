@@ -22,8 +22,7 @@ doxygen --version
 ```
 Possible output: 1.9.1
 
-All docs appearance config lies in Doxyfile
-In order to get your docs, type in terminal:
+All docs appearance config lies in Doxyfile. In order to get your docs, type in terminal:
 ```
 doxygen Doxyfile
 ```

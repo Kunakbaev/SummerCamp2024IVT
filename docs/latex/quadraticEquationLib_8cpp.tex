@@ -37,6 +37,8 @@ void \mbox{\hyperlink{quadraticEquationLib_8cpp_adb5b59614257fb21c92157a2c8fef59
 \item 
 void \mbox{\hyperlink{quadraticEquationLib_8cpp_ab15bd5240ff721b3642c0db13b5082ac}{read\+Equation}} (struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq)
 \item 
+static bool \mbox{\hyperlink{quadraticEquationLib_8cpp_a62042dd796d8c3edb2b3d3057c859fb6}{validate\+Equation}} (const \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq)
+\begin{DoxyCompactList}\small\item\em checks if equation is valid \end{DoxyCompactList}\item 
 long double \mbox{\hyperlink{quadraticEquationLib_8cpp_a35099c1645b505f2fc3c3f0307fea5f9}{get\+Point\+Value}} (const struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq, long double x)
 \begin{DoxyCompactList}\small\item\em gets function value at given point x \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{quadraticEquationLib_8cpp_aa5b232a7f9b9cf661e12f925d281f6d9}{set\+Output\+Precision}} (struct \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$eq, int output\+Precision)
@@ -74,6 +76,8 @@ const char $\ast$ \mbox{\hyperlink{quadraticEquationLib_8cpp_a8322c89dce43c24256
 \begin{DoxyCompactList}\small\item\em error occures if user tries to use functions that are only can be used if equation is square equation (a != 0) \end{DoxyCompactList}\item 
 const char $\ast$ \mbox{\hyperlink{quadraticEquationLib_8cpp_aee1fe983a743e61b6ca454fd36fcd5ac}{INPUT\+\_\+\+LINE\+\_\+\+TOO\+\_\+\+LONG\+\_\+\+ERROR}} = \char`\"{}Error\+: input line is too long\textbackslash{}n\char`\"{}
 \begin{DoxyCompactList}\small\item\em error occures if input line length exceeds MAX\+\_\+\+COEF\+\_\+\+ABS\+\_\+\+VALUE \end{DoxyCompactList}\item 
+const char $\ast$ \mbox{\hyperlink{quadraticEquationLib_8cpp_a8cdadafdf0860047e0c1fe4ddec3b88b}{INVALID\+\_\+\+EQUATION\+\_\+\+ERROR}} = \char`\"{}Error\+: coefficients of equation are invalid\textbackslash{}n\char`\"{}
+\begin{DoxyCompactList}\small\item\em error occures if user changed coefficients to be invalid \end{DoxyCompactList}\item 
 const long double \mbox{\hyperlink{quadraticEquationLib_8cpp_a3f51a4b8df89dcda6c2296c53d31c88b}{EPSILON}} = 1e-\/9
 \begin{DoxyCompactList}\small\item\em regulates with what precision we work \end{DoxyCompactList}\end{DoxyCompactItemize}
 
@@ -372,6 +376,30 @@ we have 2 distinct solutions in case if disc != 0\mbox{\Hypertarget{quadraticEqu
 
 returns square of variable x 
 
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_a62042dd796d8c3edb2b3d3057c859fb6}\label{quadraticEquationLib_8cpp_a62042dd796d8c3edb2b3d3057c859fb6}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!validateEquation@{validateEquation}}
+\index{validateEquation@{validateEquation}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{validateEquation()}{validateEquation()}}
+{\footnotesize\ttfamily static bool validate\+Equation (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structQuadraticEquation}{Quadratic\+Equation}} $\ast$}]{eq }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+checks if equation is valid 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em eq} & function, which value is evaluated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+is equation valid 
+\end{DoxyReturn}
+checks that absolute value of coef is not too big and not too small 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordflow}{if} (\mbox{\hyperlink{quadraticEquationLib_8cpp_a9721fcc864d893b677962f7f0a5623ce}{sign}}(coef -\/ \mbox{\hyperlink{quadraticEquationLib_8cpp_aa4acaced8090a298990bd90e52d0a1a3}{MAX\_COEF\_ABS\_VALUE}}) > 0 ||}
+\DoxyCodeLine{    (\mbox{\hyperlink{quadraticEquationLib_8cpp_a9721fcc864d893b677962f7f0a5623ce}{sign}}(coef) == 0 \&\& coef != 0)) \{}
+
+\end{DoxyCode}
 
 
 \doxysubsection{Variable Documentation}
@@ -407,6 +435,16 @@ error occures if inputed long double number is given in incorrect format
 
 
 error occures if input line length exceeds MAX\+\_\+\+COEF\+\_\+\+ABS\+\_\+\+VALUE 
+
+\mbox{\Hypertarget{quadraticEquationLib_8cpp_a8cdadafdf0860047e0c1fe4ddec3b88b}\label{quadraticEquationLib_8cpp_a8cdadafdf0860047e0c1fe4ddec3b88b}} 
+\index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!INVALID\_EQUATION\_ERROR@{INVALID\_EQUATION\_ERROR}}
+\index{INVALID\_EQUATION\_ERROR@{INVALID\_EQUATION\_ERROR}!quadraticEquationLib.cpp@{quadraticEquationLib.cpp}}
+\doxysubsubsection{\texorpdfstring{INVALID\_EQUATION\_ERROR}{INVALID\_EQUATION\_ERROR}}
+{\footnotesize\ttfamily const char$\ast$ INVALID\+\_\+\+EQUATION\+\_\+\+ERROR = \char`\"{}Error\+: coefficients of equation are invalid\textbackslash{}n\char`\"{}}
+
+
+
+error occures if user changed coefficients to be invalid 
 
 \mbox{\Hypertarget{quadraticEquationLib_8cpp_a8322c89dce43c24256bfc1532835dfb0}\label{quadraticEquationLib_8cpp_a8322c89dce43c24256bfc1532835dfb0}} 
 \index{quadraticEquationLib.cpp@{quadraticEquationLib.cpp}!LINEAR\_EQ\_ERROR@{LINEAR\_EQ\_ERROR}}

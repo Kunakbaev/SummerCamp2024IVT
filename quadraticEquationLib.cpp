@@ -40,6 +40,9 @@ const char* LINEAR_EQ_ERROR =             "Error: this function can not be used 
 /// @brief error occures if input line length exceeds MAX_COEF_ABS_VALUE
 const char* INPUT_LINE_TOO_LONG_ERROR =   "Error: input line is too long\n";
 
+/// @brief error occures if user changed coefficients to be invalid
+const char* INVALID_EQUATION_ERROR = "Error: coefficients of equation are invalid\n";
+
 
 /**
     epsilon, regulates with what precision we work
@@ -178,6 +181,36 @@ void readEquation(struct QuadraticEquation* eq) {
     eq->a = getCorrectCoef("Print coefficient A: ");
     eq->b = getCorrectCoef("Print coefficient B: ");
     eq->c = getCorrectCoef("Print coefficient C: ");
+
+    setOutputPrecision(eq, 10);
+}
+
+/**
+    \brief checks if equation is valid
+    \param[in] eq function, which value is evaluated
+    \result is equation valid
+*/
+static bool validateEquation(const QuadraticEquation* eq) {
+    long double coefArr[3] = {eq->a, eq->b, eq->c};
+
+    /**
+        checks that absolute value of coef is not too big and not too small
+        \code
+        if (sign(coef - MAX_COEF_ABS_VALUE) > 0 ||
+            (sign(coef) == 0 && coef != 0)) {
+        \endcode
+    */
+    for (int i = 0; i < 3; ++i) {
+        long double coef = fabsl(coefArr[i]);
+        if (sign(coef - MAX_COEF_ABS_VALUE) > 0 ||
+            (sign(coef) == 0 && coef != 0)) {
+
+            fprintf(stderr, "%s", INVALID_EQUATION_ERROR);
+            return false;
+        }
+    }
+
+    return true;
 }
 
 /**
@@ -189,6 +222,8 @@ void readEquation(struct QuadraticEquation* eq) {
 long double getPointValue(const struct QuadraticEquation* eq, long double x) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
+
+    if (!validateEquation(eq)) return 0;
 
     ///\warning x should not be too big or too small
     if (fabsl(x) > MAX_COEF_ABS_VALUE) {
@@ -216,12 +251,15 @@ long double getDiscriminant(const struct QuadraticEquation* eq) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
 
+    if (!validateEquation(eq)) return 0;
     return square(eq->b) - 4 * eq->a * eq->c;
 }
 
 long double getVertX(const struct QuadraticEquation* eq) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
+
+    if (!validateEquation(eq)) return 0;
 
     ///\warning eq->a should not be 0
     if (sign(eq->a) != 0)
@@ -234,6 +272,8 @@ long double getVertY(const struct QuadraticEquation* eq) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
 
+    if (!validateEquation(eq)) return 0;
+
     ///\warning eq->a should not be 0
     if (sign(eq->a) != 0)
         return -getDiscriminant(eq) / (4 * eq->a);
@@ -245,6 +285,8 @@ static void solveLinearEquation(const struct QuadraticEquation* eq, struct Quadr
     ///\throw eq should not be NULL
     ///\throw answer should not be NULL
     assert(eq != NULL && answer != NULL);
+
+    if (!validateEquation(eq)) return;
 
     if (sign(eq->b) == 0) {
         answer->numOfSols = sign(eq->c) ? NO_ROOTS : INFINITE_ROOTS;
@@ -264,6 +306,8 @@ static void solveQuadraticEquation(const struct QuadraticEquation* eq, struct Qu
     ///\throw eq should not be NULL
     ///\throw answer should not be NULL
     assert(eq != NULL && answer != NULL);
+
+    if (!validateEquation(eq)) return;
 
     long double disc = getDiscriminant(eq);
     /// negative disc -> no solutions
@@ -298,6 +342,8 @@ void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAn
     ///\throw answer should not be NULL
     assert(eq != NULL && answer != NULL);
 
+    if (!validateEquation(eq)) return;
+
     if (sign(eq->a) == 0) {
         solveLinearEquation(eq, answer);
         return;
@@ -326,6 +372,8 @@ void printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrec
 void solveAndPrintEquation(const struct QuadraticEquation* eq) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
+
+    if (!validateEquation(eq)) return;
 
     struct QuadraticEquationAnswer answer;
     getSolutions(eq, &answer);
