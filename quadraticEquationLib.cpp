@@ -1,7 +1,7 @@
 /**
 
     \file
-    \brief class containing realization of all methods from lib
+    \brief class containing realization of all methods from QuadraticEquation lib
 
     This is main file, with all functionality of class. File contains realization of all methods of class QuadraticEquation
 
@@ -23,7 +23,7 @@ const int MAX_INPUT_LINE_LEN = 25; ///< maximum length of input line
     \warning should be around 1e18, otherwise there might be errors with overflow
     (cause long double MAX is around 1e36 and we use square of inputed values)
 */
-const long double MAX_KOEF_ABS_VALUE = 1e18; ///< maximum absolute value that koefficient can take
+const long double MAX_COEF_ABS_VALUE = 1e18; ///< maximum absolute value that coefficient can take
 
 /// @brief error occures if absolute value of number is too big
 const char* VALUE_IS_TOO_BIG_ERROR =      "Error: absolute value of inputed number is too big\n";
@@ -32,12 +32,12 @@ const char* VALUE_IS_TOO_BIG_ERROR =      "Error: absolute value of inputed numb
 const char* VALUE_IS_TOO_SMALL_ERROR =      "Error: absolute value of inputed number is too small\n";
 
 /// @brief error occures if inputed long double number is given in incorrect format
-const char* INCORRECT_KOEF_FORMAT_ERROR = "Error: that's not a correct number\n";
+const char* INCORRECT_COEF_FORMAT_ERROR = "Error: that's not a correct number\n";
 
 /// @brief error occures if user tries to use functions that are only can be used if equation is square equation (a != 0)
 const char* LINEAR_EQ_ERROR =             "Error: this function can not be used with a linear equation\n";
 
-/// @brief error occures if input line length exceeds MAX_KOEF_ABS_VALUE
+/// @brief error occures if input line length exceeds MAX_COEF_ABS_VALUE
 const char* INPUT_LINE_TOO_LONG_ERROR =   "Error: input line is too long\n";
 
 
@@ -64,37 +64,37 @@ static long double square(long double x) {
     \brief parses long double from string and checks if it's valid
 
     \param[in] line Input line that user gave in console
-    \param[out] koef Stores parsed long double koefficient
+    \param[out] coef Stores parsed long double coefficient
     \result true, if given input line is valid
 */
-static bool parseLongDoubleAndCheckValid(const char* line, long double* koef) {
+static bool parseLongDoubleAndCheckValid(const char* line, long double* coef) {
     ///\throw line input line should not be NULL
-    ///\throw koef should not be NULL
-    assert(line != NULL && koef != NULL);
+    ///\throw coef should not be NULL
+    assert(line != NULL && coef != NULL);
 
     errno = 0;
     char* endPtr;
-    *koef = strtod(line, &endPtr);
+    *coef = strtod(line, &endPtr);
     return errno == 0 && *endPtr == '\n';
 }
 
 /**
-    \brief reads koef until it's valid
+    \brief reads coef until it's valid
     \param[in] messageLine Hint for user for what to input
-    \result returns long double koefficient
+    \result returns long double coefficient
 
     This function's purpose is too deal with all possible errors that can occur during user's input
 */
-static long double getCorrectKoef(const char* messageLine) {
+static long double getCorrectCoef(const char* messageLine) {
     ///\throw line input line should not be NULL
-    ///\throw koef should not be NULL
+    ///\throw coef should not be NULL
     assert(messageLine != NULL);
 
-    long double koef = 0;
+    long double coef = 0;
     bool isGoodNumber = false;
 
     /**
-        \brief do while loop, until good koefficient will be given
+        \brief do while loop, until good coefficient will be given
         \code
         ...} while (!isGoodNumber);
         \endcode
@@ -109,7 +109,7 @@ static long double getCorrectKoef(const char* messageLine) {
 
         \brief check for valid input format
         \code
-        if (parseLongDoubleAndCheckValid(line, &koef)) {...
+        if (parseLongDoubleAndCheckValid(line, &coef)) {...
         \endcode
     */
 
@@ -128,19 +128,19 @@ static long double getCorrectKoef(const char* messageLine) {
             continue;
         }
 
-        if (parseLongDoubleAndCheckValid(line, &koef)) {
-            if (fabsl(koef) > MAX_KOEF_ABS_VALUE)
+        if (parseLongDoubleAndCheckValid(line, &coef)) {
+            if (fabsl(coef) > MAX_COEF_ABS_VALUE)
                 fprintf(stderr, "%s", VALUE_IS_TOO_BIG_ERROR);
-            else if (sign(koef) == 0 && fabsl(koef) != 0)
+            else if (sign(coef) == 0 && fabsl(coef) != 0)
                 fprintf(stderr, "%s", VALUE_IS_TOO_SMALL_ERROR);
             else
                 isGoodNumber = true;
         } else {
-            fprintf(stderr, "%s", INCORRECT_KOEF_FORMAT_ERROR);
+            fprintf(stderr, "%s", INCORRECT_COEF_FORMAT_ERROR);
         }
     } while (!isGoodNumber);
 
-    return koef;
+    return coef;
 }
 
 
@@ -148,9 +148,9 @@ static long double getCorrectKoef(const char* messageLine) {
 
 // -------------------- FUNCTIONS REALIZATIONS -------------------------------
 
-/// @brief helper function, gets char sign of koef
-static char getSignChar(long double koef) {
-    return sign(koef) < 0 ? '-' : '+';
+/// @brief helper function, gets char sign of coef
+static char getSignChar(long double coef) {
+    return sign(coef) < 0 ? '-' : '+';
 }
 
 void printEquation(const struct QuadraticEquation* eq) {
@@ -174,10 +174,10 @@ void readEquation(struct QuadraticEquation* eq) {
     assert(eq != NULL);
 
     printf("Equation is expected to look like this: A * x ^ 2 + B * x + C, "
-           "where A, B, C are some rational koefficients\n");
-    eq->a = getCorrectKoef("Print koefficient A: ");
-    eq->b = getCorrectKoef("Print koefficient B: ");
-    eq->c = getCorrectKoef("Print koefficient C: ");
+           "where A, B, C are some rational coefficients\n");
+    eq->a = getCorrectCoef("Print coefficient A: ");
+    eq->b = getCorrectCoef("Print coefficient B: ");
+    eq->c = getCorrectCoef("Print coefficient C: ");
 }
 
 /**
@@ -191,7 +191,7 @@ long double getPointValue(const struct QuadraticEquation* eq, long double x) {
     assert(eq != NULL);
 
     ///\warning x should not be too big or too small
-    if (fabsl(x) > MAX_KOEF_ABS_VALUE) {
+    if (fabsl(x) > MAX_COEF_ABS_VALUE) {
         fprintf(stderr, "%s", VALUE_IS_TOO_BIG_ERROR);
         return 0;
     }

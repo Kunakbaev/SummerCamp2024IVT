@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['state_112',['state',['../structCheckOnTestsOutput.html#aed4b244263778c0457cad31e4eee9962',1,'CheckOnTestsOutput']]]
+  ['root_5f1_119',['root_1',['../structQuadraticEquationAnswer.html#aaf39e50282ee7526d7b9e86df8a55017',1,'QuadraticEquationAnswer']]],
+  ['root_5f2_120',['root_2',['../structQuadraticEquationAnswer.html#acc2d84154202b50ddb48fdad97395382',1,'QuadraticEquationAnswer']]]
 ];

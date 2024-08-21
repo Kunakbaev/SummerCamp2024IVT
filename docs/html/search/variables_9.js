@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['root_5f1_110',['root_1',['../structQuadraticEquationAnswer.html#aaf39e50282ee7526d7b9e86df8a55017',1,'QuadraticEquationAnswer']]],
-  ['root_5f2_111',['root_2',['../structQuadraticEquationAnswer.html#acc2d84154202b50ddb48fdad97395382',1,'QuadraticEquationAnswer']]]
+  ['outputprecision_118',['outputPrecision',['../structQuadraticEquation.html#a2034ec547cea3f1294301963cc746e2a',1,'QuadraticEquation']]]
 ];

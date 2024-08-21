@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['parselongdoubleandcheckvalid_33',['parseLongDoubleAndCheckValid',['../quadraticEquationLib_8cpp.html#a53bf4e97503515f57e98bb66b6314c2a',1,'quadraticEquationLib.cpp']]],
-  ['printalltests_34',['printAllTests',['../testsGenerator_8cpp.html#a25ce3f21f5a445c2a1ca019f9e210314',1,'printAllTests():&#160;testsGenerator.cpp'],['../testsGenerator_8hpp.html#a25ce3f21f5a445c2a1ca019f9e210314',1,'printAllTests():&#160;testsGenerator.cpp']]],
-  ['printequation_35',['printEquation',['../structQuadraticEquation.html#adb5b59614257fb21c92157a2c8fef592',1,'QuadraticEquation::printEquation()'],['../quadraticEquationLib_8cpp.html#adb5b59614257fb21c92157a2c8fef592',1,'printEquation():&#160;quadraticEquationLib.cpp']]],
-  ['printsolutions_36',['printSolutions',['../structQuadraticEquation.html#a25e68b83403f9396c333d1425d3526d8',1,'QuadraticEquation::printSolutions()'],['../quadraticEquationLib_8cpp.html#a25e68b83403f9396c333d1425d3526d8',1,'printSolutions(const struct QuadraticEquationAnswer *answer, int outputPrecision):&#160;quadraticEquationLib.cpp']]],
-  ['printtest_37',['printTest',['../testsGenerator_8cpp.html#aaeaea8b75cd1061208763968519704ae',1,'printTest(const Test *test):&#160;testsGenerator.cpp'],['../testsGenerator_8hpp.html#aedadc05155cc8d4e15eaac638391c257',1,'printTest(const struct Test *test):&#160;testsGenerator.hpp']]],
-  ['printtestwithind_38',['printTestWithInd',['../testsGenerator_8cpp.html#adb60156eea0767b4dc5849726a9c31b0',1,'printTestWithInd(int testIndex):&#160;testsGenerator.cpp'],['../testsGenerator_8hpp.html#adb60156eea0767b4dc5849726a9c31b0',1,'printTestWithInd(int testIndex):&#160;testsGenerator.cpp']]]
+  ['parselongdoubleandcheckvalid_35',['parseLongDoubleAndCheckValid',['../quadraticEquationLib_8cpp.html#accd6023a8ad7d97a8bfb2d024b14c914',1,'quadraticEquationLib.cpp']]],
+  ['printalltests_36',['printAllTests',['../testsGenerator_8cpp.html#a573dc2a2f219194816a5a4bfe4871a18',1,'printAllTests(const Tester *tester):&#160;testsGenerator.cpp'],['../testsGenerator_8hpp.html#a573dc2a2f219194816a5a4bfe4871a18',1,'printAllTests(const Tester *tester):&#160;testsGenerator.cpp']]],
+  ['printequation_37',['printEquation',['../structQuadraticEquation.html#adb5b59614257fb21c92157a2c8fef592',1,'QuadraticEquation::printEquation()'],['../quadraticEquationLib_8cpp.html#adb5b59614257fb21c92157a2c8fef592',1,'printEquation():&#160;quadraticEquationLib.cpp']]],
+  ['printsolutions_38',['printSolutions',['../structQuadraticEquation.html#a25e68b83403f9396c333d1425d3526d8',1,'QuadraticEquation::printSolutions()'],['../quadraticEquationLib_8cpp.html#a25e68b83403f9396c333d1425d3526d8',1,'printSolutions():&#160;quadraticEquationLib.cpp']]],
+  ['printtest_39',['printTest',['../structTester.html#ac36a4a733aadab9852d996495fdd1285',1,'Tester::printTest()'],['../testsGenerator_8cpp.html#a445a528e6a0f9921902286dbde5645bd',1,'printTest():&#160;testsGenerator.cpp']]],
+  ['printtestwithind_40',['printTestWithInd',['../structTester.html#a60ed04434f9c07798094aec39da3b101',1,'Tester::printTestWithInd()'],['../testsGenerator_8cpp.html#a60ed04434f9c07798094aec39da3b101',1,'printTestWithInd():&#160;testsGenerator.cpp']]]
 ];

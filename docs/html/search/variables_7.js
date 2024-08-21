@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['numofsols_108',['numOfSols',['../structQuadraticEquationAnswer.html#a1101cf73e93f34dc3a434ea0667e7c7a',1,'QuadraticEquationAnswer']]]
+  ['max_5fcoef_5fabs_5fvalue_115',['MAX_COEF_ABS_VALUE',['../quadraticEquationLib_8cpp.html#aa4acaced8090a298990bd90e52d0a1a3',1,'quadraticEquationLib.cpp']]],
+  ['max_5finput_5fline_5flen_116',['MAX_INPUT_LINE_LEN',['../quadraticEquationLib_8cpp.html#a161d6cc6af9b7d90b062f3aaf3507d29',1,'quadraticEquationLib.cpp']]]
 ];

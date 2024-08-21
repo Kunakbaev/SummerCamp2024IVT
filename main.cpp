@@ -20,16 +20,13 @@
 
 int main() {
 #ifdef RUN_ON_TESTS
+    // checking if solution works on custsom tests
     printf("Running on tests: \n");
-    QuadraticEquationAnswer answer;
 
     Tester tester;
-    CheckOnTestsOutput result = checkOnTests(&tester, &getSolutions);
-    if (result.state == FAILED_ON_SOME_TEST) {
-        printf("Failed on test: %d\n", result.testIndex);
-    } else {
-        printf("All tests passed\n");
-    }
+    validateAllTests(&tester);
+    tester.GetSolutionsFunc = &getSolutions;
+    CheckOnTestsOutput result = checkOnTests(&tester);
 #else
     // usecase of QuadraticEquation class
     struct QuadraticEquation equation;

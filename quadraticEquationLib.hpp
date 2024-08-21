@@ -20,9 +20,9 @@ int sign(long double x);
 */
 // FIXME: pochitat' ob typedef
 struct QuadraticEquation {
-    long double a; //
-    long double b; //
-    long double c; ///< a, b, c are coefficients, some rational numbers
+    long double a; ///< coefficient at x^2
+    long double b; ///< coefficient at x
+    long double c; ///< "free" coefficient
     int outputPrecision; ///< states maximum number of digits of float numbers that will be outputed
 };
 

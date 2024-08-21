@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['outputprecision_109',['outputPrecision',['../structQuadraticEquation.html#a2034ec547cea3f1294301963cc746e2a',1,'QuadraticEquation']]]
+  ['numofsols_117',['numOfSols',['../structQuadraticEquationAnswer.html#a1101cf73e93f34dc3a434ea0667e7c7a',1,'QuadraticEquationAnswer']]]
 ];

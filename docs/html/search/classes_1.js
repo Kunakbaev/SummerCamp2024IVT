@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['quadraticequation_65',['QuadraticEquation',['../structQuadraticEquation.html',1,'']]],
-  ['quadraticequationanswer_66',['QuadraticEquationAnswer',['../structQuadraticEquationAnswer.html',1,'']]]
+  ['quadraticequation_70',['QuadraticEquation',['../structQuadraticEquation.html',1,'']]],
+  ['quadraticequationanswer_71',['QuadraticEquationAnswer',['../structQuadraticEquationAnswer.html',1,'']]]
 ];

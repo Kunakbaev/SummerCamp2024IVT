@@ -32,6 +32,16 @@ struct CheckOnTestsOutput {
 };
 
 /**
+    handy pointer to a solver function
+    \code
+    typedef void (*getSolutionsFuncPtr)(const struct QuadraticEquation*, struct QuadraticEquationAnswer*);
+    \endcode
+*/
+typedef void (*getSolutionsFuncPtr)(const struct QuadraticEquation*, struct QuadraticEquationAnswer*);
+
+
+
+/**
     \brief Tester class, core of a lib
 
     Contains tests, can print them, check solution on tests
@@ -39,7 +49,7 @@ struct CheckOnTestsOutput {
 struct Tester {
     /**
         \brief all tests
-        \warning there are 2 solutions, they should be place in assending order
+        \warning if there are 2 solutions, they should be place in assending order
     */
     const struct Test tests[9] = {
         {{1.0, 1.0, -12.0, 10}, {-4, 3, TWO_ROOTS}},
@@ -52,15 +62,9 @@ struct Tester {
         {{1, 3, -4, 10}, {-4, 1, TWO_ROOTS}},
         {{10, -5, 9, 10}, {0, 0, NO_ROOTS}}
     };
+    /// pointer to a solver function
+    getSolutionsFuncPtr GetSolutionsFunc; ///< \warning should not be NULL
 };
-
-/**
-    handy pointer to a solver function
-    \code
-    typedef void (*getSolutionsFuncPtr)(const struct QuadraticEquation*, struct QuadraticEquationAnswer*);
-    \endcode
-*/
-typedef void (*getSolutionsFuncPtr)(const struct QuadraticEquation*, struct QuadraticEquationAnswer*);
 
 /**
     \brief checks solution on all tests
@@ -70,19 +74,28 @@ typedef void (*getSolutionsFuncPtr)(const struct QuadraticEquation*, struct Quad
     \result testing results, test on which solution failed
     \memberof Tester
 */
-CheckOnTestsOutput checkOnTests(const Tester* tester, getSolutionsFuncPtr GetSolutionsFunc);
+CheckOnTestsOutput checkOnTests(const Tester* tester);
 
 ///\brief prints all tests
 void printAllTests(const Tester* tester);
 /**
     \brief prints given test
     \param[in] test pointer to Test that will be printed
+    \memberof Tester
 */
 void printTest(const Tester* tester, const struct Test* test);
 
 /**
     \brief prints test at given index
     \param[in] testIndex given index of test
+    \memberof Tester
 */
 void printTestWithInd(const Tester* tester, int testIndex);
+
+/**
+    \brief checks if all tests are valid
+    \param[in] tester that contains tests
+    \memberof Tester
+*/
+void validateAllTests(const Tester* tester);
 
