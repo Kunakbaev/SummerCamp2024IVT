@@ -6,7 +6,9 @@
 */
 
 #include <stdio.h>
-#include "colourfullPrintLib/colourfullPrint.hpp"
+//#include "colourfullPrintLib/colourfullPrint.hpp"
+
+//#define RUN_ON_TESTS
 
 #ifdef RUN_ON_TESTS
 #include "testsGeneratorLib/testsGenerator.hpp"
@@ -19,13 +21,13 @@
 // ANSII colors
 int main() {
 
-    changeTextColor(BLUE_COLOR);
-    colourfullPrint("fdsakl\n");
-    colourfullPrint("Hello world: %d %d\n", 10, 20);
-    changeTextColor(YELLOW_COLOR);
-    colourfullPrint("Hello world: %d %d %s\n", 10, 20, " I am green");
-
-    return 0;
+//     changeTextColor(BLUE_COLOR);
+//     colourfullPrint("fdsakl\n");
+//     colourfullPrint("Hello world: %d %d\n", 10, 20);
+//     changeTextColor(YELLOW_COLOR);
+//     colourfullPrint("Hello world: %d %d %s\n", 10, 20, " I am green");
+//
+//     return 0;
 
 #ifdef RUN_ON_TESTS
     // checking if solution works on custsom tests
@@ -35,6 +37,8 @@ int main() {
     validateAllTests(&tester);
     tester.GetSolutionsFunc = &getSolutions;
     CheckOnTestsOutput result = checkOnTests(&tester);
+
+    return result.state;
 #else
     //usecase of QuadraticEquation class
     struct QuadraticEquation equation;

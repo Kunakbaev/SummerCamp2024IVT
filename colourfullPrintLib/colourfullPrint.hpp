@@ -1,5 +1,8 @@
+#ifndef Colors
 
-
+#ifndef printf
+    #include <stdio.h>
+#endif
 
 // bold:
 // char* const RED_COLOR[2] = {"\033[1;31m", "\033[0m"};
@@ -47,5 +50,11 @@ void changeTextColor(enum Colors newColor) {
                             printf(__VA_ARGS__); \
                             printf("%s", colorStrings[BASE_COLOR]);
 
+/// @brief prints in stderror but with red color
+#define printError(...) fprintf(stderr, "%s", colorStrings[RED_COLOR]); \
+                            fprintf(stderr, __VA_ARGS__); \
+                            fprintf(stderr, "%s", colorStrings[BASE_COLOR]);
+
+#endif
 
 

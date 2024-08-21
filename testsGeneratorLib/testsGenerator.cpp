@@ -73,9 +73,9 @@ CheckOnTestsOutput checkOnTests(const Tester* tester) {
         (*tester->GetSolutionsFunc)(&tester->tests[i].equation, &answer);
         if (!checkIfAnswerEqual(&answer, &(tester->tests[i].answer))) {
             printf("Failed on test: #%d\n", i);
-            printf("Test:\n");
+            printf("Test (expected):\n");
             printTest(tester, &tester->tests[i]);
-            printf("Wrong:\n");
+            printf("Yours (wrong):\n");
             printSolutions(&answer, 10);
             result.testIndex = i;
             result.state = FAILED_ON_SOME_TEST;

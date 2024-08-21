@@ -18,8 +18,8 @@ struct Test {
 
 /// @brief Testing state (failed or not)
 enum CheckOnTestsState {
-    ALL_TESTS_PASSED, ///< All tests passed, solution works on them correctly
-    FAILED_ON_SOME_TEST, ///< Solution has failed on some test
+    ALL_TESTS_PASSED    = 0, ///< All tests passed, solution works on them correctly
+    FAILED_ON_SOME_TEST = 1, ///< Solution has failed on some test
 };
 
 /**
@@ -53,7 +53,7 @@ struct Tester {
     */
     const struct Test tests[9] = {
         {{1.0, 1.0, -12.0, 10}, {-4, 3, TWO_ROOTS}},
-        {{1,  -1,    0.35, 10}, {0.5, 0, ONE_ROOT}},
+        {{1,  -1,    0.25, 10}, {0.5, 0, ONE_ROOT}},
         {{0,  -3,    1,    10}, {1.0 / 3.0, 0, ONE_ROOT}},
         {{0,   0,    1,    10}, {0, 0, NO_ROOTS}},
         {{0,   0,    0,    10}, {0, 0, INFINITE_ROOTS}},

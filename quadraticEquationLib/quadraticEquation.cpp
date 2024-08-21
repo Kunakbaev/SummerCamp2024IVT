@@ -15,6 +15,10 @@
 #include <stdlib.h>
 #include <errno.h>
 
+//#include "colourfullPrintLib/colourfullPrint.hpp"
+#ifndef colourfullPrint
+    #include "../colourfullPrintLib/colourfullPrint.hpp"
+#endif
 #include "quadraticEquation.hpp" // FIXME: pochitat' ob posledovatelnosti include
 
 const int MAX_INPUT_LINE_LEN = 25; ///< maximum length of input line
@@ -73,7 +77,8 @@ static bool parseLongDoubleAndCheckValid(char* line, long double* coef) {
     assert(line != NULL && coef != NULL);
 
     line[strlen(line) - 1] = '\0';
-    while (strlen(line) >= 2 && line[strlen(line) - 2] == ' ')
+    while (strlen(line) >= 2 &&
+        (line[strlen(line) - 2] == ' ' || line[strlen(line) - 2] == '\t'))
         line[strlen(line) - 2] = '\0';
 
     errno = 0;
@@ -128,17 +133,18 @@ static long double getCorrectCoef(const char* messageLine) {
         } while (line[strlen(line) - 1] != '\n');
 
         if (inputLineLen - 1 > MAX_INPUT_LINE_LEN) {
-            fprintf(stderr, "%s", INPUT_LINE_TOO_LONG_ERROR);
+            printError("%s", INPUT_LINE_TOO_LONG_ERROR);
             continue;
         }
 
         if (parseLongDoubleAndCheckValid(line, &coef)) {
-            if (fabsl(coef) > MAX_COEF_ABS_VALUE)
-                fprintf(stderr, "%s", VALUE_IS_TOO_BIG_ERROR);
-            else
+            if (fabsl(coef) > MAX_COEF_ABS_VALUE) {
+                printError("%s", VALUE_IS_TOO_BIG_ERROR);
+            } else {
                 isGoodNumber = true;
+            }
         } else {
-            fprintf(stderr, "%s", INCORRECT_COEF_FORMAT_ERROR);
+            printError("%s", INCORRECT_COEF_FORMAT_ERROR);
         }
     } while (!isGoodNumber);
 
@@ -202,7 +208,7 @@ static bool validateEquation(const QuadraticEquation* eq) {
     for (int i = 0; i < 3; ++i) {
         long double coef = fabsl(coefArr[i]);
         if (sign(coef - MAX_COEF_ABS_VALUE) > 0) {
-            fprintf(stderr, "%s", INVALID_EQUATION_ERROR);
+            printError("%s", INVALID_EQUATION_ERROR);
             return false;
         }
     }
@@ -224,7 +230,7 @@ long double getPointValue(const struct QuadraticEquation* eq, long double x) {
 
     ///\warning x should not be too big or too small
     if (fabsl(x) > MAX_COEF_ABS_VALUE) {
-        fprintf(stderr, "%s", VALUE_IS_TOO_BIG_ERROR);
+        printError("%s", VALUE_IS_TOO_BIG_ERROR);
         return 0;
     }
 
@@ -257,7 +263,7 @@ long double getVertX(const struct QuadraticEquation* eq) {
     ///\warning eq->a should not be 0
     if (sign(eq->a) != 0)
         return -eq->b / (2 * eq->a);
-    fprintf(stderr, "%s", LINEAR_EQ_ERROR);
+    printError("%s", LINEAR_EQ_ERROR);
     return 0;
 }
 
@@ -270,7 +276,7 @@ long double getVertY(const struct QuadraticEquation* eq) {
     ///\warning eq->a should not be 0
     if (sign(eq->a) != 0)
         return -getDiscriminant(eq) / (4 * eq->a);
-    fprintf(stderr, "%s", LINEAR_EQ_ERROR);
+    printError("%s", LINEAR_EQ_ERROR);
     return 0;
 }
 
