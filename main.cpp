@@ -6,29 +6,37 @@
 */
 
 #include <stdio.h>
-
-#define RUN_ON_TESTS
+#include "colourfullPrintLib/colourfullPrint.hpp"
 
 #ifdef RUN_ON_TESTS
-#include "testsGenerator.hpp"
+#include "testsGeneratorLib/testsGenerator.hpp"
 #else
-#include "quadraticEquationLib.hpp"
+#include "quadraticEquationLib/quadraticEquation.hpp"
 #endif
 
 
 // ----------------------------- MAIN ----------------------------------------
-
+// ANSII colors
 int main() {
+
+    changeTextColor(BLUE_COLOR);
+    colourfullPrint("fdsakl\n");
+    colourfullPrint("Hello world: %d %d\n", 10, 20);
+    changeTextColor(YELLOW_COLOR);
+    colourfullPrint("Hello world: %d %d %s\n", 10, 20, " I am green");
+
+    return 0;
+
 #ifdef RUN_ON_TESTS
     // checking if solution works on custsom tests
     printf("Running on tests: \n");
 
-    Tester tester;
+    Tester tester; // init
     validateAllTests(&tester);
     tester.GetSolutionsFunc = &getSolutions;
     CheckOnTestsOutput result = checkOnTests(&tester);
 #else
-    // usecase of QuadraticEquation class
+    //usecase of QuadraticEquation class
     struct QuadraticEquation equation;
 
     readEquation(&equation);
