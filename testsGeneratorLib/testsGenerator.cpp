@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
+#include "../quadraticEquationLib/quadraticEquation.hpp"
 #include "testsGenerator.hpp" // FIXME: pochitat' ob posledovatelnosti include
 
 /// @brief error occurs if there are too few tests and testIndex is bigger than number of tests

@@ -15,10 +15,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
-//#include "colourfullPrintLib/colourfullPrint.hpp"
-#ifndef colourfullPrint
-    #include "../colourfullPrintLib/colourfullPrint.hpp"
-#endif
+#include "../colourfullPrintLib/colourfullPrint.hpp"
 #include "quadraticEquation.hpp" // FIXME: pochitat' ob posledovatelnosti include
 
 const int MAX_INPUT_LINE_LEN = 25; ///< maximum length of input line
@@ -76,13 +73,26 @@ static bool parseLongDoubleAndCheckValid(char* line, long double* coef) {
     ///\throw coef should not be NULL
     assert(line != NULL && coef != NULL);
 
-    line[strlen(line) - 1] = '\0';
+    /**
+        trims string while last char == space or tab
+        \code
+        char* ptr = line + strlen(line) - 2;
+        *(ptr + 1) = '\0';
+        while (strlen(line) >= 2 &&
+            (*ptr == ' ' || *ptr == '\t'))
+                *ptr = '\0', --ptr;
+        \endcode
+    */
+    char* ptr = line + strlen(line) - 2; // lineEnd
+    //  *ptr == \n: assert
+    *(ptr + 1) = '\0';
+    // FIXME: remove strlen
     while (strlen(line) >= 2 &&
-        (line[strlen(line) - 2] == ' ' || line[strlen(line) - 2] == '\t'))
-        line[strlen(line) - 2] = '\0';
+        (*ptr == ' ' || *ptr == '\t')) // FIXME: change to func
+            *ptr = '\0', --ptr;
 
     errno = 0;
-    char* endPtr;
+    char* endPtr; // init NULL (nullptr)
     *coef = strtod(line, &endPtr);
     return errno == 0 && *endPtr == '\0';
 }

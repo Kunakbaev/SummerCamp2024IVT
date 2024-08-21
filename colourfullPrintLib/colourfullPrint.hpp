@@ -1,4 +1,6 @@
-#ifndef Colors
+#ifndef _COLOURFULL_PRINT_HEADER_
+#define _COLOURFULL_PRINT_HEADER_
+// FIXME: include guard
 
 #ifndef printf
     #include <stdio.h>
@@ -6,6 +8,7 @@
 
 // bold:
 // char* const RED_COLOR[2] = {"\033[1;31m", "\033[0m"};
+
 
 /// @brief handy Colors enum, user can only choose between them
 enum Colors {
@@ -19,10 +22,10 @@ enum Colors {
     BASE_COLOR=WHITE_COLOR,
 };
 
-enum Colors CURRENT_COLOR = RED_COLOR;
+static enum Colors CURRENT_COLOR = RED_COLOR;
 
 /// @brief real values of each color
-static char* const colorStrings[] = {
+const char* const colorStrings[] = {
     "\033[31m",
     "\033[32m",
     "\033[33m",
@@ -38,9 +41,7 @@ static char* const colorStrings[] = {
     Changes CURRENT_COLOR value to the new color
     \param[in] color string that represents color to which we switch
 */
-void changeTextColor(enum Colors newColor) {
-    CURRENT_COLOR = newColor;
-}
+void changeTextColor(enum Colors newColor);
 
 /**
     \brief printf but with color equal to CURRENT_COLOR

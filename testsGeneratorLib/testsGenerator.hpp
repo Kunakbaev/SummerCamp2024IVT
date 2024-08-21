@@ -1,3 +1,7 @@
+#ifndef TESTS_GENERATOR_HEADER
+#define TESTS_GENERATOR_HEADER
+
+
 /**
     \file
     \brief class containing all methods from testsGenerator lib
@@ -52,15 +56,15 @@ struct Tester {
         \warning if there are 2 solutions, they should be place in assending order
     */
     const struct Test tests[9] = {
-        {{1.0, 1.0, -12.0, 10}, {-4, 3, TWO_ROOTS}},
-        {{1,  -1,    0.25, 10}, {0.5, 0, ONE_ROOT}},
+        {{1.0, 1.0, -12.0, 10}, {-4,        3, TWO_ROOTS}},
+        {{1,  -1,    0.25, 10}, {0.5,       0, ONE_ROOT}},
         {{0,  -3,    1,    10}, {1.0 / 3.0, 0, ONE_ROOT}},
-        {{0,   0,    1,    10}, {0, 0, NO_ROOTS}},
-        {{0,   0,    0,    10}, {0, 0, INFINITE_ROOTS}},
-        {{1,  -5,    9,    10}, {0, 0, NO_ROOTS}},
-        {{1,  -4,    4,    10}, {2, 0, ONE_ROOT}},
-        {{1,   3,   -4,    10}, {-4, 1, TWO_ROOTS}},
-        {{10, -5,    9,    10}, {0, 0, NO_ROOTS}}
+        {{0,   0,    1,    10}, {0,         0, NO_ROOTS}},
+        {{0,   0,    0,    10}, {0,         0, INFINITE_ROOTS}},
+        {{1,  -5,    9,    10}, {0,         0, NO_ROOTS}},
+        {{1,  -4,    4,    10}, {2,         0, ONE_ROOT}},
+        {{1,   3,   -4,    10}, {-4,        1, TWO_ROOTS}},
+        {{10, -5,    9,    10}, {0,         0, NO_ROOTS}}
     };
     /// pointer to a solver function
     getSolutionsFuncPtr GetSolutionsFunc; ///< \warning should not be NULL
@@ -99,3 +103,4 @@ void printTestWithInd(const Tester* tester, int testIndex);
 */
 void validateAllTests(const Tester* tester);
 
+#endif

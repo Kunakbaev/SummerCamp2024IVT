@@ -1,3 +1,6 @@
+#ifndef QUADRATIC_EQUATION_HEADER
+#define QUADRATIC_EQUATION_HEADER
+
 /**
     \file
     \brief class containing all methods from quadratic equation lib
@@ -119,3 +122,5 @@ void printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrec
     \param[in] eq given equation
 */
 void solveAndPrintEquation(const struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
+
+#endif
