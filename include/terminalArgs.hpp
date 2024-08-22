@@ -6,7 +6,7 @@
     \brief this file contains methods that work with arguments from terminal
 */
 
-#include "../quadraticEquationLib/quadraticEquation.hpp"
+#include "quadraticEquation.hpp"
 
 // enum terminalArgsErros {
 //     TERMINAL_ARGS_NO_ERROR =                   0,

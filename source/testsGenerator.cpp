@@ -15,9 +15,9 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "../colourfullPrintLib/colourfullPrint.hpp"
-#include "../quadraticEquationLib/quadraticEquation.hpp"
-#include "testsGenerator.hpp" // FIXME: pochitat' ob posledovatelnosti include
+#include "../include/colourfullPrint.hpp"
+#include "../include/quadraticEquation.hpp"
+#include "../include/testsGenerator.hpp"
 
 /// @brief error occurs if there are too few tests and testIndex is bigger than number of tests
 const char* TOO_FEW_TESTS_ERROR = "Error: there are too few tests\n";

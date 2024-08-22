@@ -7,8 +7,8 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "terminalArgs.hpp"
-#include "../colourfullPrintLib/colourfullPrint.hpp"
+#include "../include/terminalArgs.hpp"
+#include "../include/colourfullPrint.hpp"
 
 /// @brief error occures if output file is not specified
 const char* const FILE_ARGUMENTS_ERROR       = "Error: file arguments are invalid\n";
@@ -72,7 +72,7 @@ static int findOneCommandIndexFromArgs(const ArgsManager* manager, const char* f
     assert(manager->argv != NULL);
     assert(flag != NULL);
 
-    for (int i = 1; i < manager->argc; ++i) // FIXME: from 1
+    for (int i = 1; i < manager->argc; ++i)
         if (strcmp(manager->argv[i], flag) == 0)
             return i;
 

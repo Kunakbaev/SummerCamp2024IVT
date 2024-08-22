@@ -8,7 +8,7 @@
     In this file prototypes of all methods of class testsGenerator are declared
 */
 
-#include "../quadraticEquationLib/quadraticEquation.hpp"
+#include "quadraticEquation.hpp"
 
 
 // enum testsGeneratorErrors {

@@ -24,34 +24,34 @@ ifeq ($(DEBUG), 0)
 endif
 
 
-.PHONY: $(LIB_RUN_NAME)
-$(LIB_RUN_NAME): $(BUILD_DIR)/main.o $(BUILD_DIR)/quadraticEquation.o $(BUILD_DIR)/colourfullPrint.o $(BUILD_DIR)/terminalArgs.o
-	$(CC) $^ -o $(BUILD_DIR)/$(LIB_RUN_NAME) $(CFLAGS)
-
-$(BUILD_DIR)/main.o: main.cpp $(BUILD_DIR)
-	$(CC) -c $< $(CFLAGS) -o $@
-
-$(BUILD_DIR)/quadraticEquation.o: quadraticEquationLib/quadraticEquation.cpp $(BUILD_DIR)
-	$(CC) -c $< $(CFLAGS) -o $@ $(ASSERT_DEFINE)
-
-$(BUILD_DIR)/colourfullPrint.o: colourfullPrintLib/colourfullPrint.cpp $(BUILD_DIR)
-	$(CC) -c $^ $(CFLAGS) -o $@
-
-$(BUILD_DIR)/terminalArgs.o: terminalArgsLib/terminalArgs.cpp $(BUILD_DIR)
-	$(CC) -c $^ $(CFLAGS) -o $@
-
-
-.PHONY: test
-test: $(TESTS_RUN_NAME)
-	$(BUILD_DIR)/$(TESTS_RUN_NAME)
-
-.PHONY: testrun
-testrun: $(LIB_RUN_NAME)
-	$(BUILD_DIR)/$(TESTS_RUN_NAME)
-
-.PHONY: run
-run: $(LIB_RUN_NAME)
-	$(BUILD_DIR)/$(LIB_RUN_NAME)
+# .PHONY: $(LIB_RUN_NAME)
+# $(LIB_RUN_NAME): $(BUILD_DIR)/main.o $(BUILD_DIR)/quadraticEquation.o $(BUILD_DIR)/colourfullPrint.o $(BUILD_DIR)/terminalArgs.o
+# 	$(CC) $^ -o $(BUILD_DIR)/$(LIB_RUN_NAME) $(CFLAGS)
+#
+# $(BUILD_DIR)/main.o: source/main.cpp $(BUILD_DIR)
+# 	$(CC) -c $< $(CFLAGS) -o $@
+#
+# $(BUILD_DIR)/quadraticEquation.o: source/quadraticEquation.cpp $(BUILD_DIR)
+# 	$(CC) -c $< $(CFLAGS) -o $@ $(ASSERT_DEFINE)
+#
+# $(BUILD_DIR)/colourfullPrint.o: source/colourfullPrint.cpp $(BUILD_DIR)
+# 	$(CC) -c $^ $(CFLAGS) -o $@
+#
+# $(BUILD_DIR)/terminalArgs.o: source/terminalArgs.cpp $(BUILD_DIR)
+# 	$(CC) -c $^ $(CFLAGS) -o $@
+#
+#
+# .PHONY: test
+# test: $(TESTS_RUN_NAME)
+# 	$(BUILD_DIR)/$(TESTS_RUN_NAME)
+#
+# .PHONY: testrun
+# testrun: $(LIB_RUN_NAME)
+# 	$(BUILD_DIR)/$(TESTS_RUN_NAME)
+#
+# .PHONY: run
+# run: $(LIB_RUN_NAME)
+# 	$(BUILD_DIR)/$(LIB_RUN_NAME)
 
 
 
@@ -62,10 +62,10 @@ run: $(LIB_RUN_NAME)
 $(TESTS_RUN_NAME): $(BUILD_DIR)/test_main.o $(BUILD_DIR)/quadraticEquation.o $(BUILD_DIR)/colourfullPrint.o $(BUILD_DIR)/testsGenerator.o
 	$(CC) $^ -o $(BUILD_DIR)/$(TESTS_RUN_NAME) $(CFLAGS) $(RUN_TESTS_DEFINE)
 
-$(BUILD_DIR)/testsGenerator.o: testsGeneratorLib/testsGenerator.cpp $(BUILD_DIR)
+$(BUILD_DIR)/testsGenerator.o: source/testsGenerator.cpp $(BUILD_DIR)
 	$(CC) -c $< $(CFLAGS) -o $@
 
-$(BUILD_DIR)/test_main.o: main.cpp $(BUILD_DIR)
+$(BUILD_DIR)/test_main.o: source/main.cpp $(BUILD_DIR)
 	$(CC) -c $< $(CFLAGS) -o $@ $(RUN_TESTS_DEFINE) $(ASSERT_DEFINE)
 
 

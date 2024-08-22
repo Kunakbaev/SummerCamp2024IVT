@@ -59,7 +59,6 @@ QuadEqErrors parseLongDoubleAndCheckValid(char* line, long double* coef, bool* r
     Class can find solutions of quadratic equation in rationals,
     also outputPrecisoin can be state (10 by default), helps outputing floating number.
 */
-// FIXME: pochitat' ob typedef
 struct QuadraticEquation {
     long double a; ///< coefficient at x^2
     long double b; ///< coefficient at x

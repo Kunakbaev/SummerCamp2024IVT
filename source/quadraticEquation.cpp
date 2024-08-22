@@ -16,8 +16,8 @@
 #include <errno.h>
 #include <ctype.h>
 
-#include "../colourfullPrintLib/colourfullPrint.hpp"
-#include "quadraticEquation.hpp"
+#include "../include/colourfullPrint.hpp"
+#include "../include/quadraticEquation.hpp"
 
 const int MAX_INPUT_LINE_LEN = 25; ///< maximum length of input line
 
@@ -215,7 +215,7 @@ QuadEqErrors printEquation(const struct QuadraticEquation* eq) {
     if (eq == NULL)
         return QUAD_EQ_ILLEGAL_ARG;
 
-    long double a = eq->a, b = eq->b, c = eq->c; // FIXME:
+    long double a = eq->a, b = eq->b, c = eq->c;
     char bSign = getSignChar(b);
     char cSign = getSignChar(c);
     b = fabsl(b), c = fabsl(c);

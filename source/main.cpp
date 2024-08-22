@@ -7,15 +7,15 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "colourfullPrintLib/colourfullPrint.hpp"
+#include "../include/colourfullPrint.hpp"
 
 //#define RUN_ON_TESTS
 
 #ifdef RUN_ON_TESTS
-#include "testsGeneratorLib/testsGenerator.hpp"
+#include "../include/testsGenerator.hpp"
 #else
-#include "quadraticEquationLib/quadraticEquation.hpp"
-#include "terminalArgsLib/terminalArgs.hpp"
+#include "../include/quadraticEquation.hpp"
+#include "../include/terminalArgs.hpp"
 #endif
 
 
@@ -71,8 +71,6 @@ int main(int argc, char** argv) {
     }
 
     QuadEqErrors error = QUAD_EQ_NO_ERROR;
-
-
     if (!parseUserInput(&manager, &equation)) {
         error = readEquation(&equation);
         if (error) {
