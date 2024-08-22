@@ -27,7 +27,7 @@
 #define LOG_AND_RETURN(ERROR, ...)                                                                               \
     do {                                                                                                         \
         printError("Error occured, in FILE: %s, FUNCTION: %s, at LINE: %d\n", __FILE__, __FUNCTION__, __LINE__); \
-        printError("%s", errorMessages[ERROR]);                                                                  \
+        printError("%s", getErrorMessage(ERROR));                                                                \
         return ERROR;                                                                                            \
     } while(0)
 
@@ -55,28 +55,28 @@ int sign(long double x) {
 
 
 
-// const char* getErrorMessage(QuadEqErrors error) {
-//     switch (error) {
-//         case QUAD_EQ_NO_ERROR:
-//             break;
-//         case QUAD_EQ_FILE:
-//             break;
-//         case QUAD_EQ_ILLEGAL_ARG:
-//             break;
-//         case QUAD_EQ_VALUE_IS_TOO_BIG:
-//             break;
-//         case QUAD_EQ_INCORRECT_COEF_FORMAT_ERROR:
-//             break;
-//         case QUAD_EQ_INCORRECT_COEF_FORMAT_ERROR:
-//             break;
-//         case QUAD_EQ_LINEAR_EQ_ERROR:
-//             break;
-//         case QUAD_EQ_INPUT_LINE_TOO_LONG_ERROR:
-//             break
-//         case QUAD_EQ_INVALID_EQUATION_ERROR:
-//             break
-//     }
-// }
+const char* getErrorMessage(QuadEqErrors error) {
+    switch (error) {
+        case QUAD_EQ_ERRORS_OK:
+            return "No errors occured\n";
+        case QUAD_EQ_ERRORS_INVALID_FILE:
+            return "Error: couldn't open file\n";
+        case QUAD_EQ_ERRORS_ILLEGAL_ARG:
+            return "Error: illegal argument (possibly set to NULL)\n";
+        case QUAD_EQ_ERRORS_VALUE_IS_TOO_BIG:
+            return "Error: absolute value of inputed number is too big\n";
+        case QUAD_EQ_ERRORS_INCORRECT_COEF_FORMAT:
+            return "Error: that's not a correct number\n";
+        case QUAD_EQ_ERRORS_LINEAR_EQ:
+            return "Error: this function can not be used with a linear equation\n";
+        case QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG:
+            return "Error: input line is too long\n";
+        case QUAD_EQ_ERRORS_INVALID_EQUATION:
+            return "Error: coefficients of equation are invalid\n";
+        default:
+            return "No errors occured\n";
+    }
+}
 
 
 
@@ -157,22 +157,22 @@ static QuadEqErrors getCorrectCoef(const char* messageLine, long double* result)
         } while (line[strlen(line) - 1] != '\n');
 
         if (inputLineLen - 1 > MAX_INPUT_LINE_LEN) {
-            printError("%s", errorMessages[QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG]);
+            printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG));
             continue;
         }
 
         bool isOk = false;
         QuadEqErrors error = parseLongDoubleAndCheckValid(line, &coef, &isOk);
-        if (error) //FIXME :
-            printError("%s", errorMessages[QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG]);
+        if (error != QUAD_EQ_ERRORS_OK) //FIXME :
+            printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG));
 
         if (isOk) {
             if (fabsl(coef) > MAX_COEF_ABS_VALUE)
-                printError("%s", errorMessages[QUAD_EQ_ERRORS_VALUE_IS_TOO_BIG]);
+                printError("%s", getErrorMessage(QUAD_EQ_ERRORS_VALUE_IS_TOO_BIG));
             else
                 isGoodNumber = true;
         } else {
-            printError("%s", errorMessages[QUAD_EQ_ERRORS_INCORRECT_COEF_FORMAT]);
+            printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INCORRECT_COEF_FORMAT));
         }
     } while (!isGoodNumber);
 
@@ -221,11 +221,11 @@ QuadEqErrors readEquation(struct QuadraticEquation* eq) {
     printf("Equation is expected to look like this: A * x ^ 2 + B * x + C, "
            "where A, B, C are some rational coefficients\n");
     QuadEqErrors error = getCorrectCoef("Print coefficient A: ", &eq->a);
-    if (error) return error;
+    if (error != QUAD_EQ_ERRORS_OK) return error;
     error = getCorrectCoef("Print coefficient B: ", &eq->b);
-    if (error) return error;
+    if (error != QUAD_EQ_ERRORS_OK) return error;
     error = getCorrectCoef("Print coefficient C: ", &eq->c);
-    if (error) return error;
+    if (error != QUAD_EQ_ERRORS_OK) return error;
 
     setOutputPrecision(eq, DEFAULT_PRECISION);
     return QUAD_EQ_ERRORS_OK;
@@ -315,7 +315,8 @@ QuadEqErrors getVertX(const struct QuadraticEquation* eq, long double* result) {
         return QUAD_EQ_ERRORS_OK;
     }
 
-    return QUAD_EQ_ERRORS_OK;
+
+    LOG_AND_RETURN(QUAD_EQ_ERRORS_LINEAR_EQ);
 }
 
 QuadEqErrors getVertY(const struct QuadraticEquation* eq, long double* result) {
@@ -337,7 +338,8 @@ QuadEqErrors getVertY(const struct QuadraticEquation* eq, long double* result) {
         *result = -disc / (4 * eq->a);
         return QUAD_EQ_ERRORS_OK;
     }
-    return QUAD_EQ_ERRORS_LINEAR_EQ;
+
+    LOG_AND_RETURN(QUAD_EQ_ERRORS_LINEAR_EQ);
 }
 
 static QuadEqErrors solveLinearEquation(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
@@ -469,7 +471,7 @@ QuadEqErrors printSolutions(const struct QuadraticEquationAnswer* answer, int ou
         case TWO_ROOTS:
             fprintf(stream, "%.*Lg, ", outputPrecision, answer->root_1);
         case ONE_ROOT:
-            fprintf(stream, "%.*Lg\n", outputPrecision, answer->root_2);
+            fprintf(stream, "%.*Lg", outputPrecision, answer->root_2);
             break;
         default:
             assert(false);

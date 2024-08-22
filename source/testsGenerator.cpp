@@ -159,7 +159,7 @@ static bool isValidTest(const Test* test) {
         long double val = NAN;
         error = getPointValue(&test->equation, test->answer.root_1, &val);
         if (error) {
-            printError("%s", errorMessages[error]);
+            printError("%s", getErrorMessage(error));
         }
         if (sign(val)) return false;
     }
@@ -167,7 +167,7 @@ static bool isValidTest(const Test* test) {
         long double val = NAN;
         error = getPointValue(&test->equation, test->answer.root_2, &val);
         if (error) {//FIXME: printf add do while
-            printError("%s", errorMessages[error]);
+            printError("%s", getErrorMessage(error));
         }
         if (sign(val)) return false;
     }

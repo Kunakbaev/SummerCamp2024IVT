@@ -164,7 +164,7 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
         free(argCopy);
 
         if (error) {
-            printError("%s", errorMessages[error]);
+            printError("%s", getErrorMessage(error));
             return false;
         }
         if (!isOk) {

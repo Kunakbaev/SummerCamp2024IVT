@@ -24,17 +24,12 @@ enum QuadEqErrors { // FIXME: add _ERROR
 
 //FIXME: switch case
 
-/// @brief messages of errors
-const char* const errorMessages[] = {
-    "No errors occured\n",
-    "Error: couldn't open file\n",
-    "Error: illegal argument (possibly set to NULL)\n",
-    "Error: absolute value of inputed number is too big\n",
-    "Error: that's not a correct number\n",
-    "Error: this function can not be used with a linear equation\n",
-    "Error: input line is too long\n",
-    "Error: coefficients of equation are invalid\n",
-};
+/**
+    \brief returns string representatin of error
+    \param[in] error Enum, type of error
+    \result returns string representatin of error
+*/
+const char* getErrorMessage(QuadEqErrors error);
 
 // sign function is need in multiple files so it needs to be extern
 int sign(long double x);
