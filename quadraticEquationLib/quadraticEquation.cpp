@@ -14,6 +14,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <ctype.h>
 
 #include "../colourfullPrintLib/colourfullPrint.hpp"
 #include "quadraticEquation.hpp" // FIXME: pochitat' ob posledovatelnosti include
@@ -76,19 +77,20 @@ bool parseLongDoubleAndCheckValid(char* line, long double* coef) {
                 *ptr = '\0', --ptr;
         \endcode
     */
+
     char* ptr = line + strlen(line) - 2; // lineEnd
     //  *ptr == \n: assert
     // assert(*ptr == '\n');
-
-    if (*ptr == '\n') {
+    if (*(ptr + 1) == '\n') {
         *(ptr + 1) = '\0';
     } else {
         ++ptr;
     }
 
+
     size_t len = strlen(line);
     while (len >= 2 &&
-        (*ptr == ' ' || *ptr == '\t')) // FIXME: change to func
+        (isblank(*ptr))) // FIXME: change to func
             *ptr = '\0', --ptr, --len;
 
     errno = 0;

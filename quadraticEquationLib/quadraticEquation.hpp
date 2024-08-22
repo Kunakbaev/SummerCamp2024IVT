@@ -130,6 +130,7 @@ void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAn
     \param[in] answer found roots and info about their cnt
     \param[in] outputPrecision maximum number of digits after comma
     \param[in] outputFile can be equal to "", if len > 0 then output goes to file
+    \warning outputFile should be a correct file name
 */
 void printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrecision, const char* outputFile); ///< \memberof QuadraticEquation
 
@@ -137,6 +138,7 @@ void printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrec
     \brief solves equation and prints found solutions
     \param[in] eq given equation
     \param[in] outputFile can be equal to "", if len > 0 then output goes to file
+    \warning outputFile should be a correct file name
 */
 void solveAndPrintEquation(const struct QuadraticEquation* eq, const char* outputFile); ///< \memberof QuadraticEquation
 

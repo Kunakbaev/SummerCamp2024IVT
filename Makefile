@@ -15,8 +15,8 @@ RUN_TESTS_DEFINE := -DRUN_ON_TESTS
 
 # -------------------------   LIB RUN   -----------------------------
 
-$(LIB_RUN_NAME): $(BUILD_DIR)/main.o $(BUILD_DIR)/quadraticEquation.o $(BUILD_DIR)/colourfullPrint.o
-	$(CC) $(BUILD_DIR)/main.o $(BUILD_DIR)/quadraticEquation.o $(BUILD_DIR)/colourfullPrint.o -o $(BUILD_DIR)/$(LIB_RUN_NAME) $(CFLAGS)
+$(LIB_RUN_NAME): $(BUILD_DIR)/main.o $(BUILD_DIR)/quadraticEquation.o $(BUILD_DIR)/colourfullPrint.o $(BUILD_DIR)/terminalArgs.o
+	$(CC) $^ -o $(BUILD_DIR)/$(LIB_RUN_NAME) $(CFLAGS)
 
 $(BUILD_DIR)/main.o: main.cpp
 	$(CC) -c $^ $(CFLAGS) -o $@
@@ -31,6 +31,10 @@ $(BUILD_DIR)/quadraticEquation.o: quadraticEquationLib/quadraticEquation.cpp
 
 $(BUILD_DIR)/colourfullPrint.o: colourfullPrintLib/colourfullPrint.cpp
 	$(CC) -c $^ $(CFLAGS) -o $@
+
+$(BUILD_DIR)/terminalArgs.o: terminalArgsLib/terminalArgs.cpp
+	$(CC) -c $^ $(CFLAGS) -o $@
+
 
 test: $(TESTS_RUN_NAME)
 	$(BUILD_DIR)/$(TESTS_RUN_NAME)
