@@ -1,0 +1,1 @@
+Number of solutions: 2, solutions of equation : { -3.414213562, -0.5857864376 }

@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
+#include "../colourfullPrintLib/colourfullPrint.hpp"
 #include "../quadraticEquationLib/quadraticEquation.hpp"
 #include "testsGenerator.hpp" // FIXME: pochitat' ob posledovatelnosti include
 
@@ -77,14 +78,15 @@ CheckOnTestsOutput checkOnTests(const Tester* tester) {
             printf("Test (expected):\n");
             printTest(tester, &tester->tests[i]);
             printf("Yours (wrong):\n");
-            printSolutions(&answer, 10);
+            printSolutions(&answer, 10, "");
             result.testIndex = i;
             result.state = FAILED_ON_SOME_TEST;
             return result;
         }
     }
 
-    printf("All tests passed\n");
+    changeTextColor(GREEN_COLOR);
+    colourfullPrint("All tests passed\n");
     result.state = ALL_TESTS_PASSED;
     return result;
 }
@@ -100,7 +102,7 @@ void printTest(const Tester* tester, const Test* test) {
 
     printf("-------------------------\n");
     printEquation(&test->equation);
-    printSolutions(&test->answer, test->equation.outputPrecision);
+    printSolutions(&test->answer, test->equation.outputPrecision, "");
 }
 
 /**
@@ -170,13 +172,14 @@ void validateAllTests(const Tester* tester) {
     for (int i = 0; i < arrLen; ++i) {
         Test test = tester->tests[i];
         if (!isValidTest(&test)) {
-            printf("Test: %d\n", i);
-            fprintf(stderr, "%s", VALIDATION_FAIL_ERROR);
+            printError("Test: %d\n", i);
+            printError("%s", VALIDATION_FAIL_ERROR);
             return;
         }
     }
 
-    printf("All tests are valid\n");
+    changeTextColor(GREEN_COLOR);
+    colourfullPrint("All tests are valid\n");
 }
 
 

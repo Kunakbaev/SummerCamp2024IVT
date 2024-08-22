@@ -12,13 +12,13 @@
 
 /// @brief handy Colors enum, user can only choose between them
 enum Colors {
-    RED_COLOR,
-    GREEN_COLOR,
-    YELLOW_COLOR,
-    BLUE_COLOR,
-    MAGENTA_COLOR,
-    CYAN_COLOR,
-    WHITE_COLOR,
+    RED_COLOR = 0,
+    GREEN_COLOR = 1,
+    YELLOW_COLOR = 2,
+    BLUE_COLOR = 3,
+    MAGENTA_COLOR = 4,
+    CYAN_COLOR = 5,
+    WHITE_COLOR = 6,
     BASE_COLOR=WHITE_COLOR,
 };
 

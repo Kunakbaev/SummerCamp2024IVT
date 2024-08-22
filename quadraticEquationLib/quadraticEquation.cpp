@@ -61,14 +61,7 @@ static long double square(long double x) {
     return x * x;
 }
 
-/**
-    \brief parses long double from string and checks if it's valid
-
-    \param[in] line Input line that user gave in console
-    \param[out] coef Stores parsed long double coefficient
-    \result true, if given input line is valid
-*/
-static bool parseLongDoubleAndCheckValid(char* line, long double* coef) {
+bool parseLongDoubleAndCheckValid(char* line, long double* coef) {
     ///\throw line input line should not be NULL
     ///\throw coef should not be NULL
     assert(line != NULL && coef != NULL);
@@ -85,11 +78,18 @@ static bool parseLongDoubleAndCheckValid(char* line, long double* coef) {
     */
     char* ptr = line + strlen(line) - 2; // lineEnd
     //  *ptr == \n: assert
-    *(ptr + 1) = '\0';
-    // FIXME: remove strlen
-    while (strlen(line) >= 2 &&
+    // assert(*ptr == '\n');
+
+    if (*ptr == '\n') {
+        *(ptr + 1) = '\0';
+    } else {
+        ++ptr;
+    }
+
+    size_t len = strlen(line);
+    while (len >= 2 &&
         (*ptr == ' ' || *ptr == '\t')) // FIXME: change to func
-            *ptr = '\0', --ptr;
+            *ptr = '\0', --ptr, --len;
 
     errno = 0;
     char* endPtr; // init NULL (nullptr)
@@ -361,24 +361,36 @@ void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAn
     solveQuadraticEquation(eq, answer);
 }
 
-void printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrecision) {
+void printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrecision, const char* outputFile) {
     ///\throw answer should not be NULL
     assert(answer != NULL);
 
+    FILE* stream = stdout;
+    if (strlen(outputFile) != 0) {
+        FILE* outFile;
+        outFile = fopen(outputFile, "w");
+        assert(outFile != NULL);
+        printf("Output of solutions goes to file: %s\n", outputFile);
+        stream = outFile;
+    }
+
     if (answer->numOfSols == INFINITE_ROOTS) { // FIXME: rewrite. Пусть он пишет сколько решений
-        printf("Infinetly many solutions\n");
+        fprintf(stream, "Infinetly many solutions\n");
         return;
     }
 
-    printf("Number of solutions: %d, solutions of equation : { ", answer->numOfSols);
+    fprintf(stream, "Number of solutions: %d, solutions of equation : { ", answer->numOfSols);
     if (answer->numOfSols != NO_ROOTS)
-        printf("%.*Lg", outputPrecision, answer->root_1);
+        fprintf(stream, "%.*Lg", outputPrecision, answer->root_1);
     if (answer->numOfSols == TWO_ROOTS)
-        printf(", %.*Lg", outputPrecision, answer->root_2);
-    printf(" }\n");
+        fprintf(stream, ", %.*Lg", outputPrecision, answer->root_2);
+    fprintf(stream, " }\n");
+
+    if (strlen(outputFile) != 0)
+        fclose(stream);
 }
 
-void solveAndPrintEquation(const struct QuadraticEquation* eq) {
+void solveAndPrintEquation(const struct QuadraticEquation* eq, const char* outputFile) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
 
@@ -386,6 +398,6 @@ void solveAndPrintEquation(const struct QuadraticEquation* eq) {
 
     struct QuadraticEquationAnswer answer;
     getSolutions(eq, &answer);
-    printSolutions(&answer, eq->outputPrecision);
+    printSolutions(&answer, eq->outputPrecision, outputFile);
 }
 

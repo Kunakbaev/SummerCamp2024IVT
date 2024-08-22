@@ -10,6 +10,17 @@
 // sign function is need in multiple files so it needs to be extern
 int sign(long double x);
 
+/**
+    \brief parses long double from string and checks if it's valid
+
+    \param[in] line Input line that user gave in console
+    \param[out] coef Stores parsed long double coefficient
+    \result true, if given input line is valid
+*/
+bool parseLongDoubleAndCheckValid(char* line, long double* coef);
+
+
+
 // -------------------------- QUADRATIC EQUATION "CLASS" ---------------------------------------
 
 
@@ -50,6 +61,10 @@ struct QuadraticEquationAnswer {
     long double root_2; ///< second root of equation
     QuadEqRootState numOfSols; ///< number of solutions equation has
 };
+
+
+
+
 
 // structure "methods"
 
@@ -114,13 +129,15 @@ void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAn
     \brief prints found solutions
     \param[in] answer found roots and info about their cnt
     \param[in] outputPrecision maximum number of digits after comma
+    \param[in] outputFile can be equal to "", if len > 0 then output goes to file
 */
-void printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrecision); ///< \memberof QuadraticEquation
+void printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrecision, const char* outputFile); ///< \memberof QuadraticEquation
 
 /**
     \brief solves equation and prints found solutions
     \param[in] eq given equation
+    \param[in] outputFile can be equal to "", if len > 0 then output goes to file
 */
-void solveAndPrintEquation(const struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
+void solveAndPrintEquation(const struct QuadraticEquation* eq, const char* outputFile); ///< \memberof QuadraticEquation
 
 #endif
