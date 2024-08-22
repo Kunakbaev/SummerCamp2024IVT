@@ -137,7 +137,7 @@ void printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrec
 /**
     \brief solves equation and prints found solutions
     \param[in] eq given equation
-    \param[in] outputFile can be equal to "", if len > 0 then output goes to file
+    \param[in] outputFile can be equal to NULL (means that output goes to stdout), if len > 0 then output goes to file
     \warning outputFile should be a correct file name
 */
 void solveAndPrintEquation(const struct QuadraticEquation* eq, const char* outputFile); ///< \memberof QuadraticEquation

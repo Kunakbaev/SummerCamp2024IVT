@@ -65,7 +65,8 @@ static long double square(long double x) {
 bool parseLongDoubleAndCheckValid(char* line, long double* coef) {
     ///\throw line input line should not be NULL
     ///\throw coef should not be NULL
-    assert(line != NULL && coef != NULL);
+    assert(line != NULL);
+    assert(coef != NULL);
 
     /**
         trims string while last char == space or tab
@@ -97,7 +98,7 @@ bool parseLongDoubleAndCheckValid(char* line, long double* coef) {
         return false;
 
     errno = 0;
-    char* endPtr; // init NULL (nullptr)
+    char* endPtr = NULL; // init NULL (nullptr)
     *coef = strtod(line, &endPtr);
     return errno == 0 && *endPtr == '\0';
 }
@@ -298,7 +299,8 @@ long double getVertY(const struct QuadraticEquation* eq) {
 static void solveLinearEquation(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
     ///\throw eq should not be NULL
     ///\throw answer should not be NULL
-    assert(eq != NULL && answer != NULL);
+    assert(eq != NULL);
+    assert(answer != NULL);
 
     if (!validateEquation(eq)) return;
 
@@ -319,7 +321,8 @@ static void solveLinearEquation(const struct QuadraticEquation* eq, struct Quadr
 static void solveQuadraticEquation(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
     ///\throw eq should not be NULL
     ///\throw answer should not be NULL
-    assert(eq != NULL && answer != NULL);
+    assert(eq != NULL);
+    assert(answer != NULL);
 
     if (!validateEquation(eq)) return;
 
@@ -354,7 +357,8 @@ static void solveQuadraticEquation(const struct QuadraticEquation* eq, struct Qu
 void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
     ///\throw eq should not be NULL
     ///\throw answer should not be NULL
-    assert(eq != NULL && answer != NULL);
+    assert(eq != NULL);
+    assert(answer != NULL);
 
     if (!validateEquation(eq)) return;
 
@@ -371,11 +375,13 @@ void printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrec
     assert(answer != NULL);
 
     FILE* stream = stdout;
-    if (strlen(outputFile) != 0) {
+    if (outputFile != NULL) {
         FILE* outFile;
         outFile = fopen(outputFile, "w");
         assert(outFile != NULL);
-        printf("Output of solutions goes to file: %s\n", outputFile);
+
+        changeTextColor(YELLOW_COLOR);
+        colourfullPrint("Output of solutions goes to file: %s\n", outputFile);
         stream = outFile;
     }
 
@@ -391,7 +397,7 @@ void printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrec
         fprintf(stream, ", %.*Lg", outputPrecision, answer->root_2);
     fprintf(stream, " }\n");
 
-    if (strlen(outputFile) != 0)
+    if (outputFile != NULL)
         fclose(stream);
 }
 

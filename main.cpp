@@ -59,14 +59,16 @@ int main(int argc, char** argv) {
     // usecase of QuadraticEquation class
     struct QuadraticEquation equation;
 
-    const char* outputFile = parseOutputFile(argc, argv);
+    ArgsManager manager = {argc, argv};
+    const char* outputFile = parseOutputFile(&manager);
     //printf("outpuFtile : %s\n", outputFile);
 
-    if (isHelpNeeded(argc, argv)) {
+    if (isHelpNeeded(&manager)) {
         changeTextColor(YELLOW_COLOR);
-        colourfullPrint("%s\n", HELP_MESSAGE);
+        colourfullPrint("%s", HELP_MESSAGE);
+        return 0;
     }
-    if (!parseUserInput(argc, argv, &equation))
+    if (!parseUserInput(&manager, &equation))
         readEquation(&equation);
 
 

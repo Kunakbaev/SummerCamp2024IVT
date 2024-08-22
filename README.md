@@ -26,3 +26,8 @@ All docs appearance config lies in Doxyfile. In order to get your docs, type in 
 ```
 doxygen Doxyfile
 ```
+
+To get additional info about terminal args you need to build program and then when executing add --help flag:
+```
+./main.exe --help
+```

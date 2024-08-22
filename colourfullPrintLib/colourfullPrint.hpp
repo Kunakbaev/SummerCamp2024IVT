@@ -12,17 +12,17 @@
 
 /// @brief handy Colors enum, user can only choose between them
 enum Colors {
-    RED_COLOR = 0,
-    GREEN_COLOR = 1,
-    YELLOW_COLOR = 2,
-    BLUE_COLOR = 3,
+    RED_COLOR     = 0,
+    GREEN_COLOR   = 1,
+    YELLOW_COLOR  = 2,
+    BLUE_COLOR    = 3,
     MAGENTA_COLOR = 4,
-    CYAN_COLOR = 5,
-    WHITE_COLOR = 6,
-    BASE_COLOR=WHITE_COLOR,
+    CYAN_COLOR    = 5,
+    WHITE_COLOR   = 6,
+    BASE_COLOR    = WHITE_COLOR,
 };
 
-static enum Colors CURRENT_COLOR = RED_COLOR;
+// FIXME: problem with this variable, it cannot be constant
 
 /// @brief real values of each color
 const char* const colorStrings[] = {
@@ -43,11 +43,15 @@ const char* const colorStrings[] = {
 */
 void changeTextColor(enum Colors newColor);
 
+
+/// @brief return current text color
+Colors getCurrentColor();
+
 /**
     \brief printf but with color equal to CURRENT_COLOR
     \param[in] ... printf args
 */
-#define colourfullPrint(...) printf("%s", colorStrings[CURRENT_COLOR]); \
+#define colourfullPrint(...) printf("%s", colorStrings[getCurrentColor()]); \
                             printf(__VA_ARGS__); \
                             printf("%s", colorStrings[BASE_COLOR]);
 

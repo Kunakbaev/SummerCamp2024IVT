@@ -1,7 +1,11 @@
 #include "colourfullPrint.hpp"
 
-void changeTextColor(enum Colors newColor) {
+static enum Colors CURRENT_COLOR = RED_COLOR;
+
+void changeTextColor(Colors newColor) {
     CURRENT_COLOR = newColor;
-    printf("CURRENT COLOR: %d\n", CURRENT_COLOR);
-    printf("color: %s fakdsfj;l\n", colorStrings[CURRENT_COLOR]);
+}
+
+Colors getCurrentColor() {
+    return CURRENT_COLOR;
 }
