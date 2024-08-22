@@ -21,16 +21,14 @@ enum Colors {
     BASE_COLOR    = WHITE_COLOR,
 };
 
-/// @brief real values of each color
-const char* const colorStrings[] = {
-    "\033[31m",
-    "\033[32m",
-    "\033[33m",
-    "\033[34m",
-    "\033[35m",
-    "\033[36m",
-    "\033[37m",
-};
+//FIXME: switch case
+
+/**
+    \brief returns string matching color
+    \param[in] color Colors enum, that is transformed to string
+    \return color in string representation
+*/
+const char* getColor(enum Colors color);
 
 
 /**
@@ -48,14 +46,20 @@ Colors getCurrentColor();
     \brief printf but with color equal to CURRENT_COLOR
     \param[in] ... printf args
 */
-#define colourfullPrint(...) printf("%s", colorStrings[getCurrentColor()]); \
-                            printf(__VA_ARGS__); \
-                            printf("%s", colorStrings[BASE_COLOR]);
+#define colourfullPrint(...)                             \
+    do {                                                 \
+        printf("%s", getColor(getCurrentColor()));   \
+        printf(__VA_ARGS__);                             \
+        printf("%s", getColor(BASE_COLOR));          \
+    } while(0)
 
 /// @brief prints in stderror but with red color
-#define printError(...) fprintf(stderr, "%s", colorStrings[RED_COLOR]); \
-                            fprintf(stderr, __VA_ARGS__); \
-                            fprintf(stderr, "%s", colorStrings[BASE_COLOR]);
+#define printError(...)                                  \
+    do {                                                 \
+        fprintf(stderr, "%s", getColor(RED_COLOR));  \
+        fprintf(stderr, __VA_ARGS__);                    \
+        fprintf(stderr, "%s", getColor(BASE_COLOR)); \
+    } while(0)
 
 #endif
 

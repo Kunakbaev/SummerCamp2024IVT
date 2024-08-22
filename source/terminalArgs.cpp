@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
+#include <stdlib.h>
 
 #include "../include/terminalArgs.hpp"
 #include "../include/colourfullPrint.hpp"
@@ -148,26 +149,28 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
         return false;
     }
 
-    eq->outputPrecision = 10; // global const STD_PRECISION
-    bool ok1 = false, ok2 = false, ok3 = false;
-    QuadEqErrors error = QUAD_EQ_NO_ERROR;
-    error = parseLongDoubleAndCheckValid(manager->argv[ind + 1], &eq->a, &ok1);
-    if (error) {
-        printError("%s", errorMessages[error]);
-    }
+    eq->outputPrecision = DEFAULT_PRECISION; // global const STD_PRECISION
+    //FIXME: array of pointers to structure fields???
 
-    error = parseLongDoubleAndCheckValid(manager->argv[ind + 2], &eq->b, &ok2);
-    if (error) {
-        printError("%s", errorMessages[error]);
-    }
+    // 3 -> cnt of coefficient of quadratic equation
+    long double* const arr[3] = {&eq->a, &eq->b, &eq->c};
+    for (int i = 0; i < 3; ++i) {
+        const char* word = manager->argv[ind + i + 1];
+        bool isOk = false;
+        char* argCopy = (char*)calloc(sizeof(*word), strlen(word));
+        strcpy(argCopy, word);
 
-    error = parseLongDoubleAndCheckValid(manager->argv[ind + 3], &eq->c, &ok3);
-    if (error) {
-        printError("%s", errorMessages[error]);
-    }
-    if (!(ok1 && ok2 && ok3)) {
-        printError("%s", INCORRECT_USER_INPUT_ERROR);
-        return false;
+        QuadEqErrors error = parseLongDoubleAndCheckValid(argCopy, arr[i], &isOk); // &arr[5] / arr + 5
+        free(argCopy);
+
+        if (error) {
+            printError("%s", errorMessages[error]);
+            return false;
+        }
+        if (!isOk) {
+            printError("%s", INCORRECT_USER_INPUT_ERROR);
+            return false;
+        }
     }
 
     return true;

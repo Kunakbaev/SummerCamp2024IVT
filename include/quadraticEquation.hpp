@@ -8,19 +8,21 @@
     In this file prototypes of all methods of class QuadraticEquation are declared
 */
 
-// FIXME: добавить enum ошибок! Возвращать ошибки из ВСЕХ ФУНКЦИЙ!
+const int DEFAULT_PRECISION = 10;
 
 /// @brief enum that contains errors
-enum QuadEqErrors {
-    QUAD_EQ_NO_ERROR                    = 0,
-    QUAD_EQ_INVALID_FILE                = 1,
-    QUAD_EQ_ILLEGAL_ARG                 = 2,
-    QUAD_EQ_VALUE_IS_TOO_BIG            = 3,
-    QUAD_EQ_INCORRECT_COEF_FORMAT_ERROR = 4,
-    QUAD_EQ_LINEAR_EQ_ERROR             = 5,
-    QUAD_EQ_INPUT_LINE_TOO_LONG_ERROR   = 6,
-    QUAD_EQ_INVALID_EQUATION_ERROR      = 7
+enum QuadEqErrors { // FIXME: add _ERROR
+    QUAD_EQ_ERRORS_OK                    = 0,
+    QUAD_EQ_ERRORS_INVALID_FILE          = 1,
+    QUAD_EQ_ERRORS_ILLEGAL_ARG           = 2,
+    QUAD_EQ_ERRORS_VALUE_IS_TOO_BIG      = 3,
+    QUAD_EQ_ERRORS_INCORRECT_COEF_FORMAT = 4,
+    QUAD_EQ_ERRORS_LINEAR_EQ             = 5,
+    QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG   = 6,
+    QUAD_EQ_ERRORS_INVALID_EQUATION      = 7
 };
+
+//FIXME: switch case
 
 /// @brief messages of errors
 const char* const errorMessages[] = {

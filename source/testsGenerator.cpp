@@ -30,7 +30,7 @@ const char* VALIDATION_FAIL_ERROR = "Error: tests validation failed\n";
     \param[in] tester tester that contains tests
     \result number of tests
 */
-static int getCntOfTests(const Tester* tester) {
+static size_t getCntOfTests(const Tester* tester) {
     ///\throw \param[in] tester should not be NULL
     ///\throw tester->tests should not be NULL
     assert(tester != NULL && tester->tests != NULL);
@@ -51,6 +51,8 @@ static bool checkIfAnswerEqual(const QuadraticEquationAnswer* one, const Quadrat
     if (one->numOfSols == INFINITE_ROOTS)
         return true;
 
+    // FIXME: switch
+
     if (one->numOfSols >= ONE_ROOT && sign(one->root_1 - two->root_1) != 0)
         return false;
     if (one->numOfSols == TWO_ROOTS && sign(one->root_2 - two->root_2) != 0)
@@ -68,18 +70,18 @@ CheckOnTestsOutput checkOnTests(const Tester* tester) {
     ///\throw tester->tests should not be NULL
     assert(tester != NULL && tester->tests != NULL);
 
-    CheckOnTestsOutput result;
-    int arrLen = getCntOfTests(tester);
-    for (int i = 0; i < arrLen; ++i) {
-        QuadraticEquationAnswer answer;
+    CheckOnTestsOutput result = {}; //FIXME:
+    size_t arrLen = getCntOfTests(tester);
+    for (size_t i = 0; i < arrLen; ++i) {
+        QuadraticEquationAnswer answer = {}; //FIXME:
         (*tester->GetSolutionsFunc)(&tester->tests[i].equation, &answer);
         if (!checkIfAnswerEqual(&answer, &(tester->tests[i].answer))) {
-            printf("Failed on test: #%d\n", i);
+            printf("Failed on test: #%zu\n", i);
             printf("Test (expected):\n");
             printTest(tester, &tester->tests[i]);
             printf("Yours (wrong):\n");
             printSolutions(&answer, 10, "");
-            result.testIndex = i;
+            result.testIndex = (int)i;
             result.state = FAILED_ON_SOME_TEST;
             return result;
         }
@@ -114,9 +116,9 @@ void printAllTests(const Tester* tester) {
     ///\throw tester->tests should not be NULL
     assert(tester != NULL && tester->tests != NULL);
 
-    int arrLen = getCntOfTests(tester);
-    printf("All tests:\n");
-    for (int i = 0; i < arrLen; ++i)
+    size_t arrLen = getCntOfTests(tester);
+    printf("All tests:\n"); // FIXME;
+    for (size_t i = 0; i < arrLen; ++i)
         printTest(tester, &tester->tests[i]);
 }
 
@@ -130,7 +132,7 @@ void printTestWithInd(const Tester* tester, int testIndex) {
     ///\throw tester->tests should not be NULL
     assert(tester != NULL && tester->tests != NULL);
 
-    if (testIndex >= getCntOfTests(tester)) {
+    if (testIndex >= (int)getCntOfTests(tester)) {
         fprintf(stderr, "%s", TOO_FEW_TESTS_ERROR);
         return;
     }
@@ -151,9 +153,10 @@ static bool isValidTest(const Test* test) {
         sign(test->answer.root_1 - test->answer.root_2) >= 0)
             return false;
 
-    QuadEqErrors error = QUAD_EQ_NO_ERROR;
+    QuadEqErrors error = QUAD_EQ_ERRORS_OK;
+    // FIXME swtich case
     if (test->answer.numOfSols >= ONE_ROOT) {
-        long double val = 0;
+        long double val = NAN;
         error = getPointValue(&test->equation, test->answer.root_1, &val);
         if (error) {
             printError("%s", errorMessages[error]);
@@ -161,9 +164,9 @@ static bool isValidTest(const Test* test) {
         if (sign(val)) return false;
     }
     if (test->answer.numOfSols == TWO_ROOTS) {
-        long double val = 0;
+        long double val = NAN;
         error = getPointValue(&test->equation, test->answer.root_2, &val);
-        if (error) {
+        if (error) {//FIXME: printf add do while
             printError("%s", errorMessages[error]);
         }
         if (sign(val)) return false;
@@ -177,11 +180,11 @@ void validateAllTests(const Tester* tester) {
     ///\throw tester->tests should not be NULL
     assert(tester != NULL && tester->tests != NULL);
 
-    int arrLen = getCntOfTests(tester);
-    for (int i = 0; i < arrLen; ++i) {
+    size_t arrLen = getCntOfTests(tester);
+    for (size_t i = 0; i < arrLen; ++i) {
         Test test = tester->tests[i];
         if (!isValidTest(&test)) {
-            printError("Test: %d\n", i);
+            printError("Test: %zu\n", i);
             printError("%s", VALIDATION_FAIL_ERROR);
             return;
         }

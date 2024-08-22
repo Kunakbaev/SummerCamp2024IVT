@@ -35,7 +35,7 @@ const char* const HELP_MESSAGE = "This app solves quadratic equation.\n"
 
 struct ArgsManager {
     int argc;
-    char** argv;
+    const char* const *argv;
 };
 
 /**
