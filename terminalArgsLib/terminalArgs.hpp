@@ -23,8 +23,7 @@ struct ArgsManager {
 
 /**
     \brief parses outputFile name from terminal arguments
-    \param[in] argc number of terminal arguments
-    \param[in] argv terminal arguments
+    \param[in] manager Manager that contains argc and argv
     \result outputFile name
     \memberof ArgsManager
 */
@@ -32,8 +31,7 @@ const char* parseOutputFile(const ArgsManager* manager);
 
 /**
     \brief parses coefficients from terminal arguments
-    \param[in] argc number of terminal arguments
-    \param[in] argv terminal arguments
+    \param[in] manager Manager that contains argc and argv
     \result was parse successful
     \memberof ArgsManager
 */
@@ -41,8 +39,7 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq);
 
 /**
     \brief checks if help flag occurs in terminal arguments
-    \param[in] argc number of terminal arguments
-    \param[in] argv terminal arguments
+    \param[in] manager Manager that contains argc and argv
     \result is help message needed
     \memberof ArgsManager
 */
