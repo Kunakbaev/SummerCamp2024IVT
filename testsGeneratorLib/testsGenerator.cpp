@@ -151,12 +151,21 @@ static bool isValidTest(const Test* test) {
         sign(test->answer.root_1 - test->answer.root_2) >= 0)
             return false;
 
+    QuadEqErrors error = QUAD_EQ_NO_ERROR;
     if (test->answer.numOfSols >= ONE_ROOT) {
-        long double val = getPointValue(&test->equation, test->answer.root_1);
+        long double val = 0;
+        error = getPointValue(&test->equation, test->answer.root_1, &val);
+        if (error) {
+            printError("%s", errorMessages[error]);
+        }
         if (sign(val)) return false;
     }
     if (test->answer.numOfSols == TWO_ROOTS) {
-        long double val = getPointValue(&test->equation, test->answer.root_2);
+        long double val = 0;
+        error = getPointValue(&test->equation, test->answer.root_2, &val);
+        if (error) {
+            printError("%s", errorMessages[error]);
+        }
         if (sign(val)) return false;
     }
 

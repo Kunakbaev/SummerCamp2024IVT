@@ -8,6 +8,23 @@
 
 #include "../quadraticEquationLib/quadraticEquation.hpp"
 
+// enum terminalArgsErros {
+//     TERMINAL_ARGS_NO_ERROR =                   0,
+//     TERMINAL_ARGS_QUAD_EQ_ILLEGAL_ARG =        1,
+//     TERMINAL_ARGS_FILE_ARGUMENTS_ERROR =       2,
+//     TERMINAL_ARGS_USER_INPUT_ARGUMENTS_ERROR = 3,
+//     TERMINAL_ARGS_INCORRECT_USER_INPUT_ERROR = 4
+// };
+//
+// const char* const errorMessages[] = {
+//     "No errors occured\n",
+//     "Error: illegal argument (possibly set to NULL)\n",
+//     "Error: file arguments are invalid\n",
+//     "Error: user input arguments are invalid\n",
+//     "Error: incorrect user input\n"
+// };
+
+
 /// @brief prints helping message, for user to understand what this programm does
 const char* const HELP_MESSAGE = "This app solves quadratic equation.\n"
                                  "It works only with rational coefficients and finds rational solutions.\n"
@@ -20,6 +37,13 @@ struct ArgsManager {
     int argc;
     char** argv;
 };
+
+/**
+    \brief checks that there aren't any invalid flags
+    \param[in] manager Manager that contains argc and argv
+    \memberof ArgsManager
+*/
+void validateManager(const ArgsManager* manager);
 
 /**
     \brief parses outputFile name from terminal arguments

@@ -52,14 +52,15 @@ int main(int argc, char** argv) {
     // colourfullPrint("Hello world: %d %d %s\n", 10, 20, " I am green");
 
 
-    // for (int i = 0; i < argc; ++i) {
-    //     printf("%s\n", argv[i]);
-    // }
+    for (int i = 0; i < argc; ++i) {
+        printf("%s\n", argv[i]);
+    }
 
     // usecase of QuadraticEquation class
     struct QuadraticEquation equation;
 
     ArgsManager manager = {argc, argv};
+    validateManager(&manager);
     const char* outputFile = parseOutputFile(&manager);
     //printf("outpuFtile : %s\n", outputFile);
 
@@ -68,17 +69,49 @@ int main(int argc, char** argv) {
         colourfullPrint("%s", HELP_MESSAGE);
         return 0;
     }
-    if (!parseUserInput(&manager, &equation))
-        readEquation(&equation);
+
+    QuadEqErrors error = QUAD_EQ_NO_ERROR;
+
+
+    if (!parseUserInput(&manager, &equation)) {
+        error = readEquation(&equation);
+        if (error) {
+            printError("%s", errorMessages[error]);
+        }
+    }
 
 
 
-    printEquation(&equation);
+    // FIXME: intentional error FAFADAAAAAAAAAAAAAAAHHHHHHHHHHH
+    error = printEquation(&equation);
+    if (error) {
+        printError("%s", errorMessages[error]);
+    }
+
     // these two functions works only if it's quadratic equation (a != 0), otherwise error will occur
-    printf("Coordinate X of top of parabola: %.10Lg\n", getVertX(&equation));
-    printf("Coordinate Y of top of parabola: %.10Lg\n", getVertY(&equation));
-    printf("Value at point 5: %.10Lg\n", getPointValue(&equation, 5));
-    solveAndPrintEquation(&equation, outputFile);
+    long double vertX = 0, vertY = 0, pointValue = 0;
+    error = getVertX(&equation, &vertX);
+    if (error) {
+        printError("%s", errorMessages[error]);
+    }
+    printf("Coordinate X of top of parabola: %.10Lg\n", vertX);
+
+    error = getVertY(&equation, &vertY);
+    if (error) {
+        printError("%s", errorMessages[error]);
+    }
+    printf("Coordinate Y of top of parabola: %.10Lg\n", vertY);
+
+    error = getPointValue(&equation, 5, &pointValue);
+    if (error) {
+        printError("%s", errorMessages[error]);
+    }
+    printf("Value at point 5: %.10Lg\n", pointValue);
+
+    error = solveAndPrintEquation(&equation, outputFile);
+    if (error) {
+        printError("%s", errorMessages[error]);
+    }
 #endif
 
     return 0;

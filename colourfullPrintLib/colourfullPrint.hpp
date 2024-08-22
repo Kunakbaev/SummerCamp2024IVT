@@ -1,6 +1,5 @@
 #ifndef _COLOURFULL_PRINT_HEADER_
 #define _COLOURFULL_PRINT_HEADER_
-// FIXME: include guard
 
 #ifndef printf
     #include <stdio.h>
@@ -21,8 +20,6 @@ enum Colors {
     WHITE_COLOR   = 6,
     BASE_COLOR    = WHITE_COLOR,
 };
-
-// FIXME: problem with this variable, it cannot be constant
 
 /// @brief real values of each color
 const char* const colorStrings[] = {

@@ -1,11 +1,38 @@
 #ifndef QUADRATIC_EQUATION_HEADER
 #define QUADRATIC_EQUATION_HEADER
 
+
 /**
     \file
     \brief class containing all methods from quadratic equation lib
     In this file prototypes of all methods of class QuadraticEquation are declared
 */
+
+// FIXME: добавить enum ошибок! Возвращать ошибки из ВСЕХ ФУНКЦИЙ!
+
+/// @brief enum that contains errors
+enum QuadEqErrors {
+    QUAD_EQ_NO_ERROR                    = 0,
+    QUAD_EQ_INVALID_FILE                = 1,
+    QUAD_EQ_ILLEGAL_ARG                 = 2,
+    QUAD_EQ_VALUE_IS_TOO_BIG            = 3,
+    QUAD_EQ_INCORRECT_COEF_FORMAT_ERROR = 4,
+    QUAD_EQ_LINEAR_EQ_ERROR             = 5,
+    QUAD_EQ_INPUT_LINE_TOO_LONG_ERROR   = 6,
+    QUAD_EQ_INVALID_EQUATION_ERROR      = 7
+};
+
+/// @brief messages of errors
+const char* const errorMessages[] = {
+    "No errors occured\n",
+    "Error: couldn't open file\n",
+    "Error: illegal argument (possibly set to NULL)\n",
+    "Error: absolute value of inputed number is too big\n",
+    "Error: that's not a correct number\n",
+    "Error: this function can not be used with a linear equation\n",
+    "Error: input line is too long\n",
+    "Error: coefficients of equation are invalid\n",
+};
 
 // sign function is need in multiple files so it needs to be extern
 int sign(long double x);
@@ -17,7 +44,7 @@ int sign(long double x);
     \param[out] coef Stores parsed long double coefficient
     \result true, if given input line is valid
 */
-bool parseLongDoubleAndCheckValid(char* line, long double* coef);
+QuadEqErrors parseLongDoubleAndCheckValid(char* line, long double* coef, bool* result);
 
 
 
@@ -73,14 +100,14 @@ struct QuadraticEquationAnswer {
     \param[out] eq equation that will be read
     \result void
 */
-void readEquation(struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
+QuadEqErrors readEquation(struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
 
 /**
     \brief prints given equation
     \param[in] eq Quadratic equation that will be printed
     \result void
 */
-void printEquation(const struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
+QuadEqErrors printEquation(const struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
 
 /**
     \brief gets function value at given point x
@@ -88,42 +115,42 @@ void printEquation(const struct QuadraticEquation* eq); ///< \memberof Quadratic
     \param[in] x x coordinat, at which value is get
     \result y coordinat, found value at given point
 */
-long double getPointValue(const struct QuadraticEquation* eq, long double x); ///< \memberof QuadraticEquation
+QuadEqErrors getPointValue(const struct QuadraticEquation* eq, long double x, long double* result); ///< \memberof QuadraticEquation
 
 /**
     \brief sets output precision of give equation
     \param[in] eq give equation
     \param[in] outputPrecision precision when outputing numbers
 */
-void setOutputPrecision(struct QuadraticEquation* eq, int outputPrecision); ///< \memberof QuadraticEquation
+QuadEqErrors setOutputPrecision(struct QuadraticEquation* eq, int outputPrecision); ///< \memberof QuadraticEquation
 
 /**
     \brief returns discriminant of given equation
     \param[in] eq given equation
     \result found discriminant
 */
-long double getDiscriminant(const struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
+QuadEqErrors getDiscriminant(const struct QuadraticEquation* eq, long double* result); ///< \memberof QuadraticEquation
 
 /**
     \brief returns x coordinat of top of the parabola
     \param[in] eq given equation
     \result x coordinat of top of the parabola
 */
-long double getVertX(const struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
+QuadEqErrors getVertX(const struct QuadraticEquation* eq, long double* result); ///< \memberof QuadraticEquation
 
 /**
     \brief returns y coordinat of top of the parabola
     \param[in] eq given equation
     \result y coordinat of top of the parabola
 */
-long double getVertY(const struct QuadraticEquation* eq); ///< \memberof QuadraticEquation
+QuadEqErrors getVertY(const struct QuadraticEquation* eq, long double* result); ///< \memberof QuadraticEquation
 
 /**
     \brief core function, gets solutions of quadratic equation
     \param[in] eq given equation
     \param[out] answer found roots and info about their cnt
 */
-void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer); ///< \memberof QuadraticEquation
+QuadEqErrors getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer); ///< \memberof QuadraticEquation
 
 /**
     \brief prints found solutions
@@ -132,7 +159,7 @@ void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAn
     \param[in] outputFile can be equal to "", if len > 0 then output goes to file
     \warning outputFile should be a correct file name
 */
-void printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrecision, const char* outputFile); ///< \memberof QuadraticEquation
+QuadEqErrors printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrecision, const char* outputFile); ///< \memberof QuadraticEquation
 
 /**
     \brief solves equation and prints found solutions
@@ -140,6 +167,6 @@ void printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrec
     \param[in] outputFile can be equal to NULL (means that output goes to stdout), if len > 0 then output goes to file
     \warning outputFile should be a correct file name
 */
-void solveAndPrintEquation(const struct QuadraticEquation* eq, const char* outputFile); ///< \memberof QuadraticEquation
+QuadEqErrors solveAndPrintEquation(const struct QuadraticEquation* eq, const char* outputFile); ///< \memberof QuadraticEquation
 
 #endif

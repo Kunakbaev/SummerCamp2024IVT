@@ -17,7 +17,10 @@ const char* const FILE_ARGUMENTS_ERROR       = "Error: file arguments are invali
 const char* const USER_INPUT_ARGUMENTS_ERROR = "Error: user input arguments are invalid\n";
 
 /// @brief error occures if provided argument are invalid long doubles
-const char* const INCORRECT_USER_INPUT_ERROR    = "Error: incorrect user input\n";
+const char* const INCORRECT_USER_INPUT_ERROR = "Error: incorrect user input\n";
+
+/// @brief error occures if some of arguments flags are unknow
+const char* const UNKNOWN_FLAGS_ERROR        = "Error: there are some unknown flags\n";
 
 const char* USER_FLAG_SHORT      = "-u";
 const char* USER_FLAG_EXTENDED   = "--user";
@@ -25,6 +28,41 @@ const char* HELP_FLAG_SHORT      = "-h";
 const char* HELP_FLAG_EXTENDED   = "--help";
 const char* OUTPUT_FLAG_SHORT    = "-o";
 const char* OUTPUT_FLAG_EXTENDED = "--output";
+
+static bool isKnownFlag(const char* flag) {
+    const char* const arr[] = {
+        USER_FLAG_SHORT,
+        USER_FLAG_EXTENDED,
+        HELP_FLAG_SHORT,
+        HELP_FLAG_EXTENDED,
+        OUTPUT_FLAG_SHORT,
+        OUTPUT_FLAG_EXTENDED
+    };
+
+    int arrLen = sizeof(arr) / sizeof(*arr);
+    for (int i = 0; i < arrLen; ++i)
+        if (strcmp(arr[i], flag) == 0)
+            return true;
+    return false;
+}
+
+static bool isParamArgument(const char* arg) {
+    assert(arg != NULL);
+    return arg[0] == '-';
+}
+
+void validateManager(const ArgsManager* manager) {
+    ///\throw manager should not be NULL
+    assert(manager != NULL);
+
+    for (int i = 1; i < manager->argc; ++i) {
+        const char* flag = manager->argv[i];
+        if (isParamArgument(flag) && !isKnownFlag(flag)) {
+            printError("%s", UNKNOWN_FLAGS_ERROR);
+            return;
+        }
+    }
+}
 
 static int findOneCommandIndexFromArgs(const ArgsManager* manager, const char* flag) {
     ///\throw manager should not be NULL
@@ -34,7 +72,7 @@ static int findOneCommandIndexFromArgs(const ArgsManager* manager, const char* f
     assert(manager->argv != NULL);
     assert(flag != NULL);
 
-    for (int i = 0; i < manager->argc; ++i) // from 1
+    for (int i = 1; i < manager->argc; ++i) // FIXME: from 1
         if (strcmp(manager->argv[i], flag) == 0)
             return i;
 
@@ -58,10 +96,7 @@ static int findCommandIndex(const ArgsManager* manager, const char* flag_short, 
     return first > second ? first : second;
 }
 
-static bool isParamArgument(const char* arg) {
-    assert(arg != NULL);
-    return arg[0] == '-';
-}
+// FIXME: check for illegal flags
 
 static bool checkGoodParams(const ArgsManager* manager, int startInd, int cntNeed) {
     assert(manager != NULL);
@@ -86,7 +121,8 @@ const char* parseOutputFile(const ArgsManager* manager) {
     // output file argument not found
     if (ind == -1) return NULL;
 
-    if (!checkGoodParams(manager, ind, 1)) {
+    const int numNeededArgs = 1;
+    if (!checkGoodParams(manager, ind, numNeededArgs)) {
         printError("%s", FILE_ARGUMENTS_ERROR);
         return NULL;
     }
@@ -106,16 +142,30 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
     // output file argument not found
     if (ind == -1) return false;
 
-    if (!checkGoodParams(manager, ind, 3)) { // same
+    const int numNeededArgs = 3;
+    if (!checkGoodParams(manager, ind, numNeededArgs)) { // same
         printError("%s", USER_INPUT_ARGUMENTS_ERROR);
         return false;
     }
 
-    eq->outputPrecision = 10;
-    bool isOk = parseLongDoubleAndCheckValid(manager->argv[ind + 1], &eq->a) &&
-                parseLongDoubleAndCheckValid(manager->argv[ind + 2], &eq->b) &&
-                parseLongDoubleAndCheckValid(manager->argv[ind + 3], &eq->c);
-    if (!isOk) {
+    eq->outputPrecision = 10; // global const STD_PRECISION
+    bool ok1 = false, ok2 = false, ok3 = false;
+    QuadEqErrors error = QUAD_EQ_NO_ERROR;
+    error = parseLongDoubleAndCheckValid(manager->argv[ind + 1], &eq->a, &ok1);
+    if (error) {
+        printError("%s", errorMessages[error]);
+    }
+
+    error = parseLongDoubleAndCheckValid(manager->argv[ind + 2], &eq->b, &ok2);
+    if (error) {
+        printError("%s", errorMessages[error]);
+    }
+
+    error = parseLongDoubleAndCheckValid(manager->argv[ind + 3], &eq->c, &ok3);
+    if (error) {
+        printError("%s", errorMessages[error]);
+    }
+    if (!(ok1 && ok2 && ok3)) {
         printError("%s", INCORRECT_USER_INPUT_ERROR);
         return false;
     }

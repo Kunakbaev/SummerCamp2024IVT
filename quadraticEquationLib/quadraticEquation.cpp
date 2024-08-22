@@ -17,7 +17,7 @@
 #include <ctype.h>
 
 #include "../colourfullPrintLib/colourfullPrint.hpp"
-#include "quadraticEquation.hpp" // FIXME: pochitat' ob posledovatelnosti include
+#include "quadraticEquation.hpp"
 
 const int MAX_INPUT_LINE_LEN = 25; ///< maximum length of input line
 
@@ -26,21 +26,6 @@ const int MAX_INPUT_LINE_LEN = 25; ///< maximum length of input line
     (cause long double MAX is around 1e36 and we use square of inputed values)
 */
 const long double MAX_COEF_ABS_VALUE = 1e18; ///< maximum absolute value that coefficient can take
-
-/// @brief error occures if absolute value of number is too big
-const char* VALUE_IS_TOO_BIG_ERROR =      "Error: absolute value of inputed number is too big\n";
-
-/// @brief error occures if inputed long double number is given in incorrect format
-const char* INCORRECT_COEF_FORMAT_ERROR = "Error: that's not a correct number\n";
-
-/// @brief error occures if user tries to use functions that are only can be used if equation is square equation (a != 0)
-const char* LINEAR_EQ_ERROR =             "Error: this function can not be used with a linear equation\n";
-
-/// @brief error occures if input line length exceeds MAX_COEF_ABS_VALUE
-const char* INPUT_LINE_TOO_LONG_ERROR =   "Error: input line is too long\n";
-
-/// @brief error occures if user changed coefficients to be invalid
-const char* INVALID_EQUATION_ERROR = "Error: coefficients of equation are invalid\n";
 
 
 /**
@@ -55,6 +40,33 @@ int sign(long double x) {
     return x > EPSILON;
 }
 
+
+
+// const char* getErrorMessage(QuadEqErrors error) {
+//     switch (error) {
+//         case QUAD_EQ_NO_ERROR:
+//             break;
+//         case QUAD_EQ_FILE:
+//             break;
+//         case QUAD_EQ_ILLEGAL_ARG:
+//             break;
+//         case QUAD_EQ_VALUE_IS_TOO_BIG:
+//             break;
+//         case QUAD_EQ_INCORRECT_COEF_FORMAT_ERROR:
+//             break;
+//         case QUAD_EQ_INCORRECT_COEF_FORMAT_ERROR:
+//             break;
+//         case QUAD_EQ_LINEAR_EQ_ERROR:
+//             break;
+//         case QUAD_EQ_INPUT_LINE_TOO_LONG_ERROR:
+//             break
+//         case QUAD_EQ_INVALID_EQUATION_ERROR:
+//             break
+//     }
+// }
+
+
+
 // ------------------------ HELPER FUNCTIONS ---------------------------------------
 
 /// @brief returns square of variable x
@@ -62,11 +74,16 @@ static long double square(long double x) {
     return x * x;
 }
 
-bool parseLongDoubleAndCheckValid(char* line, long double* coef) {
+QuadEqErrors parseLongDoubleAndCheckValid(char* line, long double* coef, bool* result) {
     ///\throw line input line should not be NULL
     ///\throw coef should not be NULL
+    ///\throw result should not be NULL
     assert(line != NULL);
     assert(coef != NULL);
+    assert(result != NULL);
+
+    if (line == NULL || coef == NULL || result == NULL)
+        return QUAD_EQ_ILLEGAL_ARG;
 
     /**
         trims string while last char == space or tab
@@ -90,17 +107,19 @@ bool parseLongDoubleAndCheckValid(char* line, long double* coef) {
 
 
     size_t len = strlen(line);
-    while (len >= 1 &&
-        (isblank(*ptr))) // FIXME: change to func
-            *ptr = '\0', --ptr, --len;
+    while (len >= 1 && isblank(*ptr))
+        *ptr = '\0', --ptr, --len;
 
-    if (len == 0)
-        return false;
+    if (len == 0) {
+        *result = false;
+        return QUAD_EQ_NO_ERROR;
+    }
 
     errno = 0;
     char* endPtr = NULL; // init NULL (nullptr)
     *coef = strtod(line, &endPtr);
-    return errno == 0 && *endPtr == '\0';
+    *result = errno == 0 && *endPtr == '\0';
+    return QUAD_EQ_NO_ERROR;
 }
 
 /**
@@ -110,10 +129,15 @@ bool parseLongDoubleAndCheckValid(char* line, long double* coef) {
 
     This function's purpose is too deal with all possible errors that can occur during user's input
 */
-static long double getCorrectCoef(const char* messageLine) {
+static QuadEqErrors getCorrectCoef(const char* messageLine, long double* result) {
     ///\throw line input line should not be NULL
     ///\throw coef should not be NULL
+    ///\throw result should not be NULL
     assert(messageLine != NULL);
+    assert(result != NULL);
+
+    if (messageLine == NULL || result == NULL)
+        return QUAD_EQ_ILLEGAL_ARG;
 
     long double coef = 0;
     bool isGoodNumber = false;
@@ -149,22 +173,29 @@ static long double getCorrectCoef(const char* messageLine) {
         } while (line[strlen(line) - 1] != '\n');
 
         if (inputLineLen - 1 > MAX_INPUT_LINE_LEN) {
-            printError("%s", INPUT_LINE_TOO_LONG_ERROR);
+            printError("%s", errorMessages[QUAD_EQ_INPUT_LINE_TOO_LONG_ERROR]);
             continue;
         }
 
-        if (parseLongDoubleAndCheckValid(line, &coef)) {
+        bool isOk = false;
+        QuadEqErrors error = parseLongDoubleAndCheckValid(line, &coef, &isOk);
+        if (error) {
+            printError("%s", errorMessages[QUAD_EQ_INPUT_LINE_TOO_LONG_ERROR]);
+        }
+
+        if (isOk) {
             if (fabsl(coef) > MAX_COEF_ABS_VALUE) {
-                printError("%s", VALUE_IS_TOO_BIG_ERROR);
+                printError("%s", errorMessages[QUAD_EQ_VALUE_IS_TOO_BIG]);
             } else {
                 isGoodNumber = true;
             }
         } else {
-            printError("%s", INCORRECT_COEF_FORMAT_ERROR);
+            printError("%s", errorMessages[QUAD_EQ_INCORRECT_COEF_FORMAT_ERROR]);
         }
     } while (!isGoodNumber);
 
-    return coef;
+    *result = coef;
+    return QUAD_EQ_NO_ERROR;
 }
 
 
@@ -177,9 +208,12 @@ static char getSignChar(long double coef) {
     return sign(coef) < 0 ? '-' : '+';
 }
 
-void printEquation(const struct QuadraticEquation* eq) {
+QuadEqErrors printEquation(const struct QuadraticEquation* eq) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
+
+    if (eq == NULL)
+        return QUAD_EQ_ILLEGAL_ARG;
 
     long double a = eq->a, b = eq->b, c = eq->c; // FIXME:
     char bSign = getSignChar(b);
@@ -191,19 +225,27 @@ void printEquation(const struct QuadraticEquation* eq) {
         precision, a,
         bSign, precision, b,
         cSign, precision, c);
+    return QUAD_EQ_NO_ERROR;
 }
 
-void readEquation(struct QuadraticEquation* eq) {
+QuadEqErrors readEquation(struct QuadraticEquation* eq) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
 
+    if (eq == NULL)
+        return QUAD_EQ_ILLEGAL_ARG;
+
     printf("Equation is expected to look like this: A * x ^ 2 + B * x + C, "
            "where A, B, C are some rational coefficients\n");
-    eq->a = getCorrectCoef("Print coefficient A: ");
-    eq->b = getCorrectCoef("Print coefficient B: ");
-    eq->c = getCorrectCoef("Print coefficient C: ");
+    QuadEqErrors error = getCorrectCoef("Print coefficient A: ", &eq->a);
+    if (error) return error;
+    error = getCorrectCoef("Print coefficient B: ", &eq->b);
+    if (error) return error;
+    error = getCorrectCoef("Print coefficient C: ", &eq->c);
+    if (error) return error;
 
     setOutputPrecision(eq, 10);
+    return QUAD_EQ_NO_ERROR;
 }
 
 /**
@@ -211,7 +253,11 @@ void readEquation(struct QuadraticEquation* eq) {
     \param[in] eq function, which value is evaluated
     \result is equation valid
 */
-static bool validateEquation(const QuadraticEquation* eq) {
+static QuadEqErrors validateEquation(const QuadraticEquation* eq) {
+    ///\throw eq should not be NULL
+    assert(eq != NULL);
+    if (eq == NULL) return QUAD_EQ_ILLEGAL_ARG;
+
     long double coefArr[3] = {eq->a, eq->b, eq->c};
 
     /**
@@ -221,15 +267,11 @@ static bool validateEquation(const QuadraticEquation* eq) {
             (sign(coef) == 0 && coef != 0)) {
         \endcode
     */
-    for (int i = 0; i < 3; ++i) {
-        long double coef = fabsl(coefArr[i]);
-        if (sign(coef - MAX_COEF_ABS_VALUE) > 0) {
-            printError("%s", INVALID_EQUATION_ERROR);
-            return false;
-        }
-    }
+    for (int i = 0; i < 3; ++i)
+        if (sign(fabsl(coefArr[i]) - MAX_COEF_ABS_VALUE) > 0)
+            return QUAD_EQ_VALUE_IS_TOO_BIG;
 
-    return true;
+    return QUAD_EQ_NO_ERROR;
 }
 
 /**
@@ -238,79 +280,105 @@ static bool validateEquation(const QuadraticEquation* eq) {
     \param[in] x x coordinat, at which value is get
     \result y coordinat, found value at given point
 */
-long double getPointValue(const struct QuadraticEquation* eq, long double x) {
+QuadEqErrors getPointValue(const struct QuadraticEquation* eq, long double x, long double* result) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
+    if (eq == NULL) return QUAD_EQ_ILLEGAL_ARG;
 
-    if (!validateEquation(eq)) return 0;
+    QuadEqErrors error = validateEquation(eq);
+    if (error) return error;
 
     ///\warning x should not be too big or too small
-    if (fabsl(x) > MAX_COEF_ABS_VALUE) {
-        printError("%s", VALUE_IS_TOO_BIG_ERROR);
-        return 0;
-    }
+    if (fabsl(x) > MAX_COEF_ABS_VALUE)
+        return QUAD_EQ_VALUE_IS_TOO_BIG;
 
-    return eq->a * square(x) + eq->b * x + eq->c;
+    *result = eq->a * square(x) + eq->b * x + eq->c;
+    return QUAD_EQ_NO_ERROR;
 }
 
-void setOutputPrecision(struct QuadraticEquation* eq, int outputPrecision) {
+QuadEqErrors setOutputPrecision(struct QuadraticEquation* eq, int outputPrecision) {
     ///\throw eq should not be NULL
     ///\throw outputPrecision should be >= 0
     assert(eq != NULL);
     assert(outputPrecision >= 0);
 
+    if (eq == NULL || outputPrecision < 0)
+        return QUAD_EQ_ILLEGAL_ARG;
+
     eq->outputPrecision = outputPrecision;
+    return QUAD_EQ_NO_ERROR;
 }
 
-long double getDiscriminant(const struct QuadraticEquation* eq) {
+QuadEqErrors getDiscriminant(const struct QuadraticEquation* eq, long double* result) {
     ///\throw eq should not be NULL
+    ///\throw result should not be NULL
     assert(eq != NULL);
+    assert(result != NULL);
 
-    if (!validateEquation(eq)) return 0;
-    return square(eq->b) - 4 * eq->a * eq->c;
+    if (eq == NULL || result == NULL)
+        return QUAD_EQ_ILLEGAL_ARG;
+
+    *result = square(eq->b) - 4 * eq->a * eq->c;
+    return QUAD_EQ_NO_ERROR;
 }
 
-long double getVertX(const struct QuadraticEquation* eq) {
+QuadEqErrors getVertX(const struct QuadraticEquation* eq, long double* result) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
+    if (eq == NULL) return QUAD_EQ_ILLEGAL_ARG;
 
-    if (!validateEquation(eq)) return 0;
+    QuadEqErrors error = validateEquation(eq);
+    if (error) return error;
 
     ///\warning eq->a should not be 0
-    if (sign(eq->a) != 0)
-        return -eq->b / (2 * eq->a);
-    printError("%s", LINEAR_EQ_ERROR);
-    return 0;
+    if (sign(eq->a) != 0) {
+        *result = -eq->b / (2 * eq->a);
+        return QUAD_EQ_NO_ERROR;
+    }
+
+    return QUAD_EQ_LINEAR_EQ_ERROR;
 }
 
-long double getVertY(const struct QuadraticEquation* eq) {
+QuadEqErrors getVertY(const struct QuadraticEquation* eq, long double* result) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
+    if (eq == NULL) return QUAD_EQ_ILLEGAL_ARG;
 
-    if (!validateEquation(eq)) return 0;
+    QuadEqErrors error = validateEquation(eq);
+    if (error) return error;
 
     ///\warning eq->a should not be 0
-    if (sign(eq->a) != 0)
-        return -getDiscriminant(eq) / (4 * eq->a);
-    printError("%s", LINEAR_EQ_ERROR);
-    return 0;
+    if (sign(eq->a) != 0) {
+        long double disc = 0;
+        error = getDiscriminant(eq, &disc);
+        if (error) return error;
+
+        *result = -disc / (4 * eq->a);
+        return QUAD_EQ_NO_ERROR;
+    }
+    return QUAD_EQ_LINEAR_EQ_ERROR;
 }
 
-static void solveLinearEquation(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
+static QuadEqErrors solveLinearEquation(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
     ///\throw eq should not be NULL
     ///\throw answer should not be NULL
     assert(eq != NULL);
     assert(answer != NULL);
 
-    if (!validateEquation(eq)) return;
+    if (eq == NULL || answer == NULL)
+        return QUAD_EQ_ILLEGAL_ARG;
+
+    QuadEqErrors error = validateEquation(eq);
+    if (error) return error;
 
     if (sign(eq->b) == 0) {
         answer->numOfSols = sign(eq->c) ? NO_ROOTS : INFINITE_ROOTS;
-        return;
+        return QUAD_EQ_NO_ERROR;
     }
 
     answer->root_1 = -eq->c / eq->b;
     answer->numOfSols = ONE_ROOT;
+    return QUAD_EQ_NO_ERROR;
 }
 
 /**
@@ -318,19 +386,26 @@ static void solveLinearEquation(const struct QuadraticEquation* eq, struct Quadr
     \param[in] eq given equation
     \param[out] answer found roots and info about their cnt
 */
-static void solveQuadraticEquation(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
+static QuadEqErrors solveQuadraticEquation(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
     ///\throw eq should not be NULL
     ///\throw answer should not be NULL
     assert(eq != NULL);
     assert(answer != NULL);
 
-    if (!validateEquation(eq)) return;
+    if (eq == NULL || answer == NULL)
+        return QUAD_EQ_ILLEGAL_ARG;
 
-    long double disc = getDiscriminant(eq);
+    QuadEqErrors error = validateEquation(eq);
+    if (error) return error;
+
+    long double disc = 0;
+    error = getDiscriminant(eq, &disc);
+    if (error) return error;
+
     /// negative disc -> no solutions
     if (sign(disc) < 0) {
         answer->numOfSols = NO_ROOTS;
-        return;
+        return QUAD_EQ_NO_ERROR;
     }
 
     /**
@@ -352,42 +427,48 @@ static void solveQuadraticEquation(const struct QuadraticEquation* eq, struct Qu
     } else {
         answer->numOfSols = ONE_ROOT;
     }
+
+    return QUAD_EQ_NO_ERROR;
 }
 
-void getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
+QuadEqErrors getSolutions(const struct QuadraticEquation* eq, struct QuadraticEquationAnswer* answer) {
     ///\throw eq should not be NULL
     ///\throw answer should not be NULL
     assert(eq != NULL);
     assert(answer != NULL);
 
-    if (!validateEquation(eq)) return;
+    if (eq == NULL || answer == NULL)
+        return QUAD_EQ_ILLEGAL_ARG;
 
-    if (sign(eq->a) == 0) {
-        solveLinearEquation(eq, answer);
-        return;
-    }
+    QuadEqErrors error = validateEquation(eq);
+    if (error) return error;
 
-    solveQuadraticEquation(eq, answer);
+    if (sign(eq->a) == 0)
+        return solveLinearEquation(eq, answer);
+    return solveQuadraticEquation(eq, answer);
 }
 
-void printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrecision, const char* outputFile) {
+QuadEqErrors printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrecision, const char* outputFile) {
     ///\throw answer should not be NULL
     assert(answer != NULL);
+    if (answer == NULL)
+        return QUAD_EQ_ILLEGAL_ARG;
 
     FILE* stream = stdout;
     if (outputFile != NULL) {
-        FILE* outFile;
-        outFile = fopen(outputFile, "w");
+        FILE* outFile = fopen(outputFile, "w");
         assert(outFile != NULL);
+        if (outFile == NULL)
+            return QUAD_EQ_INVALID_FILE;
 
         changeTextColor(YELLOW_COLOR);
         colourfullPrint("Output of solutions goes to file: %s\n", outputFile);
         stream = outFile;
     }
 
-    if (answer->numOfSols == INFINITE_ROOTS) { // FIXME: rewrite. Пусть он пишет сколько решений
+    if (answer->numOfSols == INFINITE_ROOTS) {
         fprintf(stream, "Infinetly many solutions\n");
-        return;
+        return QUAD_EQ_NO_ERROR;
     }
 
     fprintf(stream, "Number of solutions: %d, solutions of equation : { ", answer->numOfSols);
@@ -399,16 +480,22 @@ void printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrec
 
     if (outputFile != NULL)
         fclose(stream);
+    return QUAD_EQ_NO_ERROR;
 }
 
-void solveAndPrintEquation(const struct QuadraticEquation* eq, const char* outputFile) {
+QuadEqErrors solveAndPrintEquation(const struct QuadraticEquation* eq, const char* outputFile) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
 
-    if (!validateEquation(eq)) return;
+    if (eq == NULL)
+        return QUAD_EQ_ILLEGAL_ARG;
+
+    QuadEqErrors error = validateEquation(eq);
+    if (error) return error;
 
     struct QuadraticEquationAnswer answer;
-    getSolutions(eq, &answer);
-    printSolutions(&answer, eq->outputPrecision, outputFile);
+    error = getSolutions(eq, &answer);
+    if (error) return error;
+    return printSolutions(&answer, eq->outputPrecision, outputFile);
 }
 

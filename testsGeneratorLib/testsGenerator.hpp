@@ -10,6 +10,25 @@
 
 #include "../quadraticEquationLib/quadraticEquation.hpp"
 
+
+// enum testsGeneratorErrors {
+//     TESTS_GENERATOR_NO_ERROR              = 0,
+//     TESTS_GENERATOR_ILLEGAL_ARG           = 1,
+//     TESTS_GENERATOR_TOO_FEW_TESTS_ERROR   = 2,
+//     TESTS_GENERATOR_VALIDATION_FAIL_ERROR = 3,
+// };
+//
+// const char* const errorMessages[] = {
+//     "No errors occured\n",
+//     "Error: illegal argument (possibly set to NULL)\n",
+//     "Error: file arguments are invalid\n",
+//     "Error: user input arguments are invalid\n",
+//     "Error: incorrect user input\n"
+// };
+
+
+
+
 /**
     \brief Test, contains equation and answer
 
