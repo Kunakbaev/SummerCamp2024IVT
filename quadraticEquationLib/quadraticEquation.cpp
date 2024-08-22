@@ -89,9 +89,12 @@ bool parseLongDoubleAndCheckValid(char* line, long double* coef) {
 
 
     size_t len = strlen(line);
-    while (len >= 2 &&
+    while (len >= 1 &&
         (isblank(*ptr))) // FIXME: change to func
             *ptr = '\0', --ptr, --len;
+
+    if (len == 0)
+        return false;
 
     errno = 0;
     char* endPtr; // init NULL (nullptr)

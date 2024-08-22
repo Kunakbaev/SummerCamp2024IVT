@@ -15,8 +15,12 @@ RUN_TESTS_DEFINE := -DRUN_ON_TESTS
 
 # -------------------------   LIB RUN   -----------------------------
 
-$(LIB_RUN_NAME): $(BUILD_DIR)/main.o $(BUILD_DIR)/quadraticEquation.o $(BUILD_DIR)/colourfullPrint.o $(BUILD_DIR)/terminalArgs.o
-	$(CC) $^ -o $(BUILD_DIR)/$(LIB_RUN_NAME) $(CFLAGS)
+
+$(LIB_RUN_NAME): CHECK_FOLDER $(BUILD_DIR)/main.o $(BUILD_DIR)/quadraticEquation.o $(BUILD_DIR)/colourfullPrint.o $(BUILD_DIR)/terminalArgs.o
+	$(CC) $(BUILD_DIR)/main.o $(BUILD_DIR)/quadraticEquation.o $(BUILD_DIR)/colourfullPrint.o $(BUILD_DIR)/terminalArgs.o -o $(BUILD_DIR)/$(LIB_RUN_NAME) $(CFLAGS)
+
+CHECK_FOLDER:
+	mkdir -p $(BUILD_DIR)
 
 $(BUILD_DIR)/main.o: main.cpp
 	$(CC) -c $^ $(CFLAGS) -o $@
