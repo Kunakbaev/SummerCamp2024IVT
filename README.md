@@ -30,7 +30,6 @@ All docs appearance config lies in Doxyfile. In order to open docs, type in term
 Program can be run by typing this commands in terminal:
 ```
 make run
-./building/libRun
 ```
 
 If you want to run release version type this:
@@ -41,10 +40,9 @@ make run DEBUG=0
 If you want to test your program on tests type this:
 ```
 make test
-./building/testsRun
 ```
 
-To get additional info about terminal args you need to build program and then when executing add --help flag:
+To get additional info about terminal args you need to build program (using make) and then when executing add --help flag:
 ```
-./main.exe --help
+./building/libRun --help
 ```

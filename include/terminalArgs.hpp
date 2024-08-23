@@ -69,4 +69,11 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq);
 */
 bool isHelpNeeded(const ArgsManager* manager);
 
+/**
+    \brief parses tests flag and outputFile from which tests will be read (if stated) from terminal arguments
+    \param[in] manager Manager that contains argc and argv
+    \memberof ArgsManager
+*/
+char* parseTestsArgs(const ArgsManager* manager, bool* isTest);
+
 #endif

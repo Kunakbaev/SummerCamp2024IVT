@@ -21,8 +21,6 @@ enum Colors {
     BASE_COLOR    = WHITE_COLOR,
 };
 
-//FIXME: switch case
-
 /**
     \brief returns string matching color
     \param[in] color Colors enum, that is transformed to string

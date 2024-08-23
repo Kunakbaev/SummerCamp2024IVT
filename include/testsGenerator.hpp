@@ -70,26 +70,20 @@ typedef QuadEqErrors (*getSolutionsFuncPtr)(const struct QuadraticEquation*, str
     Contains tests, can print them, check solution on tests
 */
 struct Tester {
+    int cntOfTests = 0; ///< number of tests we have
     /**
         \brief all tests
         \warning if there are 2 solutions, they should be place in assending order
     */
-    //   a        b       c precision root_1           root_2           cnt_of_roots
-    const struct Test tests[10] = {
-        {{1.0,    1.0,   -12.0, 10}, {-4,                3,               TWO_ROOTS}},
-        {{1,     -1,      0.25, 10}, {0.5,               0,               ONE_ROOT}},
-        {{0,     -3,      1,    10}, {1.0 / 3.0,         0,               ONE_ROOT}},
-        {{0,      0,      1,    10}, {0,                 0,               NO_ROOTS}},
-        {{0,      0,      0,    10}, {0,                 0,               INFINITE_ROOTS}},
-        {{1,     -5,      9,    10}, {0,                 0,               NO_ROOTS}},
-        {{1,     -4,      4,    10}, {2,                 0,               ONE_ROOT}},
-        {{1,      3,     -4,    10}, {-4,                1,               TWO_ROOTS}},
-        {{10,    -5,      9,    10}, {0,                 0,               NO_ROOTS}},
-        {{0.581, -10.42, 0.592, 10}, {0.056994945705249, 17.877600579252, TWO_ROOTS}}
-    };
+    struct Test* tests = NULL;
     /// pointer to a solver function
     getSolutionsFuncPtr GetSolutionsFunc; ///< \warning should not be NULL
 };
+
+/**
+    \brief returns myTests variable
+*/
+Test* getMyTests(Tester* tester);
 
 /**
     \brief checks solution on all tests
@@ -122,6 +116,6 @@ void printTestWithInd(const Tester* tester, int testIndex);
     \param[in] tester that contains tests
     \memberof Tester
 */
-void validateAllTests(const Tester* tester);
+void validateTester(Tester* tester, const char* testsFileSource);
 
 #endif

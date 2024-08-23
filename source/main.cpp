@@ -7,16 +7,11 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 #include "../include/colourfullPrint.hpp"
-
-//#define RUN_ON_TESTS
-
-#ifdef RUN_ON_TESTS
 #include "../include/testsGenerator.hpp"
-#else
 #include "../include/quadraticEquation.hpp"
 #include "../include/terminalArgs.hpp"
-#endif
 
 
 
@@ -33,18 +28,16 @@
 
 
 
+void quadraticEquationShowcase(struct QuadraticEquation* equation, const char* outputFile);
+int runOnTests(char* testsFileSource);
+
+
+
 int main(int argc, const char* const argv[]) {
 #ifdef RUN_ON_TESTS
-// checking if solution works on custsom tests
-    printf("Running on tests: \n");
+    return runOnTests();
+#endif
 
-    Tester tester = {}; // init
-    validateAllTests(&tester);
-    tester.GetSolutionsFunc = &getSolutions;
-    CheckOnTestsOutput result = checkOnTests(&tester);
-
-    return result.state;
-#else
     // changeTextColor(BLUE_COLOR);
     // colourfullPrint("fdsakl\n");
     // colourfullPrint("Hello world: %d %d\n", 10, 20);
@@ -56,12 +49,10 @@ int main(int argc, const char* const argv[]) {
     // }
 
     // usecase of QuadraticEquation class
-    struct QuadraticEquation equation = {}; // FIXME:
+    struct QuadraticEquation equation = {};
 
     ArgsManager manager = {argc, argv};
     validateManager(&manager);
-    const char* outputFile = parseOutputFile(&manager);
-    //printf("outpuFtile : %s\n", outputFile);
 
     if (isHelpNeeded(&manager)) {
         changeTextColor(YELLOW_COLOR);
@@ -69,47 +60,50 @@ int main(int argc, const char* const argv[]) {
         return 0;
     }
 
-    QuadEqErrors error = {};
-    if (!parseUserInput(&manager, &equation)) {
-        error = readEquation(&equation);
-        // if (error) {
-        //     printError("%s", errorMessages[error]);
-        // }
+    const char* outputFile = parseOutputFile(&manager);
+    //printf("outpuFtile : %s\n", outputFile);
+
+    bool isTestRun = false;
+    char* testsFileSource = parseTestsArgs(&manager, &isTestRun);
+    printf("isTest : %d, TestSource : %s\n", isTestRun, testsFileSource);
+    if (isTestRun) {
+        return runOnTests(testsFileSource);
     }
 
+    if (!parseUserInput(&manager, &equation))
+        readEquation(&equation);
 
-
-    // FIXME: intentional error FAFADAAAAAAAAAAAAAAAHHHHHHHHHHH
-    error = printEquation(&equation);
-    // if (error) {
-    //     printError("%s", errorMessages[error]);
-    // }
-
-    // these two functions works only if it's quadratic equation (a != 0), otherwise error will occur
-    long double vertX = 0.0, vertY = 0.0, pointValue = 0.0;
-    error = getVertX(&equation, &vertX);
-    // if (error) {
-    //     printError("%s", errorMessages[error]);
-    // }
-    printf("Coordinate X of top of parabola: %.10Lg\n", vertX);
-
-    error = getVertY(&equation, &vertY);
-    // if (error) {
-    //     printError("%s", errorMessages[error]);
-    // }
-    printf("Coordinate Y of top of parabola: %.10Lg\n", vertY);
-
-    error = getPointValue(&equation, 5, &pointValue);
-    // if (error) {
-    //     printError("%s", errorMessages[error]);
-    // }
-    printf("Value at point 5: %.10Lg\n", pointValue);
-
-    error = solveAndPrintEquation(&equation, outputFile);
-    // if (error) {
-    //     printError("%s", errorMessages[error]);
-    // }
-#endif
+    quadraticEquationShowcase(&equation, outputFile);
 
     return 0;
+}
+
+void quadraticEquationShowcase(struct QuadraticEquation* equation, const char* outputFile) {
+    assert(equation != NULL);
+
+    printEquation(equation);
+    // these two functions works only if it's quadratic equation (a != 0), otherwise error will occur
+    long double vertX = 0.0, vertY = 0.0, pointValue = 0.0;
+    getVertX(equation, &vertX);
+    printf("Coordinate X of top of parabola: %.10Lg\n", vertX);
+
+    getVertY(equation, &vertY);
+    printf("Coordinate Y of top of parabola: %.10Lg\n", vertY);
+
+    getPointValue(equation, 5, &pointValue);
+    printf("Value at point 5: %.10Lg\n", pointValue);
+
+    solveAndPrintEquation(equation, outputFile);
+}
+
+int runOnTests(char* testsFileSource) {
+    // checking if solution works on custsom tests
+    printf("Running on tests: \n");
+
+    Tester tester = {}; // init
+    validateTester(&tester, testsFileSource);
+    tester.GetSolutionsFunc = &getSolutions;
+    CheckOnTestsOutput result = checkOnTests(&tester);
+
+    return result.state;
 }

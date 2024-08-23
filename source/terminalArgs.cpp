@@ -30,6 +30,8 @@ const char* HELP_FLAG_SHORT      = "-h";
 const char* HELP_FLAG_EXTENDED   = "--help";
 const char* OUTPUT_FLAG_SHORT    = "-o";
 const char* OUTPUT_FLAG_EXTENDED = "--output";
+const char* TESTS_FLAG_SHORT    = "-t";
+const char* TESTS_FLAG_EXTENDED = "--test";
 
 static bool isKnownFlag(const char* flag) {
     const char* const arr[] = {
@@ -38,7 +40,9 @@ static bool isKnownFlag(const char* flag) {
         HELP_FLAG_SHORT,
         HELP_FLAG_EXTENDED,
         OUTPUT_FLAG_SHORT,
-        OUTPUT_FLAG_EXTENDED
+        OUTPUT_FLAG_EXTENDED,
+        TESTS_FLAG_SHORT,
+        TESTS_FLAG_EXTENDED,
     };
 
     int arrLen = sizeof(arr) / sizeof(*arr);
@@ -50,7 +54,12 @@ static bool isKnownFlag(const char* flag) {
 
 static bool isParamFlag(const char* arg) {
     assert(arg != NULL);
-    return arg[0] == '-';
+    if (arg[0] != '-')
+        return false;
+    int cntBlanks = 0;
+    for (size_t i = 0; i < strlen(arg); ++i)
+        cntBlanks += isblank(arg[i]);
+    return cntBlanks == 0;
 }
 
 void validateManager(const ArgsManager* manager) {
@@ -135,6 +144,7 @@ const char* parseOutputFile(const ArgsManager* manager) {
 }
 
 // FIXME: this function is not very stable
+// FIXME: fix this function
 bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
     ///\throw manager should not be NULL
     ///\throw argv should not be NULL
@@ -153,7 +163,9 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
         return false;
     }
 
-    char* line = (char*)manager->argv[ind + 1];
+    char* line = (char*)calloc(strlen(manager->argv[ind + 1]) + 1, sizeof(*manager->argv[ind + 1]));
+    strcpy(line, manager->argv[ind + 1]);
+
     int cntBlanks = 0;
     for (int i = 0; i < (int)strlen(line); ++i)
         cntBlanks += isblank(line[i]);
@@ -161,7 +173,7 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
         printError("%s", USER_INPUT_ARGUMENTS_ERROR);
         return false;
     }
-    line = strcat(line, " ");
+    strcat(line, " ");
     // printf("line : %s\n", line);
 
     //FIXME: array of pointers to structure fields???
@@ -171,11 +183,14 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
     char* word = (char*)calloc(strlen(line) + 1, sizeof(*line));
     eq->outputPrecision = DEFAULT_PRECISION; // global const STD_PRECISION
     // printf("word : %s, len : %d\n", word, strlen(word));
-    for (int i = 0; i < (int)strlen(line); ++i) {
+
+    for (size_t i = 0; line[i] != '\0'; ++i) {
         if (!isblank(line[i])) {
             // printf("fail %c\n", line[i]);
-            word[strlen(word)] = line[i];
-            word[strlen(word) + 1] = '\0';
+            // FIXME: optimize
+            size_t len = strlen(word);
+            word[len] = line[i];
+            word[len + 1] = '\0';
             //strcat(word, &ch);
             //printf("word : %s, len : %d\n", word, strlen(word));
             continue;
@@ -198,18 +213,48 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
         ++argInd;
         word[0] = '\0';
     }
-    //free(line);
-    //free(word);
+    free(line);
+    free(word);
 
     return true;
 }
 
 bool isHelpNeeded(const ArgsManager* manager) {
     ///\throw manager should not be NULL
-    ///\throw argv should not be NULL
+    ///\throw manager->argv should not be NULL
     assert(manager != NULL);
     assert(manager->argv != NULL);
 
     int ind = findCommandIndex(manager, HELP_FLAG_SHORT, HELP_FLAG_EXTENDED);
     return ind != -1;
+}
+
+char* parseTestsArgs(const ArgsManager* manager, bool* isTest) {
+    ///\throw manager should not be NULL
+    ///\throw manager->argv should not be NULL
+    assert(manager != NULL);
+    assert(manager->argv != NULL);
+    assert(isTest != NULL);
+
+    char* outputFile = {};
+    int ind = findCommandIndex(manager, TESTS_FLAG_SHORT, TESTS_FLAG_EXTENDED);
+    if (ind == -1) {
+        *isTest = false;
+        return NULL;
+    }
+
+    *isTest = true;
+    const int cntNeedArgs = 1;
+    bool isGood = checkGoodParams(manager, ind, cntNeedArgs);
+    printf("isGood : %d\n", isGood);
+    if (isGood) {
+        outputFile = (char*)calloc(strlen(manager->argv[ind + 1]), sizeof(*(manager->argv[ind + 1])));
+        printf("len : %d\n", strlen(outputFile));
+        strcpy(outputFile, manager->argv[ind + 1]);
+        printf("len : %d\n", strlen(outputFile));
+        return outputFile;
+    }
+
+    printf("test source : \n", outputFile);
+    return NULL;
 }

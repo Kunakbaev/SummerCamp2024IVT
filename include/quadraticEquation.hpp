@@ -22,8 +22,6 @@ enum QuadEqErrors { // FIXME: add _ERROR
     QUAD_EQ_ERRORS_INVALID_EQUATION      = 7
 };
 
-//FIXME: switch case
-
 /**
     \brief returns string representatin of error
     \param[in] error Enum, type of error

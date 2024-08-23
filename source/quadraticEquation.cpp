@@ -24,7 +24,7 @@
                             printError(__VA_ARGS__); \
 */
 
-#define LOG_AND_RETURN(ERROR, ...)                                                                               \
+#define LOG_AND_RETURN(ERROR)                                                                                    \
     do {                                                                                                         \
         printError("Error occured, in FILE: %s, FUNCTION: %s, at LINE: %d\n", __FILE__, __FUNCTION__, __LINE__); \
         printError("%s", getErrorMessage(ERROR));                                                                \
@@ -105,19 +105,10 @@ QuadEqErrors parseLongDoubleAndCheckValid(char* line, long double* coef, bool* r
     if (line == NULL || coef == NULL || result == NULL)
         LOG_AND_RETURN(QUAD_EQ_ERRORS_ILLEGAL_ARG);
 
-    char* ptr = line + strlen(line) - 2; // lineEnd
-    //  *ptr == \n: assert
-    // assert(*ptr == '\n');
-    if (*(ptr + 1) == '\n') {
-        *(ptr + 1) = '\0';
-    } else {
-        //printf("ok\n");
-        ++ptr;
-    }
-
+    char* ptr = line + strlen(line) - 1; // lineEnd
     size_t len = strlen(line);
-    // printf("line : *%s*, len : %d\n", line, len);
-    while (len >= 1 && isblank(*ptr)) {
+    // printf("line : *%s*, len : %d, isblank: %d\n", line, len, isblank(*ptr));
+    while (len >= 1 && (isblank(*ptr) || (*ptr) == '\n')) {
         *ptr = '\0';
         --ptr;
         --len;
@@ -175,7 +166,7 @@ static QuadEqErrors getCorrectCoef(const char* messageLine, long double* result)
         bool isOk = false;
         // checks if line is a valid long double, if it is result is saved in coef
         QuadEqErrors error = parseLongDoubleAndCheckValid(line, &coef, &isOk);
-        if (error != QUAD_EQ_ERRORS_OK) //FIXME :
+        if (error != QUAD_EQ_ERRORS_OK)
             printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG));
 
         if (isOk) {
@@ -272,7 +263,7 @@ QuadEqErrors getPointValue(const struct QuadraticEquation* eq, long double x, lo
     ///\throw result should not be NULL
     assert(eq != NULL);
     assert(result != NULL);
-    if (eq == NULL || result == NULL) // FIXME: delete curly braces
+    if (eq == NULL || result == NULL)
         LOG_AND_RETURN(QUAD_EQ_ERRORS_ILLEGAL_ARG);
 
     VALIDATE_EQUATION(eq);
@@ -438,8 +429,6 @@ QuadEqErrors getSolutions(const struct QuadraticEquation* eq, struct QuadraticEq
     if (eq == NULL || answer == NULL)
         LOG_AND_RETURN(QUAD_EQ_ERRORS_ILLEGAL_ARG);
 
-    // FIXME: wrap around validate
-    // FIXME: midway logging
     VALIDATE_EQUATION(eq);
 
     QuadEqErrors error = {};
@@ -498,7 +487,6 @@ QuadEqErrors printSolutions(const struct QuadraticEquationAnswer* answer, int ou
     if (answer->numOfSols != INFINITE_ROOTS)
         fprintf(stream, " }\n");
 
-    // FIXME: always close file
     if (outputFile != NULL)
         fclose(stream);
     return QUAD_EQ_ERRORS_OK;
