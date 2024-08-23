@@ -48,7 +48,7 @@ static bool isKnownFlag(const char* flag) {
     return false;
 }
 
-static bool isParamArgument(const char* arg) {
+static bool isParamFlag(const char* arg) {
     assert(arg != NULL);
     return arg[0] == '-';
 }
@@ -59,7 +59,7 @@ void validateManager(const ArgsManager* manager) {
 
     for (int i = 1; i < manager->argc; ++i) {
         const char* flag = manager->argv[i];
-        if (isParamArgument(flag) && !isKnownFlag(flag)) {
+        if (isParamFlag(flag) && !isKnownFlag(flag)) {
             printError("%s", UNKNOWN_FLAGS_ERROR);
             return;
         }
@@ -68,8 +68,7 @@ void validateManager(const ArgsManager* manager) {
 
 static int findOneCommandIndexFromArgs(const ArgsManager* manager, const char* flag) {
     ///\throw manager should not be NULL
-    ///\throw argv should not be NULL
-    ///\throw command should not be NULL
+    ///\throw flag should not be NULL
     assert(manager != NULL);
     assert(manager->argv != NULL);
     assert(flag != NULL);
@@ -78,13 +77,12 @@ static int findOneCommandIndexFromArgs(const ArgsManager* manager, const char* f
         if (strcmp(manager->argv[i], flag) == 0)
             return i;
 
-    // command was not found in arguments to program
+    // flag was not found in arguments to program
     return -1;
 }
 
 static int findCommandIndex(const ArgsManager* manager, const char* flag_short, const char* flag_extended) {
     ///\throw manager should not be NULL
-    ///\throw argv should not be NULL
     ///\throw flag_short should not be NULL
     ///\throw flag_extended should not be NULL
     assert(manager->argv != NULL);
@@ -106,7 +104,7 @@ static bool checkGoodParams(const ArgsManager* manager, int startInd, int cntNee
         return false;
 
     for (int i = 1; i <= cntNeed; ++i)
-        if (isParamArgument(manager->argv[startInd + i]))
+        if (isParamFlag(manager->argv[startInd + i]))
             return false;
     return true;
 }
@@ -160,15 +158,12 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
     line = strcat(line, " ");
     // printf("line : %s\n", line);
 
-
-
-    eq->outputPrecision = DEFAULT_PRECISION; // global const STD_PRECISION
     //FIXME: array of pointers to structure fields???
-
     // 3 -> cnt of coefficient of quadratic equation
     int argInd = 0;
     long double* const arr[3] = {&eq->a, &eq->b, &eq->c};
     char* word = (char*)calloc(strlen(line) + 1, sizeof(*line));
+    eq->outputPrecision = DEFAULT_PRECISION; // global const STD_PRECISION
     // printf("word : %s, len : %d\n", word, strlen(word));
     for (int i = 0; i < (int)strlen(line); ++i) {
         if (!isblank(line[i])) {

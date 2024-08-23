@@ -74,6 +74,7 @@ struct Tester {
         \brief all tests
         \warning if there are 2 solutions, they should be place in assending order
     */
+    //   a        b       c precision root_1           root_2           cnt_of_roots
     const struct Test tests[10] = {
         {{1.0,    1.0,   -12.0, 10}, {-4,                3,               TWO_ROOTS}},
         {{1,     -1,      0.25, 10}, {0.5,               0,               ONE_ROOT}},

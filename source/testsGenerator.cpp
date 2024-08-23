@@ -36,7 +36,8 @@ const char* ILLEGAL_ARG_ERROR = "Error: invalid argument (possible set to NULL)\
 static size_t getCntOfTests(const Tester* tester) {
     ///\throw \param[in] tester should not be NULL
     ///\throw tester->tests should not be NULL
-    assert(tester != NULL && tester->tests != NULL);
+    assert(tester != NULL);
+    assert(tester->tests != NULL);
     return sizeof(tester->tests) / sizeof(*tester->tests);
 }
 
@@ -79,7 +80,8 @@ static bool checkIfAnswerEqual(const QuadraticEquationAnswer* mine, const Quadra
 CheckOnTestsOutput checkOnTests(const Tester* tester) {
     ///\throw tester should not be NULL
     ///\throw tester->tests should not be NULL
-    assert(tester != NULL && tester->tests != NULL);
+    assert(tester != NULL);
+    assert(tester->tests != NULL);
 
     CheckOnTestsOutput result = {}; //FIXME:
     size_t arrLen = getCntOfTests(tester);
@@ -96,9 +98,7 @@ CheckOnTestsOutput checkOnTests(const Tester* tester) {
             printf("Test (expected):\n");
             printTest(tester, &test);
             printf("Yours (wrong):\n");
-            printSolutions(&answer, 10, NULL);
-
-            printf("f : %Lg, e : %Lg\n", answer.root_1, answer.root_2);
+            printSolutions(&answer, DEFAULT_PRECISION, NULL);
 
             result.testIndex = (int)i;
             result.state = FAILED_ON_SOME_TEST;
@@ -119,7 +119,8 @@ CheckOnTestsOutput checkOnTests(const Tester* tester) {
 void printTest(const Tester* tester, const Test* test) {
     ///\throw tester should not be NULL
     ///\throw tester->tests should not be NULL
-    assert(tester != NULL && tester->tests != NULL);
+    assert(tester != NULL);
+    assert(tester->tests != NULL);
 
     printf("-------------------------\n");
     printEquation(&test->equation);
@@ -227,7 +228,6 @@ void validateAllTests(const Tester* tester) {
     size_t arrLen = getCntOfTests(tester);
     for (size_t i = 0; i < arrLen; ++i) {
         Test test = tester->tests[i];
-        // we want this to match quad eq lib
         if (!isValidTest(&test)) {
             printError("Test: %zu\n", i);
             printError("%s", VALIDATION_FAIL_ERROR);
@@ -238,7 +238,5 @@ void validateAllTests(const Tester* tester) {
     changeTextColor(GREEN_COLOR);
     colourfullPrint("All tests are valid\n");
 }
-
-
 
 

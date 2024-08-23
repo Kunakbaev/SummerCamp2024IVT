@@ -31,6 +31,13 @@
         return ERROR;                                                                                            \
     } while(0)
 
+#define VALIDATE_EQUATION(eq)                           \
+    do {                                                \
+        QuadEqErrors error = validateEquation(eq);      \
+        if (error != QUAD_EQ_ERRORS_OK)                 \
+            LOG_AND_RETURN(error);                      \
+    } while(0)
+
 
 const int MAX_INPUT_LINE_LEN = 25; ///< maximum length of input line
 
@@ -194,7 +201,6 @@ static char getSignChar(long double coef) {
 QuadEqErrors printEquation(const struct QuadraticEquation* eq) {
     ///\throw eq should not be NULL
     assert(eq != NULL);
-
     if (eq == NULL)
         LOG_AND_RETURN(QUAD_EQ_ERRORS_ILLEGAL_ARG);
 
@@ -203,9 +209,6 @@ QuadEqErrors printEquation(const struct QuadraticEquation* eq) {
     long double c = fabsl(eq->c);
     char bSign = getSignChar(eq->b);
     char cSign = getSignChar(eq->c);
-    // printf("Bruh : %c %c\n", bSign, cSign);
-
-    //LOG_AND_RETURN("aaaaaahhhhhhhhhh bruuuuuuuh\n");
 
     int precision = eq->outputPrecision;
     printf("Your equation is: %.*Lg * x ^ 2 %c %.*Lg * x %c %.*Lg\n",
@@ -264,13 +267,13 @@ static QuadEqErrors validateEquation(const QuadraticEquation* eq) {
 */
 QuadEqErrors getPointValue(const struct QuadraticEquation* eq, long double x, long double* result) {
     ///\throw eq should not be NULL
+    ///\throw result should not be NULL
     assert(eq != NULL);
-    if (eq == NULL) // FIXME: delete curly braces
+    assert(result != NULL);
+    if (eq == NULL || result == NULL) // FIXME: delete curly braces
         LOG_AND_RETURN(QUAD_EQ_ERRORS_ILLEGAL_ARG);
 
-    QuadEqErrors error = validateEquation(eq);
-    if (error != QUAD_EQ_ERRORS_OK)
-        LOG_AND_RETURN(error);
+    VALIDATE_EQUATION(eq);
 
     ///\warning x should not be too big or too small
     if (fabsl(x) > MAX_COEF_ABS_VALUE)
@@ -308,13 +311,14 @@ QuadEqErrors getDiscriminant(const struct QuadraticEquation* eq, long double* re
 
 QuadEqErrors getVertX(const struct QuadraticEquation* eq, long double* result) {
     ///\throw eq should not be NULL
+    ///\throw eq should not be NULL
     assert(eq != NULL);
-    if (eq == NULL)
+    assert(result != NULL);
+
+    if (eq == NULL || result == NULL)
         LOG_AND_RETURN(QUAD_EQ_ERRORS_ILLEGAL_ARG);
 
-    QuadEqErrors error = validateEquation(eq);
-    if (error != QUAD_EQ_ERRORS_OK)
-        LOG_AND_RETURN(error);
+    VALIDATE_EQUATION(eq);
 
     ///\warning eq->a should not be 0
     if (sign(eq->a) != 0) {
@@ -322,24 +326,24 @@ QuadEqErrors getVertX(const struct QuadraticEquation* eq, long double* result) {
         return QUAD_EQ_ERRORS_OK;
     }
 
-
     LOG_AND_RETURN(QUAD_EQ_ERRORS_LINEAR_EQ);
 }
 
 QuadEqErrors getVertY(const struct QuadraticEquation* eq, long double* result) {
     ///\throw eq should not be NULL
+    ///\throw eq should not be NULL
     assert(eq != NULL);
-    if (eq == NULL)
-        LOG_AND_RETURN(QUAD_EQ_ERRORS_OK);
+    assert(result != NULL);
 
-    QuadEqErrors error = validateEquation(eq);
-    if (error != QUAD_EQ_ERRORS_OK)
-        LOG_AND_RETURN(error);
+    if (eq == NULL || result == NULL)
+        LOG_AND_RETURN(QUAD_EQ_ERRORS_ILLEGAL_ARG);
+
+    VALIDATE_EQUATION(eq);
 
     ///\warning eq->a should not be 0
     if (sign(eq->a) != 0) {
         long double disc = 0;
-        error = getDiscriminant(eq, &disc);
+        QuadEqErrors error = getDiscriminant(eq, &disc);
         if (error != QUAD_EQ_ERRORS_OK)
             LOG_AND_RETURN(error);
 
@@ -359,9 +363,7 @@ static QuadEqErrors solveLinearEquation(const struct QuadraticEquation* eq, stru
     if (eq == NULL || answer == NULL)
         LOG_AND_RETURN(QUAD_EQ_ERRORS_ILLEGAL_ARG);
 
-    QuadEqErrors error = validateEquation(eq);
-    if (error != QUAD_EQ_ERRORS_OK)
-        LOG_AND_RETURN(error);
+    VALIDATE_EQUATION(eq);
 
     if (sign(eq->b) == 0) {
         answer->numOfSols = sign(eq->c) ? NO_ROOTS : INFINITE_ROOTS;
@@ -387,12 +389,10 @@ static QuadEqErrors solveQuadraticEquation(const struct QuadraticEquation* eq, s
     if (eq == NULL || answer == NULL)
         LOG_AND_RETURN(QUAD_EQ_ERRORS_ILLEGAL_ARG);
 
-    QuadEqErrors error = validateEquation(eq);
-    if (error != QUAD_EQ_ERRORS_OK)
-        LOG_AND_RETURN(error);
+    VALIDATE_EQUATION(eq);
 
     long double disc = 0;
-    error = getDiscriminant(eq, &disc);
+    QuadEqErrors error = getDiscriminant(eq, &disc);
     if (error != QUAD_EQ_ERRORS_OK)
         LOG_AND_RETURN(error);
 
@@ -420,7 +420,6 @@ static QuadEqErrors solveQuadraticEquation(const struct QuadraticEquation* eq, s
         answer->numOfSols = TWO_ROOTS;
     } else {
         answer->numOfSols = ONE_ROOT;
-
         // WARNING !!!
         answer->root_2 = answer->root_1;
     }
@@ -439,13 +438,20 @@ QuadEqErrors getSolutions(const struct QuadraticEquation* eq, struct QuadraticEq
 
     // FIXME: wrap around validate
     // FIXME: midway logging
-    QuadEqErrors error = validateEquation(eq);
+    VALIDATE_EQUATION(eq);
+
+    QuadEqErrors error = {};
+    if (sign(eq->a) == 0) {
+        error = solveLinearEquation(eq, answer);
+        if (error != QUAD_EQ_ERRORS_OK)
+            LOG_AND_RETURN(error);
+        return error;
+    }
+
+    error = solveQuadraticEquation(eq, answer);
     if (error != QUAD_EQ_ERRORS_OK)
         LOG_AND_RETURN(error);
-
-    if (sign(eq->a) == 0)
-        return solveLinearEquation(eq, answer);
-    return solveQuadraticEquation(eq, answer);
+    return error;
 }
 
 QuadEqErrors printSolutions(const struct QuadraticEquationAnswer* answer, int outputPrecision, const char* outputFile) {
@@ -482,6 +488,8 @@ QuadEqErrors printSolutions(const struct QuadraticEquationAnswer* answer, int ou
             fprintf(stream, "%.*Lg", outputPrecision, answer->root_2);
             break;
         default:
+            if (outputFile != NULL)
+                fclose(stream);
             assert(false);
             LOG_AND_RETURN(QUAD_EQ_ERRORS_ILLEGAL_ARG);
     }
@@ -501,12 +509,10 @@ QuadEqErrors solveAndPrintEquation(const struct QuadraticEquation* eq, const cha
     if (eq == NULL)
         LOG_AND_RETURN(QUAD_EQ_ERRORS_ILLEGAL_ARG);
 
-    QuadEqErrors error = validateEquation(eq);
-    if (error != QUAD_EQ_ERRORS_OK)
-        LOG_AND_RETURN(error);
+    VALIDATE_EQUATION(eq);
 
     struct QuadraticEquationAnswer answer = {};
-    error = getSolutions(eq, &answer);
+    QuadEqErrors error = getSolutions(eq, &answer);
     if (error != QUAD_EQ_ERRORS_OK)
         LOG_AND_RETURN(error);
     error = printSolutions(&answer, eq->outputPrecision, outputFile);
