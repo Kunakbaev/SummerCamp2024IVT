@@ -22,9 +22,9 @@ doxygen --version
 ```
 Possible output: 1.9.1
 
-All docs appearance config lies in Doxyfile. In order to get your docs, type in terminal:
+All docs appearance config lies in Doxyfile. In order to open docs, type in terminal:
 ```
-doxygen Doxyfile
+./bashScripts/open_docs.sh
 ```
 
 To get additional info about terminal args you need to build program and then when executing add --help flag:

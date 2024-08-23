@@ -69,7 +69,7 @@ int main(int argc, const char* const argv[]) {
         return 0;
     }
 
-    QuadEqErrors error = QUAD_EQ_ERRORS_OK;
+    QuadEqErrors error = {};
     if (!parseUserInput(&manager, &equation)) {
         error = readEquation(&equation);
         // if (error) {

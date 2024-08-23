@@ -173,7 +173,6 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
     for (int i = 0; i < (int)strlen(line); ++i) {
         if (!isblank(line[i])) {
             // printf("fail %c\n", line[i]);
-            const char ch = line[i];
             word[strlen(word)] = line[i];
             word[strlen(word) + 1] = '\0';
             //strcat(word, &ch);

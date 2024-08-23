@@ -26,11 +26,12 @@ endif
 SRC := $(wildcard ./$(SOURCE_DIR)/*.cpp)
 OBJ := $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(notdir ${SRC}))
 
+# running all commands without output (@ at the beginning)
 $(LIB_RUN_NAME): $(OBJ)
-	$(CC) $^ -o $(BUILD_DIR)/$(LIB_RUN_NAME) $(CFLAGS)
+	@$(CC) $^ -o $(BUILD_DIR)/$(LIB_RUN_NAME) $(CFLAGS)
 #
 $(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp $(BUILD_DIR)
-	$(CC) -c $< $(CFLAGS) -o $@ $(ASSERT_DEFINE)
+	@$(CC) -c $< $(CFLAGS) -o $@ $(ASSERT_DEFINE)
 
 test: $(TESTS_RUN_NAME)
 	$(BUILD_DIR)/$(TESTS_RUN_NAME)
@@ -49,11 +50,12 @@ run: $(LIB_RUN_NAME)
 
 OBJ_TESTS := $(patsubst %.cpp, $(BUILD_DIR)/TESTS_%.o, $(notdir ${SRC}))
 
+# running all commands without output (@ at the beginning)
 $(TESTS_RUN_NAME): $(OBJ_TESTS)
-	$(CC) $^ -o $(BUILD_DIR)/$(TESTS_RUN_NAME) $(CFLAGS) $(RUN_TESTS_DEFINE)
+	@$(CC) $^ -o $(BUILD_DIR)/$(TESTS_RUN_NAME) $(CFLAGS) $(RUN_TESTS_DEFINE)
 
 $(BUILD_DIR)/TESTS_%.o: $(SOURCE_DIR)/%.cpp $(BUILD_DIR)
-	$(CC) -c $< $(CFLAGS) -o $@ $(ASSERT_DEFINE) $(RUN_TESTS_DEFINE)
+	@$(CC) -c $< $(CFLAGS) -o $@ $(ASSERT_DEFINE) $(RUN_TESTS_DEFINE)
 
 
 
