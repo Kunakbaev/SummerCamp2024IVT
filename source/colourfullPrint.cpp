@@ -18,7 +18,7 @@ const char* getColor(enum Colors color) {
         case BLUE_COLOR:    return "\033[34m";
         case MAGENTA_COLOR: return "\033[35m";
         case CYAN_COLOR:    return "\033[36m";
-        case WHITE_COLOR:   return "\033[37m";
+        case WHITE_COLOR:
         default:            return "\033[37m";
     };
 }

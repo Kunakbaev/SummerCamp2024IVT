@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stdlib.h>
 #include "../include/colourfullPrint.hpp"
 #include "../include/testsGenerator.hpp"
 #include "../include/quadraticEquation.hpp"
@@ -35,7 +36,7 @@ int runOnTests(char* testsFileSource);
 
 int main(int argc, const char* const argv[]) {
 #ifdef RUN_ON_TESTS
-    return runOnTests();
+    return runOnTests(NULL);
 #endif
 
     // changeTextColor(BLUE_COLOR);
@@ -65,9 +66,15 @@ int main(int argc, const char* const argv[]) {
 
     bool isTestRun = false;
     char* testsFileSource = parseTestsArgs(&manager, &isTestRun);
-    //printf("isTest : %d, TestSource : %s\n", isTestRun, testsFileSource);
-    if (isTestRun)
-        return runOnTests(testsFileSource);
+    printf("isTest : %d, TestSource : %s\n", isTestRun, testsFileSource);
+    if (isTestRun) {
+        int code = runOnTests(testsFileSource);
+        free(testsFileSource);
+        testsFileSource = NULL;
+        return code;
+    }
+    free(testsFileSource);
+    testsFileSource = NULL;
 
     if (!parseUserInput(&manager, &equation))
         readEquation(&equation);
@@ -101,6 +108,7 @@ int runOnTests(char* testsFileSource) {
 
     Tester tester = {}; // init
     validateTester(&tester, testsFileSource);
+
     tester.GetSolutionsFunc = &getSolutions;
     CheckOnTestsOutput result = checkOnTests(&tester);
 

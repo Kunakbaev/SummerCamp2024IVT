@@ -34,6 +34,8 @@
 
     Structure contains Test: equation and answer (solutions and equation state)
 */
+
+// FIXME: add const
 struct Test {
     QuadraticEquation equation; ///< Test's equation
     QuadraticEquationAnswer answer; ///< Answer to test
@@ -70,12 +72,12 @@ typedef QuadEqErrors (*getSolutionsFuncPtr)(const struct QuadraticEquation*, str
     Contains tests, can print them, check solution on tests
 */
 struct Tester {
-    int cntOfTests = 0; ///< number of tests we have
+    int cntOfTests; ///< number of tests we have
     /**
         \brief all tests
         \warning if there are 2 solutions, they should be place in assending order
     */
-    struct Test* tests = NULL;
+    const struct Test* tests;
     /// pointer to a solver function
     getSolutionsFuncPtr GetSolutionsFunc; ///< \warning should not be NULL
 };
@@ -83,7 +85,7 @@ struct Tester {
 /**
     \brief returns myTests variable
 */
-Test* getMyTests(Tester* tester);
+const Test* getMyTests(Tester* tester);
 
 /**
     \brief checks solution on all tests

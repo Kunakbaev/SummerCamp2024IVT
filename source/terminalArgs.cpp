@@ -163,7 +163,7 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
         return false;
     }
 
-    char* line = (char*)calloc(strlen(manager->argv[ind + 1]) + 1, sizeof(*manager->argv[ind + 1]));
+    char* line = (char*)calloc(strlen(manager->argv[ind + 1]) + 2, sizeof(*manager->argv[ind + 1]));
     strcpy(line, manager->argv[ind + 1]);
 
     int cntBlanks = 0;
@@ -184,7 +184,7 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
     eq->outputPrecision = DEFAULT_PRECISION; // global const STD_PRECISION
     // printf("word : %s, len : %d\n", word, strlen(word));
 
-    for (size_t i = 0; line[i] != '\0'; ++i) {
+    for (int i = 0; line[i] != '\0'; ++i) {
         if (!isblank(line[i])) {
             // printf("fail %c\n", line[i]);
             // FIXME: optimize
@@ -229,6 +229,11 @@ bool isHelpNeeded(const ArgsManager* manager) {
     return ind != -1;
 }
 
+/// @brief
+/// @param manager
+/// @param isTest
+/// @note The returning pointer is heap-allocated, do not forget to free!
+/// @return
 char* parseTestsArgs(const ArgsManager* manager, bool* isTest) {
     ///\throw manager should not be NULL
     ///\throw manager->argv should not be NULL
@@ -248,13 +253,13 @@ char* parseTestsArgs(const ArgsManager* manager, bool* isTest) {
     bool isGood = checkGoodParams(manager, ind, cntNeedArgs);
     //printf("isGood : %d\n", isGood);
     if (isGood) {
-        outputFile = (char*)calloc(strlen(manager->argv[ind + 1]), sizeof(*(manager->argv[ind + 1])));
+        outputFile = (char*)calloc(strlen(manager->argv[ind + 1]) + 1, sizeof(*(manager->argv[ind + 1])));
         //printf("len : %d\n", strlen(outputFile));
         strcpy(outputFile, manager->argv[ind + 1]);
         //printf("len : %d\n", strlen(outputFile));
         return outputFile;
     }
 
-    printf("test source : \n", outputFile);
+    //printf("test source : \n", outputFile);
     return NULL;
 }

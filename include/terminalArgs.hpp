@@ -31,7 +31,8 @@ const char* const HELP_MESSAGE = "This app solves quadratic equation.\n"
                                  "Possible terminal arguments:\n"
                                  "--help   (-h)          prints helping message (current command)\n"
                                  "--user   (-u) a b c    specifies coefficients of equation via user input (a, b, c)\n"
-                                 "--output (-o)          specifies output file\n";
+                                 "--output (-o)          specifies output file\n"
+                                 "--test   (-t) source   runs tests, if source specified reads tests from source file\n";
 
 struct ArgsManager {
     int argc;
