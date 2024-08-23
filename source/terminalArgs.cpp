@@ -96,6 +96,12 @@ static int findCommandIndex(const ArgsManager* manager, const char* flag_short, 
     return first > second ? first : second;
 }
 
+/**
+    \brief checks that there are enough arguments to flag and they are valid (not other flags)
+    \param[in] manager contains argc and argv
+    \param[in] startInd index of flag in argv
+    \param[in] cntNeed number of arguments to flag
+*/
 static bool checkGoodParams(const ArgsManager* manager, int startInd, int cntNeed) {
     assert(manager != NULL);
     assert(manager->argv != NULL);

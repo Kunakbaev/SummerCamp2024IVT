@@ -38,7 +38,7 @@ int main(int argc, const char* const argv[]) {
 // checking if solution works on custsom tests
     printf("Running on tests: \n");
 
-    Tester tester; // init
+    Tester tester = {}; // init
     validateAllTests(&tester);
     tester.GetSolutionsFunc = &getSolutions;
     CheckOnTestsOutput result = checkOnTests(&tester);
@@ -86,7 +86,7 @@ int main(int argc, const char* const argv[]) {
     // }
 
     // these two functions works only if it's quadratic equation (a != 0), otherwise error will occur
-    long double vertX = 0, vertY = 0, pointValue = 0;
+    long double vertX = 0.0, vertY = 0.0, pointValue = 0.0;
     error = getVertX(&equation, &vertX);
     // if (error) {
     //     printError("%s", errorMessages[error]);

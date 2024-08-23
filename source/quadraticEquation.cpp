@@ -166,12 +166,14 @@ static QuadEqErrors getCorrectCoef(const char* messageLine, long double* result)
             inputLineLen += strlen(line);
         } while (line[strlen(line) - 1] != '\n');
 
+        // if line was too long, error occurs
         if (inputLineLen - 1 > MAX_INPUT_LINE_LEN) {
             printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG));
             continue;
         }
 
         bool isOk = false;
+        // checks if line is a valid long double, if it is result is saved in coef
         QuadEqErrors error = parseLongDoubleAndCheckValid(line, &coef, &isOk);
         if (error != QUAD_EQ_ERRORS_OK) //FIXME :
             printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG));
@@ -184,7 +186,7 @@ static QuadEqErrors getCorrectCoef(const char* messageLine, long double* result)
         } else {
             printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INCORRECT_COEF_FORMAT));
         }
-    } while (!isGoodNumber);
+    } while (!isGoodNumber); // until user will input correct coefficient
 
     *result = coef;
     return QUAD_EQ_ERRORS_OK;
