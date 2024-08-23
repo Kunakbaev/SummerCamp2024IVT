@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "../include/terminalArgs.hpp"
 #include "../include/colourfullPrint.hpp"
@@ -129,6 +130,7 @@ const char* parseOutputFile(const ArgsManager* manager) {
     return manager->argv[ind + 1];
 }
 
+// FIXME: this function is not very stable
 bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
     ///\throw manager should not be NULL
     ///\throw argv should not be NULL
@@ -141,25 +143,49 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
     // output file argument not found
     if (ind == -1) return false;
 
-    const int numNeededArgs = 3;
-    if (!checkGoodParams(manager, ind, numNeededArgs)) { // same
+    const int numNeededArgs = 1;
+    if (!checkGoodParams(manager, ind, numNeededArgs)) {
         printError("%s", USER_INPUT_ARGUMENTS_ERROR);
         return false;
     }
+
+    char* line = (char*)manager->argv[ind + 1];
+    int cntBlanks = 0;
+    for (int i = 0; i < (int)strlen(line); ++i)
+        cntBlanks += isblank(line[i]);
+    if (cntBlanks != 2) {
+        printError("%s", USER_INPUT_ARGUMENTS_ERROR);
+        return false;
+    }
+    line = strcat(line, " ");
+    // printf("line : %s\n", line);
+
+
 
     eq->outputPrecision = DEFAULT_PRECISION; // global const STD_PRECISION
     //FIXME: array of pointers to structure fields???
 
     // 3 -> cnt of coefficient of quadratic equation
+    int argInd = 0;
     long double* const arr[3] = {&eq->a, &eq->b, &eq->c};
-    for (int i = 0; i < 3; ++i) {
-        const char* word = manager->argv[ind + i + 1];
-        bool isOk = false;
-        char* argCopy = (char*)calloc(sizeof(*word), strlen(word));
-        strcpy(argCopy, word);
+    char* word = (char*)calloc(strlen(line) + 1, sizeof(*line));
+    // printf("word : %s, len : %d\n", word, strlen(word));
+    for (int i = 0; i < (int)strlen(line); ++i) {
+        if (!isblank(line[i])) {
+            // printf("fail %c\n", line[i]);
+            const char ch = line[i];
+            word[strlen(word)] = line[i];
+            word[strlen(word) + 1] = '\0';
+            //strcat(word, &ch);
+            //printf("word : %s, len : %d\n", word, strlen(word));
+            continue;
+        }
 
-        QuadEqErrors error = parseLongDoubleAndCheckValid(argCopy, arr[i], &isOk); // &arr[5] / arr + 5
-        free(argCopy);
+        bool isOk = false;
+        // strcat(word, "\n");
+        // printf("word : %s, len : %d\n", word, strlen(word));
+        // printf("word : %s, argInd : %d\n", word, argInd);
+        QuadEqErrors error = parseLongDoubleAndCheckValid(word, arr[argInd], &isOk);
 
         if (error) {
             printError("%s", getErrorMessage(error));
@@ -169,7 +195,11 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
             printError("%s", INCORRECT_USER_INPUT_ERROR);
             return false;
         }
+        ++argInd;
+        word[0] = '\0';
     }
+    //free(line);
+    //free(word);
 
     return true;
 }

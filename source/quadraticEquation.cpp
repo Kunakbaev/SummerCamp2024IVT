@@ -104,16 +104,19 @@ QuadEqErrors parseLongDoubleAndCheckValid(char* line, long double* coef, bool* r
     if (*(ptr + 1) == '\n') {
         *(ptr + 1) = '\0';
     } else {
+        //printf("ok\n");
         ++ptr;
     }
 
     size_t len = strlen(line);
+    // printf("line : *%s*, len : %d\n", line, len);
     while (len >= 1 && isblank(*ptr)) {
         *ptr = '\0';
         --ptr;
         --len;
     }
 
+    // printf("len : %d\n", len);
     if (len == 0) {
         *result = false;
         return QUAD_EQ_ERRORS_OK;

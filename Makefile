@@ -47,11 +47,12 @@ run: $(LIB_RUN_NAME)
 
 # -------------------------   TESTS RUN     -----------------------------
 
+OBJ_TESTS := $(patsubst %.cpp, $(BUILD_DIR)/TESTS_%.o, $(notdir ${SRC}))
 
-$(TESTS_RUN_NAME): $(OBJ)
+$(TESTS_RUN_NAME): $(OBJ_TESTS)
 	$(CC) $^ -o $(BUILD_DIR)/$(TESTS_RUN_NAME) $(CFLAGS) $(RUN_TESTS_DEFINE)
 
-$(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp $(BUILD_DIR)
+$(BUILD_DIR)/TESTS_%.o: $(SOURCE_DIR)/%.cpp $(BUILD_DIR)
 	$(CC) -c $< $(CFLAGS) -o $@ $(ASSERT_DEFINE) $(RUN_TESTS_DEFINE)
 
 
