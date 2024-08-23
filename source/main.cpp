@@ -111,6 +111,10 @@ int runOnTests(char* testsFileSource) {
 
     tester.GetSolutionsFunc = &getSolutions;
     CheckOnTestsOutput result = checkOnTests(&tester);
+    free(tester.membuffer);
+    tester.membuffer = NULL;
+    // if (testsFileSource != NULL)
+    //     free((void*)tester.tests);
 
     return result.state;
 }

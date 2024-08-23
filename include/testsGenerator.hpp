@@ -77,6 +77,8 @@ struct Tester {
         \brief all tests
         \warning if there are 2 solutions, they should be place in assending order
     */
+
+    void* membuffer;
     const struct Test* tests;
     /// pointer to a solver function
     getSolutionsFuncPtr GetSolutionsFunc; ///< \warning should not be NULL

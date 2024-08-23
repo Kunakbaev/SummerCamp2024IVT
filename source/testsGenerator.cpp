@@ -39,12 +39,12 @@ const char* INF_ROOTS_IN_FILE = "inf\n";
 //   a        b       c precision root_1           root_2           cnt_of_roots
 const struct Test myTests[] = {
     {{1.0,    1.0,   -12.0, 10}, {-4,                3,               TWO_ROOTS}},
-    {{1,     -1,      0.25, 10}, {0.5,               0,               ONE_ROOT}},
-    {{0,     -3,      1,    10}, {1.0 / 3.0,         0,               ONE_ROOT}},
+    {{1,     -1,      0.25, 10}, {0.5,               0.5,             ONE_ROOT}},
+    {{0,     -3,      1,    10}, {1.0 / 3.0,         1.0 / 3.0,       ONE_ROOT}},
     {{0,      0,      1,    10}, {0,                 0,               NO_ROOTS}},
     {{0,      0,      0,    10}, {0,                 0,               INFINITE_ROOTS}},
     {{1,     -5,      9,    10}, {0,                 0,               NO_ROOTS}},
-    {{1,     -4,      4,    10}, {2,                 0,               ONE_ROOT}},
+    {{1,     -4,      4,    10}, {2,                 2,               ONE_ROOT}},
     {{1,      3,     -4,    10}, {-4,                1,               TWO_ROOTS}},
     {{10,    -5,      9,    10}, {0,                 0,               NO_ROOTS}},
     {{0.581, -10.42, 0.592, 10}, {0.056994945705249, 17.877600579252, TWO_ROOTS}}
@@ -53,18 +53,9 @@ const struct Test myTests[] = {
 
 const Test* getMyTests(Tester* tester) {
     assert(tester != NULL);
-    return myTests;
 
-//     size_t arrLen = sizeof(myTests) / sizeof(*myTests);
-//     Test* result = (Test*)calloc(arrLen, sizeof(Test));
-//
-//     for (size_t i = 0; i < arrLen; ++i) {
-//         // FIXME: is this ok?
-//         result[i] = myTests[i];
-//     }
-//
-//     tester->cntOfTests = (int)arrLen;
-//     return result;
+    tester->cntOfTests = (int)(sizeof(myTests) / sizeof(*myTests));
+    return myTests;
 }
 
 
@@ -146,9 +137,7 @@ CheckOnTestsOutput checkOnTests(const Tester* tester) {
 */
 void printTest(const Tester* tester, const Test* test) {
     ///\throw tester should not be NULL
-    ///\throw tester->tests should not be NULL
     assert(tester != NULL);
-    assert(tester->tests != NULL);
 
     printf("-------------------------\n");
     printEquation(&test->equation);
@@ -162,7 +151,8 @@ void printTest(const Tester* tester, const Test* test) {
 void printAllTests(const Tester* tester) {
     ///\throw tester should not be NULL
     ///\throw tester->tests should not be NULL
-    assert(tester != NULL && tester->tests != NULL);
+    assert(tester != NULL);
+    assert(tester->tests != NULL);
 
     printf("All tests:\n"); // FIXME;
     for (int i = 0; i < tester->cntOfTests; ++i)
@@ -220,6 +210,10 @@ static bool isValidTest(const Test* test) {
             if (error)
                 printError("%s", getErrorMessage(error));
             if (sign(val)) return false;
+
+            if (test->answer.numOfSols == ONE_ROOT &&
+                sign(test->answer.root_1 - test->answer.root_2))
+                return false;
             break;
 
         default:
@@ -228,6 +222,21 @@ static bool isValidTest(const Test* test) {
             break;
     }
 
+    return true;
+}
+
+static bool isFileLineGood(const char* line) {
+    const char* newLinePtr = strchr(line, '\n');
+    if (newLinePtr == NULL) { // error
+        return false;
+    }
+    //printf("OK\n");
+    newLinePtr = strchr(newLinePtr + 1, '\n');
+    if (newLinePtr != NULL) { // error
+        return false;
+    }
+    //printf("ok");
+    // free(newLinePtr);
     return true;
 }
 
@@ -246,19 +255,12 @@ static int getCntOfTestsInSourceFile(FILE* source) {
     //FIXME: strch check for \n in line
     //FIXME: change tests to const
     while (fgets(line, sizeof(line), source)) {
-        const char* newLinePtr = strchr(line, '\n');
-        if (newLinePtr == NULL) { // error
+        //printf("line : %s\n", line);
+        if (!isFileLineGood(line))
             return -1;
-        }
-        newLinePtr = strchr(newLinePtr, '\n');
-        if (newLinePtr != NULL) { // error
-            return -1;
-        }
-
         cntOfTests += line[0] == BREAK_CHAR;
     }
 
-    fclose(source);
     return cntOfTests;
 }
 
@@ -277,17 +279,12 @@ static void modifyCurrentTest(Test* currentTest, int varInd, long double number)
     }
 }
 
-static void chooseNumOfSols(QuadraticEquationAnswer* ans, int varInd) {
+static void chooseNumOfSols(QuadEqRootState* numOfSols, int varInd) {
     switch (varInd) {
-        case 3:
-            ans->numOfSols = NO_ROOTS;
-            break;
-        case 4:
-            ans->numOfSols = ONE_ROOT;
-            break;
-        case 5:
-            ans->numOfSols = TWO_ROOTS;
-            break;
+        case 3: *numOfSols = NO_ROOTS;  break;
+        case 4: *numOfSols = ONE_ROOT;  break;
+        case 5: *numOfSols = TWO_ROOTS; break;
+
         default:
             printError("%s", ILLEGAL_ARG_ERROR);
             assert(false);
@@ -302,16 +299,17 @@ void readTestsFromSourceFile(Tester* tester, FILE* source, int cntOfTests) {
     assert(tester != NULL);
     assert(cntOfTests > 0);
 
+    rewind(source);
     if (source == NULL) {
         printError("%s", INVALID_FILE_ERROR);
         return;
     }
-    // FIXME: save to temp variable
+
     Test* testsCopy = (Test*)calloc((size_t)cntOfTests, sizeof(Test));
-    if (testsCopy == NULL) {
-        fclose(source);
+    if (testsCopy == NULL)
         return;
-    }
+
+    //tester->tests = testsCopy;
 
     bool isInf = false;
     int  varInd = 0;
@@ -319,23 +317,28 @@ void readTestsFromSourceFile(Tester* tester, FILE* source, int cntOfTests) {
     Test currentTest = {};
     char line[LINE_BUFFER_SIZE] = {};
 
+    // if error, first we close file (source) and then return
+    #define FAIL_AND_RETURN()       \
+        do {                        \
+            free(testsCopy);        \
+            tester->tests = NULL;   \
+            return;                 \
+        } while(0);
+
     while (fgets(line, sizeof(line), source)) {
+        if (!isFileLineGood(line))
+            FAIL_AND_RETURN();
+
         if (line[0] == BREAK_CHAR) {
-            //printf("varInd : %d, isInf: %d\n", varInd, isInf);
             if (!isInf)
-                chooseNumOfSols(&currentTest.answer, varInd);
+                chooseNumOfSols(&currentTest.answer.numOfSols, varInd);
             else
                 currentTest.answer.numOfSols = INFINITE_ROOTS;
-            testsCopy[testInd] = currentTest;
 
-            //printf("i am test\n");
-            //printTest(tester, &currentTest);
+            currentTest.equation.outputPrecision = DEFAULT_PRECISION;
+            testsCopy[testInd++] = currentTest;
             varInd = 0;
-
-            tester->cntOfTests = testInd++;
             isInf = false;
-
-            //printTest(tester, &currentTest);
             continue;
         }
 
@@ -347,18 +350,16 @@ void readTestsFromSourceFile(Tester* tester, FILE* source, int cntOfTests) {
         bool isOk = false;
         long double number = 0.0;
         parseLongDoubleAndCheckValid(line, &number, &isOk);
-        if (!isOk) {
-            fclose(source);
-            tester->tests = NULL;
-            return;
-        }
+        if (!isOk)
+            FAIL_AND_RETURN();
 
         modifyCurrentTest(&currentTest, varInd, number);
         ++varInd;
     }
 
-    tester->tests = testsCopy;
-    fclose(source);
+    tester->cntOfTests = testInd;
+    tester->membuffer = testsCopy;
+    tester->tests = (const Test*)testsCopy;
 }
 
 static void readTests(Tester* tester, const char* testsFileSource) {
@@ -379,41 +380,33 @@ static void readTests(Tester* tester, const char* testsFileSource) {
     // Пометка менторам: не давать пока что онегина, пусть пока так
     int cntOfTests = getCntOfTestsInSourceFile(source);
     if (cntOfTests == -1) { // error
+        fclose(source);
         return;
     }
 
-    //printf("bruh\n");
     readTestsFromSourceFile(tester, source, cntOfTests);
+    fclose(source);
 }
 
 void validateTester(Tester* tester, const char* testsFileSource) {
     ///\throw tester should not be NULL
     assert(tester != NULL);
-    //assert(tester->tests != NULL);
 
+    tester->membuffer = NULL;
     if (testsFileSource == NULL) {
-        // FIXME: is this ok?
         tester->tests = getMyTests(tester);
-        printTest(tester, &tester->tests[0]);
     } else {
         readTests(tester, testsFileSource);
     }
 
-    assert(tester->tests != NULL);
-    // checking that tests are good
-    int arrLen = tester->cntOfTests; // numOfTests -> numTests -> nTests
-    //printf("arrLen : %d\n", arrLen);
+    if (tester->tests == NULL) { //error
+        return;
+    }
+
+    int arrLen = tester->cntOfTests;
     printAllTests(tester);
 
-    // we want to match answer type of quad eq lib (if ONE_ROOT root_2 == root_1
-    Test* testsGoodFormat = (Test*)calloc(arrLen, sizeof(Test));
-    for (int i = 0; i < arrLen; ++i) {
-        if (testsGoodFormat[i].answer.numOfSols == ONE_ROOT)
-            testsGoodFormat[i].answer.root_2 =
-            testsGoodFormat[i].answer.root_1;
-    }
-    tester->tests = testsGoodFormat;
-
+    // checking that tests are good
     for (int i = 0; i < arrLen; ++i) {
         const Test* test = (&tester->tests[i]);
         if (!isValidTest(test)) {
