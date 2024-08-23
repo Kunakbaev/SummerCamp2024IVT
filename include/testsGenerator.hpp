@@ -117,6 +117,7 @@ void printTestWithInd(const Tester* tester, int testIndex);
 
 /**
     \brief checks if all tests are valid
+    \param[in] testsFileSource reads from file if it's not NULL
     \param[in] tester that contains tests
     \memberof Tester
 */

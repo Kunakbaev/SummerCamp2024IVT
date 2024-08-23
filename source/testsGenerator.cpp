@@ -173,7 +173,6 @@ void printTestWithInd(const Tester* tester, int testIndex) {
         printError("%s", TOO_FEW_TESTS_ERROR);
         return;
     }
-
     printTest(tester, &tester->tests[testIndex]);
 }
 
@@ -230,13 +229,10 @@ static bool isFileLineGood(const char* line) {
     if (newLinePtr == NULL) { // error
         return false;
     }
-    //printf("OK\n");
+
     newLinePtr = strchr(newLinePtr + 1, '\n');
-    if (newLinePtr != NULL) { // error
+    if (newLinePtr != NULL) // error
         return false;
-    }
-    //printf("ok");
-    // free(newLinePtr);
     return true;
 }
 
@@ -292,7 +288,7 @@ static void chooseNumOfSols(QuadEqRootState* numOfSols, int varInd) {
     }
 }
 
-void readTestsFromSourceFile(Tester* tester, FILE* source, int cntOfTests) {
+static void readTestsFromSourceFile(Tester* tester, FILE* source, int cntOfTests) {
     ///\throw testsFileSource should not be NULL
     ///\throw tests should not be NULL
     assert(source != NULL);
@@ -368,9 +364,6 @@ static void readTests(Tester* tester, const char* testsFileSource) {
     assert(tester != NULL);
     assert(testsFileSource != NULL);
 
-    // FIXME: вот тут открываешь файл
-    // man fseek
-
     FILE* source = fopen(testsFileSource, "r");
     if (source == NULL) {
         printError("%s", INVALID_FILE_ERROR);
@@ -393,15 +386,13 @@ void validateTester(Tester* tester, const char* testsFileSource) {
     assert(tester != NULL);
 
     tester->membuffer = NULL;
-    if (testsFileSource == NULL) {
+    if (testsFileSource == NULL)
         tester->tests = getMyTests(tester);
-    } else {
+    else
         readTests(tester, testsFileSource);
-    }
 
-    if (tester->tests == NULL) { //error
+    if (tester->tests == NULL) //error
         return;
-    }
 
     int arrLen = tester->cntOfTests;
     printAllTests(tester);

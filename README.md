@@ -1,7 +1,7 @@
 SquareSolver
 
-This simple app solves quadratic equations with rational koefficients and finds rational solutions.
-The main purpose of creating it is to learn how to write good proffesional code.
+This simple app solves quadratic equations with rational coefficients and finds rational solutions.
+The main purpose of creating it is to learn how to write good professional code.
 
 There are docs, if you want to know more about program.
 
@@ -9,9 +9,6 @@ required libs: doxygen v1.9.1
 
 In order to install, type this in your command line:
 ```
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get install doxygen
 sudo apg-get install doxygen graphwiz
 ```
 
