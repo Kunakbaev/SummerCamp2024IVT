@@ -198,8 +198,9 @@ QuadEqErrors printEquation(const struct QuadraticEquation* eq) {
     long double a = eq->a;
     long double b = fabsl(eq->b);
     long double c = fabsl(eq->c);
-    char bSign = getSignChar(b);
-    char cSign = getSignChar(c);
+    char bSign = getSignChar(eq->b);
+    char cSign = getSignChar(eq->c);
+    // printf("Bruh : %c %c\n", bSign, cSign);
 
     //LOG_AND_RETURN("aaaaaahhhhhhhhhh bruuuuuuuh\n");
 
@@ -221,11 +222,14 @@ QuadEqErrors readEquation(struct QuadraticEquation* eq) {
     printf("Equation is expected to look like this: A * x ^ 2 + B * x + C, "
            "where A, B, C are some rational coefficients\n");
     QuadEqErrors error = getCorrectCoef("Print coefficient A: ", &eq->a);
-    if (error != QUAD_EQ_ERRORS_OK) return error;
+    if (error != QUAD_EQ_ERRORS_OK)
+        LOG_AND_RETURN(error);
     error = getCorrectCoef("Print coefficient B: ", &eq->b);
-    if (error != QUAD_EQ_ERRORS_OK) return error;
+    if (error != QUAD_EQ_ERRORS_OK)
+        LOG_AND_RETURN(error);
     error = getCorrectCoef("Print coefficient C: ", &eq->c);
-    if (error != QUAD_EQ_ERRORS_OK) return error;
+    if (error != QUAD_EQ_ERRORS_OK)
+        LOG_AND_RETURN(error);
 
     setOutputPrecision(eq, DEFAULT_PRECISION);
     return QUAD_EQ_ERRORS_OK;
@@ -263,7 +267,7 @@ QuadEqErrors getPointValue(const struct QuadraticEquation* eq, long double x, lo
 
     QuadEqErrors error = validateEquation(eq);
     if (error != QUAD_EQ_ERRORS_OK)
-        return error;
+        LOG_AND_RETURN(error);
 
     ///\warning x should not be too big or too small
     if (fabsl(x) > MAX_COEF_ABS_VALUE)
@@ -307,7 +311,7 @@ QuadEqErrors getVertX(const struct QuadraticEquation* eq, long double* result) {
 
     QuadEqErrors error = validateEquation(eq);
     if (error != QUAD_EQ_ERRORS_OK)
-        return error;
+        LOG_AND_RETURN(error);
 
     ///\warning eq->a should not be 0
     if (sign(eq->a) != 0) {
@@ -327,13 +331,14 @@ QuadEqErrors getVertY(const struct QuadraticEquation* eq, long double* result) {
 
     QuadEqErrors error = validateEquation(eq);
     if (error != QUAD_EQ_ERRORS_OK)
-        return error;
+        LOG_AND_RETURN(error);
 
     ///\warning eq->a should not be 0
     if (sign(eq->a) != 0) {
         long double disc = 0;
         error = getDiscriminant(eq, &disc);
-        if (error != QUAD_EQ_ERRORS_OK) return error;
+        if (error != QUAD_EQ_ERRORS_OK)
+            LOG_AND_RETURN(error);
 
         *result = -disc / (4 * eq->a);
         return QUAD_EQ_ERRORS_OK;
@@ -353,14 +358,14 @@ static QuadEqErrors solveLinearEquation(const struct QuadraticEquation* eq, stru
 
     QuadEqErrors error = validateEquation(eq);
     if (error != QUAD_EQ_ERRORS_OK)
-        return error;
+        LOG_AND_RETURN(error);
 
     if (sign(eq->b) == 0) {
         answer->numOfSols = sign(eq->c) ? NO_ROOTS : INFINITE_ROOTS;
         return QUAD_EQ_ERRORS_OK;
     }
 
-    answer->root_1 = -eq->c / eq->b;
+    answer->root_1 = answer->root_2 = -eq->c / eq->b;
     answer->numOfSols = ONE_ROOT;
     return QUAD_EQ_ERRORS_OK;
 }
@@ -381,12 +386,12 @@ static QuadEqErrors solveQuadraticEquation(const struct QuadraticEquation* eq, s
 
     QuadEqErrors error = validateEquation(eq);
     if (error != QUAD_EQ_ERRORS_OK)
-        return error;
+        LOG_AND_RETURN(error);
 
     long double disc = 0;
     error = getDiscriminant(eq, &disc);
     if (error != QUAD_EQ_ERRORS_OK)
-        return error;
+        LOG_AND_RETURN(error);
 
     /// negative disc -> no solutions
     if (sign(disc) < 0) {
@@ -433,7 +438,7 @@ QuadEqErrors getSolutions(const struct QuadraticEquation* eq, struct QuadraticEq
     // FIXME: midway logging
     QuadEqErrors error = validateEquation(eq);
     if (error != QUAD_EQ_ERRORS_OK)
-        return error;
+        LOG_AND_RETURN(error);
 
     if (sign(eq->a) == 0)
         return solveLinearEquation(eq, answer);
@@ -461,7 +466,7 @@ QuadEqErrors printSolutions(const struct QuadraticEquationAnswer* answer, int ou
     if (answer->numOfSols != INFINITE_ROOTS)
         fprintf(stream, "Number of solutions: %d, solutions of equation : { ", answer->numOfSols);
 
-    //FIXME: root_1 can be equal to root_2
+    //WARNING: root_1 can be equal to root_2
     switch (answer->numOfSols) {
         case INFINITE_ROOTS:
             fprintf(stream, "Infinitely many solutions\n");
@@ -495,12 +500,16 @@ QuadEqErrors solveAndPrintEquation(const struct QuadraticEquation* eq, const cha
 
     QuadEqErrors error = validateEquation(eq);
     if (error != QUAD_EQ_ERRORS_OK)
-        return error;
+        LOG_AND_RETURN(error);
 
     struct QuadraticEquationAnswer answer = {};
     error = getSolutions(eq, &answer);
     if (error != QUAD_EQ_ERRORS_OK)
-        return error;
-    return printSolutions(&answer, eq->outputPrecision, outputFile);
+        LOG_AND_RETURN(error);
+    error = printSolutions(&answer, eq->outputPrecision, outputFile);
+    if (error != QUAD_EQ_ERRORS_OK)
+        LOG_AND_RETURN(error);
+
+    return QUAD_EQ_ERRORS_OK;
 }
 

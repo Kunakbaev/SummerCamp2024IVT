@@ -25,6 +25,9 @@ const char* TOO_FEW_TESTS_ERROR = "Error: there are too few tests\n";
 /// @brief error occurs if some tests are in invalid format
 const char* VALIDATION_FAIL_ERROR = "Error: tests validation failed\n";
 
+/// @brief error occurs if argument to function is set to NULL or it's reaches invalid case in switch
+const char* ILLEGAL_ARG_ERROR = "Error: invalid argument (possible set to NULL)\n";
+
 /**
     \brief returns number of tests
     \param[in] tester tester that contains tests
@@ -42,22 +45,30 @@ static size_t getCntOfTests(const Tester* tester) {
     \param[in] one, two answers from getSolutions func and tests
     \result are two answer equal
 */
-static bool checkIfAnswerEqual(const QuadraticEquationAnswer* one, const QuadraticEquationAnswer* two) {
-    ///\throw one should not be NULL
-    ///\throw two should not be NULL
-    assert(one != NULL && two != NULL);
-    if (one->numOfSols != two->numOfSols)
+static bool checkIfAnswerEqual(const QuadraticEquationAnswer* mine, const QuadraticEquationAnswer* corr) {
+    ///\throw mine should not be NULL
+    ///\throw corr should not be NULL
+    assert(mine != NULL);
+    assert(corr != NULL);
+    if (mine->numOfSols != corr->numOfSols)
         return false;
-    if (one->numOfSols == INFINITE_ROOTS)
-        return true;
 
-    // FIXME: switch
-
-    if (one->numOfSols >= ONE_ROOT && sign(one->root_1 - two->root_1) != 0)
-        return false;
-    if (one->numOfSols == TWO_ROOTS && sign(one->root_2 - two->root_2) != 0)
-        return false;
-    return true;
+    switch (mine->numOfSols) {
+        case NO_ROOTS:
+            return true;
+        case INFINITE_ROOTS:
+            return true;
+        case TWO_ROOTS:
+            if (sign(corr->root_1 - corr->root_1) != 0)
+                return false;
+        case ONE_ROOT:
+            return (sign(mine->root_2 - corr->root_2) == 0);
+        default:
+            assert(false);
+            printError("%s", ILLEGAL_ARG_ERROR);
+            break;
+    }
+    return false;
 }
 
 /**
@@ -74,13 +85,21 @@ CheckOnTestsOutput checkOnTests(const Tester* tester) {
     size_t arrLen = getCntOfTests(tester);
     for (size_t i = 0; i < arrLen; ++i) {
         QuadraticEquationAnswer answer = {}; //FIXME:
-        (*tester->GetSolutionsFunc)(&tester->tests[i].equation, &answer);
-        if (!checkIfAnswerEqual(&answer, &(tester->tests[i].answer))) {
+        Test test = tester->tests[i];
+        // we want to match answer type of quad eq lib (if ONE_ROOT root_2 == root_1
+        if (test.answer.numOfSols == ONE_ROOT)
+            test.answer.root_2 = test.answer.root_1;
+
+        (*tester->GetSolutionsFunc)(&test.equation, &answer);
+        if (!checkIfAnswerEqual(&answer, &test.answer)) {
             printf("Failed on test: #%zu\n", i);
             printf("Test (expected):\n");
-            printTest(tester, &tester->tests[i]);
+            printTest(tester, &test);
             printf("Yours (wrong):\n");
-            printSolutions(&answer, 10, "");
+            printSolutions(&answer, 10, NULL);
+
+            printf("f : %Lg, e : %Lg\n", answer.root_1, answer.root_2);
+
             result.testIndex = (int)i;
             result.state = FAILED_ON_SOME_TEST;
             return result;
@@ -104,7 +123,7 @@ void printTest(const Tester* tester, const Test* test) {
 
     printf("-------------------------\n");
     printEquation(&test->equation);
-    printSolutions(&test->answer, test->equation.outputPrecision, "");
+    printSolutions(&test->answer, test->equation.outputPrecision, NULL);
 }
 
 /**
@@ -133,7 +152,7 @@ void printTestWithInd(const Tester* tester, int testIndex) {
     assert(tester != NULL && tester->tests != NULL);
 
     if (testIndex >= (int)getCntOfTests(tester)) {
-        fprintf(stderr, "%s", TOO_FEW_TESTS_ERROR);
+        printError("%s", TOO_FEW_TESTS_ERROR);
         return;
     }
 
@@ -149,28 +168,53 @@ static bool isValidTest(const Test* test) {
     ///\throw test should not be NULL
     assert(test != NULL);
 
-    if (test->answer.numOfSols == TWO_ROOTS &&
+    int numOfSols = test->answer.numOfSols;
+    if (numOfSols == TWO_ROOTS &&
         sign(test->answer.root_1 - test->answer.root_2) >= 0)
             return false;
 
-    QuadEqErrors error = QUAD_EQ_ERRORS_OK;
-    // FIXME swtich case
-    if (test->answer.numOfSols >= ONE_ROOT) {
+    QuadEqErrors error = {};
+    if (numOfSols == ONE_ROOT ||
+        numOfSols == TWO_ROOTS) {
         long double val = NAN;
         error = getPointValue(&test->equation, test->answer.root_1, &val);
-        if (error) {
+        if (error)
             printError("%s", getErrorMessage(error));
-        }
         if (sign(val)) return false;
     }
-    if (test->answer.numOfSols == TWO_ROOTS) {
+
+    if (numOfSols == TWO_ROOTS) {
         long double val = NAN;
         error = getPointValue(&test->equation, test->answer.root_2, &val);
-        if (error) {//FIXME: printf add do while
+        if (error)
             printError("%s", getErrorMessage(error));
-        }
         if (sign(val)) return false;
     }
+
+    // QuadEqErrors error = {};
+    // switch (test->answer.numOfSols) {
+    //     case NO_ROOTS:
+    //         return true;
+    //     case INFINITE_ROOTS:
+    //         return true;
+    //     case TWO_ROOTS:
+    //         long double val = NAN;
+    //         error = getPointValue(&test->equation, test->answer.root_1, &val);
+    //         if (error)
+    //             printError("%s", getErrorMessage(error));
+    //         if (sign(val)) return false;
+    //     case ONE_ROOT:
+    //         val = NAN;
+    //         error = getPointValue(&test->equation, test->answer.root_2, &val);
+    //         if (error)
+    //             printError("%s", getErrorMessage(error));
+    //         if (sign(val)) return false;
+    //         break;
+    //     default:
+    //         assert(false);
+    //         printError("%s", ILLEGAL_ARG_ERROR);
+    //         break;
+    // }
 
     return true;
 }
@@ -183,6 +227,7 @@ void validateAllTests(const Tester* tester) {
     size_t arrLen = getCntOfTests(tester);
     for (size_t i = 0; i < arrLen; ++i) {
         Test test = tester->tests[i];
+        // we want this to match quad eq lib
         if (!isValidTest(&test)) {
             printError("Test: %zu\n", i);
             printError("%s", VALIDATION_FAIL_ERROR);

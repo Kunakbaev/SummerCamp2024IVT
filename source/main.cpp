@@ -56,7 +56,7 @@ int main(int argc, const char* const argv[]) {
     // }
 
     // usecase of QuadraticEquation class
-    struct QuadraticEquation equation; // FIXME:
+    struct QuadraticEquation equation = {}; // FIXME:
 
     ArgsManager manager = {argc, argv};
     validateManager(&manager);

@@ -97,8 +97,6 @@ static int findCommandIndex(const ArgsManager* manager, const char* flag_short, 
     return first > second ? first : second;
 }
 
-// FIXME: check for illegal flags
-
 static bool checkGoodParams(const ArgsManager* manager, int startInd, int cntNeed) {
     assert(manager != NULL);
     assert(manager->argv != NULL);

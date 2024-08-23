@@ -19,7 +19,7 @@ ifeq ($(DEBUG), 0)
 	ASSERT_DEFINE = -DNDEBUG
 endif
 
-.PHONY: $(LIB_RUN_NAME) test run testrun $(BUILD_DIR) clean
+.PHONY: $(LIB_RUN_NAME) test run testrun $(TESTS_RUN_NAME) $(BUILD_DIR) clean
 
 # -------------------------   LIB RUN   -----------------------------
 
@@ -48,18 +48,11 @@ run: $(LIB_RUN_NAME)
 # -------------------------   TESTS RUN     -----------------------------
 
 
-# SRC := $(wildcard ./$(SOURCE_DIR)/*.cpp)
-# OBJ := $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(notdir ${SRC}))
-#
-# .PHONY: $(TESTS_RUN_NAME)
-# $(TESTS_RUN_NAME): $(OBJ)
-# 	$(CC) $^ -o $(BUILD_DIR)/$(TESTS_RUN_NAME) $(CFLAGS) $(RUN_TESTS_DEFINE)
-#
-# $(BUILD_DIR)/testsGenerator.o: $(SOURCE_DIR)/testsGenerator.cpp $(BUILD_DIR)
-# 	$(CC) -c $< $(CFLAGS) -o $@
-#
-# $(BUILD_DIR)/test_main.o: $(SOURCE_DIR)/main.cpp $(BUILD_DIR)
-# 	$(CC) -c $< $(CFLAGS) -o $@ $(RUN_TESTS_DEFINE) $(ASSERT_DEFINE)
+$(TESTS_RUN_NAME): $(OBJ)
+	$(CC) $^ -o $(BUILD_DIR)/$(TESTS_RUN_NAME) $(CFLAGS) $(RUN_TESTS_DEFINE)
+
+$(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp $(BUILD_DIR)
+	$(CC) -c $< $(CFLAGS) -o $@ $(ASSERT_DEFINE) $(RUN_TESTS_DEFINE)
 
 
 

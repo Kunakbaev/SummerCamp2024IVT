@@ -60,7 +60,7 @@ struct CheckOnTestsOutput {
     typedef void (*getSolutionsFuncPtr)(const struct QuadraticEquation*, struct QuadraticEquationAnswer*);
     \endcode
 */
-typedef void (*getSolutionsFuncPtr)(const struct QuadraticEquation*, struct QuadraticEquationAnswer*);
+typedef QuadEqErrors (*getSolutionsFuncPtr)(const struct QuadraticEquation*, struct QuadraticEquationAnswer*);
 
 
 
