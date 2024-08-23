@@ -246,12 +246,12 @@ char* parseTestsArgs(const ArgsManager* manager, bool* isTest) {
     *isTest = true;
     const int cntNeedArgs = 1;
     bool isGood = checkGoodParams(manager, ind, cntNeedArgs);
-    printf("isGood : %d\n", isGood);
+    //printf("isGood : %d\n", isGood);
     if (isGood) {
         outputFile = (char*)calloc(strlen(manager->argv[ind + 1]), sizeof(*(manager->argv[ind + 1])));
-        printf("len : %d\n", strlen(outputFile));
+        //printf("len : %d\n", strlen(outputFile));
         strcpy(outputFile, manager->argv[ind + 1]);
-        printf("len : %d\n", strlen(outputFile));
+        //printf("len : %d\n", strlen(outputFile));
         return outputFile;
     }
 

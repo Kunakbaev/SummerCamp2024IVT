@@ -65,10 +65,9 @@ int main(int argc, const char* const argv[]) {
 
     bool isTestRun = false;
     char* testsFileSource = parseTestsArgs(&manager, &isTestRun);
-    printf("isTest : %d, TestSource : %s\n", isTestRun, testsFileSource);
-    if (isTestRun) {
+    //printf("isTest : %d, TestSource : %s\n", isTestRun, testsFileSource);
+    if (isTestRun)
         return runOnTests(testsFileSource);
-    }
 
     if (!parseUserInput(&manager, &equation))
         readEquation(&equation);

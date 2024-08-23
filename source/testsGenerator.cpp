@@ -32,6 +32,8 @@ const char* ILLEGAL_ARG_ERROR = "Error: invalid argument (possible set to NULL)\
 const char* INVALID_FILE_ERROR = "Error: invalid file name (or couldn't open it)\n";
 
 const int LINE_BUFFER_SIZE = 256;
+const char BREAK_CHAR = '#';
+const char* INF_ROOTS_IN_FILE = "inf\n";
 
 
 //   a        b       c precision root_1           root_2           cnt_of_roots
@@ -250,7 +252,6 @@ static int getCntOfLinesInSourceFile(const char* testsFileSource) {
     assert(testsFileSource != NULL);
 
     FILE* source = fopen(testsFileSource, "r");
-    //assert(source != NULL);
     if (source == NULL) {
         printError("%s", INVALID_FILE_ERROR);
         return 0;
@@ -262,44 +263,119 @@ static int getCntOfLinesInSourceFile(const char* testsFileSource) {
         ++cntLines;
     }
 
-    //fclose(source);
-    printf("cntLines : %d\n", cntLines);
+    //printf("cntLines : %d\n", cntLines);
+    fclose(source);
     return cntLines;
 }
 
-static void readTestsFromSourceFile(Test* tests, const char* testsFileSource, int cntLines) {
+static void modifyCurrentTest(Test* currentTest, int varInd, double number) {
+    switch (varInd) {
+        case 0:
+            currentTest->equation.a = number;
+            break;
+        case 1:
+            currentTest->equation.b = number;
+            break;
+        case 2:
+            currentTest->equation.c = number;
+            break;
+        case 3:
+            currentTest->answer.root_1 = currentTest->answer.root_2 = number;
+            break;
+        case 4:
+            currentTest->answer.root_2 = number;
+            break;
+        default:
+            printError("%s", ILLEGAL_ARG_ERROR);
+            assert(false);
+            break;
+    }
+}
+
+static void chooseNumOfSols(QuadraticEquationAnswer* ans, int varInd) {
+    switch (varInd) {
+        case 3:
+            ans->numOfSols = NO_ROOTS;
+            break;
+        case 4:
+            ans->numOfSols = ONE_ROOT;
+            break;
+        case 5:
+            ans->numOfSols = TWO_ROOTS;
+            break;
+        default:
+            printError("%s", ILLEGAL_ARG_ERROR);
+            assert(false);
+            break;
+    }
+}
+
+static void readTestsFromSourceFile(Tester* tester, const char* testsFileSource, int cntLines) {
     ///\throw testsFileSource should not be NULL
     ///\throw tests should not be NULL
     assert(testsFileSource != NULL);
 
     FILE* source = fopen(testsFileSource, "r");
-    //assert(source != NULL);
-    printf("ok\n");
     if (source == NULL) {
         printError("%s", INVALID_FILE_ERROR);
         return;
     }
-    printf("ok\n");
 
-    tests = (Test*)calloc(cntLines, sizeof(Test));
+    tester->tests = (Test*)calloc(cntLines, sizeof(Test));
 
+    bool isInf = false;
     char line[LINE_BUFFER_SIZE];
+    int varInd = 0, testInd = 0;
+    Test currentTest = {};
     while (fgets(line, sizeof(line), source)) {
-        printf("line : %s\n", line);
+        if (line[0] == BREAK_CHAR) {
+            //printf("varInd : %d, isInf: %d\n", varInd, isInf);
+            if (!isInf)
+                chooseNumOfSols(&currentTest.answer, varInd);
+            else
+                currentTest.answer.numOfSols = INFINITE_ROOTS;
+            tester->tests[testInd] = currentTest;
+
+            //printf("i am test\n");
+            //printTest(tester, &currentTest);
+            varInd = 0;
+            ++testInd;
+            tester->cntOfTests = testInd;
+            isInf = false;
+
+            //printTest(tester, &currentTest);
+            continue;
+        }
+
+        if (strcmp(line, INF_ROOTS_IN_FILE) == 0) {
+            isInf = true;
+            continue;
+        }
+
+        bool isOk = false;
+        long double number = 0.0;
+        parseLongDoubleAndCheckValid(line, &number, &isOk);
+        if (!isOk) {
+            tester->tests = NULL;
+            return;
+        }
+
+        modifyCurrentTest(&currentTest, varInd, number);
+        ++varInd;
     }
 
     fclose(source);
 }
 
-static void readTestsFromFile(Tester* tester, const char* testsFileSource) {
+static void readTests(Tester* tester, const char* testsFileSource) {
     ///\throw tester should not be NULL
     ///\throw testsFileSource should not be NULL
     assert(tester != NULL);
     assert(testsFileSource != NULL);
 
     int cntLines = getCntOfLinesInSourceFile(testsFileSource);
-    printf("bruh\n");
-    readTestsFromSourceFile(tester->tests, testsFileSource, cntLines);
+    //printf("bruh\n");
+    readTestsFromSourceFile(tester, testsFileSource, cntLines);
 }
 
 void validateTester(Tester* tester, const char* testsFileSource) {
@@ -312,14 +388,15 @@ void validateTester(Tester* tester, const char* testsFileSource) {
         tester->tests = getMyTests(tester);
         printTest(tester, &tester->tests[0]);
     } else {
-        readTestsFromFile(tester, testsFileSource);
+        readTests(tester, testsFileSource);
     }
 
 
     assert(tester->tests != NULL);
     // checking that tests are good
     int arrLen = tester->cntOfTests;
-    printf("arrLen : %d\n", arrLen);
+    //printf("arrLen : %d\n", arrLen);
+    printAllTests(tester);
 
     for (size_t i = 0; i < arrLen; ++i) {
         Test* test = &tester->tests[i];
