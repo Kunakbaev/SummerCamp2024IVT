@@ -14,9 +14,9 @@
 #include "../include/quadraticEquation.hpp"
 #include "../include/terminalArgs.hpp"
 
-extern "C" {
+//extern "C" {
     #include "../LoggerLib/logLib.h"
-}
+//}
 
 
 // ----------------------------- MAIN ----------------------------------------
@@ -33,12 +33,13 @@ int main(int argc, const char* const argv[]) {
     // ----------------------     LOGGER INIT      ----------------------------------
 
     setLoggingLevel(DEBUG);
-    //stateLogFile("../loggingFile.txt");
+    stateLogFile("../loggingFile.txt");
     LOG_DEBUG("i am debug\n");
     LOG_INFO("i am info\n");
     LOG_WARNING("i am warning\n");
     LOG_ERROR("i am error\n");
 
+    // DEBUG("fdas");
 
 
 

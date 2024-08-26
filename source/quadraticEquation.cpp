@@ -19,9 +19,9 @@
 #include "../LoggerLib/colourfulPrintLib/colourfullPrint.h"
 #include "../include/quadraticEquation.hpp"
 
-extern "C" {
+//extern "C" {
     #include "../LoggerLib/logLib.h"
-}
+//}
 
 /*
 #define LOG_AND_RETURN(...) printError("Error occured, in FILE: %s, FUNCTION: %s, at LINE: %d\n", __FILE__, __FUNCTION__, __LINE__); \
