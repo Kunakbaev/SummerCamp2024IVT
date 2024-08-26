@@ -23,7 +23,7 @@ enum QuadEqErrors { // FIXME: add _ERROR
 };
 
 /**
-    \brief returns string representatin of error
+    \brief returns string represetatin of error
     \param[in] error Enum, type of error
     \result returns string representatin of error
 */

@@ -25,6 +25,9 @@ const char* const INCORRECT_USER_INPUT_ERROR = "Error: incorrect user input\n";
 /// @brief error occures if some of arguments flags are unknow
 const char* const UNKNOWN_FLAGS_ERROR        = "Error: there are some unknown flags\n";
 
+/// @brief error occures if memory is not allocated during calloc or malloc
+const char* const MEMORY_ALLOCATION_ERROR    = "Error: couldn't allocate memory\n";
+
 const char* USER_FLAG_SHORT      = "-u";
 const char* USER_FLAG_EXTENDED   = "--user";
 const char* HELP_FLAG_SHORT      = "-h";
@@ -65,7 +68,10 @@ static bool isParamFlag(const char* arg) {
 
 void validateManager(const ArgsManager* manager) {
     ///\throw manager should not be NULL
-    assert(manager != NULL);
+    ///\throw manager->argv should not be NULL
+    assert(manager       != NULL);
+    assert(manager->argv != NULL);
+
 
     for (int i = 1; i < manager->argc; ++i) {
         const char* flag = manager->argv[i];
@@ -79,8 +85,9 @@ void validateManager(const ArgsManager* manager) {
 
 static int findOneCommandIndexFromArgs(const ArgsManager* manager, const char* flag) {
     ///\throw manager should not be NULL
+    ///\throw manager->argv should not be NULL
     ///\throw flag should not be NULL
-    assert(manager != NULL);
+    assert(manager       != NULL);
     assert(manager->argv != NULL);
     assert(flag != NULL);
 
@@ -94,10 +101,12 @@ static int findOneCommandIndexFromArgs(const ArgsManager* manager, const char* f
 
 static int findCommandIndex(const ArgsManager* manager, const char* flag_short, const char* flag_extended) {
     ///\throw manager should not be NULL
+    ///\throw manager->argv should not be NULL
     ///\throw flag_short should not be NULL
     ///\throw flag_extended should not be NULL
     assert(manager->argv != NULL);
-    assert(flag_short != NULL);
+    assert(manager->argv != NULL);
+    assert(flag_short    != NULL);
     assert(flag_extended != NULL);
 
     // tries to get atleast one good index of flag
@@ -128,8 +137,8 @@ static bool checkGoodParams(const ArgsManager* manager, int startInd, int cntNee
 
 const char* parseOutputFile(const ArgsManager* manager) {
     ///\throw manager should not be NULL
-    ///\throw argv should not be NULL
-    assert(manager != NULL);
+    ///\throw manager->argv should not be NULL
+    assert(manager       != NULL);
     assert(manager->argv != NULL);
 
     int ind = findCommandIndex(manager, OUTPUT_FLAG_SHORT, OUTPUT_FLAG_EXTENDED);
@@ -150,9 +159,9 @@ const char* parseOutputFile(const ArgsManager* manager) {
 // FIXME: fix this function
 bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
     ///\throw manager should not be NULL
-    ///\throw argv should not be NULL
+    ///\throw manager->argv should not be NULL
     ///\throw eq should not be NULL
-    assert(manager != NULL);
+    assert(manager       != NULL);
     assert(manager->argv != NULL);
     assert(eq != NULL);
 
@@ -168,6 +177,8 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
     }
 
     char* line = (char*)calloc(strlen(manager->argv[ind + 1]) + 2, sizeof(*manager->argv[ind + 1]));
+    if (line == NULL)
+        LOG_ERROR("%s", MEMORY_ALLOCATION_ERROR);
     strcpy(line, manager->argv[ind + 1]);
 
     int cntBlanks = 0;
@@ -186,25 +197,20 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
     int argInd = 0;
     long double* const arr[3] = {&eq->a, &eq->b, &eq->c};
     char* word = (char*)calloc(strlen(line) + 1, sizeof(*line));
+    if (word == NULL)
+        LOG_ERROR("%s", MEMORY_ALLOCATION_ERROR);
     eq->outputPrecision = DEFAULT_PRECISION; // global const STD_PRECISION
     // printf("word : %s, len : %d\n", word, strlen(word));
 
     for (int i = 0; line[i] != '\0'; ++i) {
         if (!isblank(line[i])) {
-            // printf("fail %c\n", line[i]);
-            // FIXME: optimize
             size_t len = strlen(word);
             word[len] = line[i];
             word[len + 1] = '\0';
-            //strcat(word, &ch);
-            //printf("word : %s, len : %d\n", word, strlen(word));
             continue;
         }
 
         bool isOk = false;
-        // strcat(word, "\n");
-        // printf("word : %s, len : %d\n", word, strlen(word));
-        // printf("word : %s, argInd : %d\n", word, argInd);
         QuadEqErrors error = parseLongDoubleAndCheckValid(word, arr[argInd], &isOk);
 
         if (error) {
@@ -258,15 +264,13 @@ char* parseTestsArgs(const ArgsManager* manager, bool* isTest) {
     *isTest = true;
     const int cntNeedArgs = 1;
     bool isGood = checkGoodParams(manager, ind, cntNeedArgs);
-    //printf("isGood : %d\n", isGood);
     if (isGood) {
         outputFile = (char*)calloc(strlen(manager->argv[ind + 1]) + 1, sizeof(*(manager->argv[ind + 1])));
-        //printf("len : %d\n", strlen(outputFile));
+        if (outputFile == NULL)
+            LOG_ERROR("%s", MEMORY_ALLOCATION_ERROR);
         strcpy(outputFile, manager->argv[ind + 1]);
-        //printf("len : %d\n", strlen(outputFile));
         return outputFile;
     }
 
-    //printf("test source : \n", outputFile);
     return NULL;
 }

@@ -21,16 +21,19 @@
 #include "../include/testsGenerator.hpp"
 
 /// @brief error occurs if there are too few tests and testIndex is bigger than number of tests
-const char* TOO_FEW_TESTS_ERROR = "Error: there are too few tests\n";
+const char* TOO_FEW_TESTS_ERROR           = "Error: there are too few tests\n";
 
 /// @brief error occurs if some tests are in invalid format
-const char* VALIDATION_FAIL_ERROR = "Error: tests validation failed\n";
+const char* VALIDATION_FAIL_ERROR         = "Error: tests validation failed\n";
 
 /// @brief error occurs if argument to function is set to NULL or it's reaches invalid case in switch
-const char* ILLEGAL_ARG_ERROR = "Error: invalid argument (possible set to NULL)\n";
+const char* ILLEGAL_ARG_ERROR             = "Error: invalid argument (possible set to NULL)\n";
 
 /// @brief error occurs if argument to function is set to NULL or it's reaches invalid case in switch
-const char* INVALID_FILE_ERROR = "Error: invalid file name (or couldn't open it)\n";
+const char* INVALID_FILE_ERROR            = "Error: invalid file name (or couldn't open it)\n";
+
+/// @brief error occures if memory is not allocated during calloc or malloc
+const char* const MEMORY_ALLOCATION_ERROR = "Error: couldn't allocate memory\n";
 
 const int LINE_BUFFER_SIZE = 256;
 const char BREAK_CHAR = '#';
@@ -314,7 +317,7 @@ static void readTestsFromSourceFile(Tester* tester, FILE* source, int cntOfTests
 
     Test* testsCopy = (Test*)calloc((size_t)cntOfTests, sizeof(Test));
     if (testsCopy == NULL)
-        return;
+        LOG_ERROR("%s", MEMORY_ALLOCATION_ERROR);
 
     //tester->tests = testsCopy;
 

@@ -28,10 +28,10 @@ extern "C" {
                             printError(__VA_ARGS__); \
 */
 
-#define LOG_AND_RETURN(ERROR)                                                                                    \
-    do {                                                                                                         \
-        LOG_ERROR("%s", getErrorMessage(ERROR));                                                                 \
-        return ERROR;                                                                                            \
+#define LOG_AND_RETURN(ERROR)                           \
+    do {                                                \
+        LOG_ERROR("%s", getErrorMessage(ERROR));        \
+        return ERROR;                                   \
     } while(0)
 
 #define VALIDATE_EQUATION(eq)                           \
@@ -110,14 +110,11 @@ QuadEqErrors parseLongDoubleAndCheckValid(char* line, long double* coef, bool* r
 
     char* ptr = line + strlen(line) - 1; // lineEnd
     size_t len = strlen(line);
-    // printf("line : *%s*, len : %d, isblank: %d\n", line, len, isblank(*ptr));
     while (len >= 1 && (isblank(*ptr) || (*ptr) == '\n')) {
-        *ptr = '\0';
-        --ptr;
+        *ptr-- = '\0';
         --len;
     }
 
-    // printf("len : %d\n", len);
     if (len == 0) {
         *result = false;
         return QUAD_EQ_ERRORS_OK;
