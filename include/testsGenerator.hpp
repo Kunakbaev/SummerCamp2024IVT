@@ -35,7 +35,7 @@
     Structure contains Test: equation and answer (solutions and equation state)
 */
 
-// FIXME: add const
+
 struct Test {
     QuadraticEquation equation; ///< Test's equation
     QuadraticEquationAnswer answer; ///< Answer to test

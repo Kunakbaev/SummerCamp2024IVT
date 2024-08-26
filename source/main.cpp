@@ -9,13 +9,14 @@
 #include <string.h>
 #include <assert.h>
 #include <stdlib.h>
-#include "../LoggerLib/colourfulPrintLib/colourfullPrint.h"
+#include "../LoggerLib/include/colourfullPrint.hpp"
 #include "../include/testsGenerator.hpp"
 #include "../include/quadraticEquation.hpp"
 #include "../include/terminalArgs.hpp"
 
+//#define NO_LOG
 //extern "C" {
-    #include "../LoggerLib/logLib.h"
+    #include "../LoggerLib/include/logLib.hpp"
 //}
 
 
@@ -33,11 +34,16 @@ int main(int argc, const char* const argv[]) {
     // ----------------------     LOGGER INIT      ----------------------------------
 
     setLoggingLevel(DEBUG);
-    stateLogFile("../loggingFile.txt");
+    //stateLogFile("../loggingFile.txt");
     LOG_DEBUG("i am debug\n");
     LOG_INFO("i am info\n");
     LOG_WARNING("i am warning\n");
     LOG_ERROR("i am error\n");
+
+    int a = 10;
+    bool f = true;
+    long double pie = 3.141592;
+    DEBUG_("i am debug macros", a, f, pie);
 
     // DEBUG("fdas");
 

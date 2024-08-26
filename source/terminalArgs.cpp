@@ -10,8 +10,8 @@
 #include <ctype.h>
 
 #include "../include/terminalArgs.hpp"
-#include "../LoggerLib/colourfulPrintLib/colourfullPrint.h"
-#include "../LoggerLib/logLib.h"
+#include "../LoggerLib/include/colourfullPrint.hpp"
+#include "../LoggerLib/include/logLib.hpp"
 
 /// @brief error occures if output file is not specified
 const char* const FILE_ARGUMENTS_ERROR       = "Error: file arguments are invalid\n";
@@ -77,7 +77,7 @@ void validateManager(const ArgsManager* manager) {
         const char* flag = manager->argv[i];
         if (isParamFlag(flag) && !isKnownFlag(flag)) {
             LOG_ERROR("%s", UNKNOWN_FLAGS_ERROR);
-            // printError("%s", UNKNOWN_FLAGS_ERROR);
+            printError("%s", UNKNOWN_FLAGS_ERROR);
             return;
         }
     }
@@ -148,7 +148,7 @@ const char* parseOutputFile(const ArgsManager* manager) {
     const int numNeededArgs = 1;
     if (!checkGoodParams(manager, ind, numNeededArgs)) {
         LOG_ERROR("%s", FILE_ARGUMENTS_ERROR);
-        //printError("%s", FILE_ARGUMENTS_ERROR);
+        printError("%s", FILE_ARGUMENTS_ERROR);
         return NULL;
     }
 
@@ -156,7 +156,6 @@ const char* parseOutputFile(const ArgsManager* manager) {
 }
 
 // FIXME: this function is not very stable
-// FIXME: fix this function
 bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
     ///\throw manager should not be NULL
     ///\throw manager->argv should not be NULL
@@ -172,7 +171,7 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
     const int numNeededArgs = 1;
     if (!checkGoodParams(manager, ind, numNeededArgs)) {
         LOG_ERROR("%s", USER_INPUT_ARGUMENTS_ERROR);
-        // printError("%s", USER_INPUT_ARGUMENTS_ERROR);
+        printError("%s", USER_INPUT_ARGUMENTS_ERROR);
         return false;
     }
 
@@ -186,13 +185,11 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
         cntBlanks += isblank(line[i]);
     if (cntBlanks != 2) {
         LOG_ERROR("%s", USER_INPUT_ARGUMENTS_ERROR);
-        //printError("%s", USER_INPUT_ARGUMENTS_ERROR);
+        printError("%s", USER_INPUT_ARGUMENTS_ERROR);
         return false;
     }
     strcat(line, " ");
-    // printf("line : %s\n", line);
 
-    //FIXME: array of pointers to structure fields???
     // 3 -> cnt of coefficient of quadratic equation
     int argInd = 0;
     long double* const arr[3] = {&eq->a, &eq->b, &eq->c};
@@ -215,12 +212,12 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
 
         if (error) {
             LOG_ERROR("%s", getErrorMessage(error));
-            // printError("%s", getErrorMessage(error));
+            printError("%s", getErrorMessage(error));
             return false;
         }
         if (!isOk) {
             LOG_ERROR("%s", getErrorMessage(error));
-            // printError("%s", INCORRECT_USER_INPUT_ERROR);
+            printError("%s", INCORRECT_USER_INPUT_ERROR);
             return false;
         }
         ++argInd;

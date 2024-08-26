@@ -11,7 +11,7 @@
 const int DEFAULT_PRECISION = 10;
 
 /// @brief enum that contains errors
-enum QuadEqErrors { // FIXME: add _ERROR
+enum QuadEqErrors {
     QUAD_EQ_ERRORS_OK                    = 0,
     QUAD_EQ_ERRORS_INVALID_FILE          = 1,
     QUAD_EQ_ERRORS_ILLEGAL_ARG           = 2,

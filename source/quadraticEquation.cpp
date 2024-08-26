@@ -16,11 +16,11 @@
 #include <errno.h>
 #include <ctype.h>
 
-#include "../LoggerLib/colourfulPrintLib/colourfullPrint.h"
+#include "../LoggerLib/include/colourfullPrint.hpp"
 #include "../include/quadraticEquation.hpp"
 
 //extern "C" {
-    #include "../LoggerLib/logLib.h"
+    #include "../LoggerLib/include/logLib.hpp"
 //}
 
 /*
@@ -31,6 +31,7 @@
 #define LOG_AND_RETURN(ERROR)                           \
     do {                                                \
         LOG_ERROR("%s", getErrorMessage(ERROR));        \
+        printError("%s", getErrorMessage(ERROR));       \
         return ERROR;                                   \
     } while(0)
 
@@ -160,7 +161,7 @@ static QuadEqErrors getCorrectCoef(const char* messageLine, long double* result)
         // if line was too long, error occurs
         if (inputLineLen - 1 > MAX_INPUT_LINE_LEN) {
             LOG_ERROR("%s", getErrorMessage(QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG));
-            // printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG));
+            printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG));
             continue;
         }
 
@@ -169,19 +170,19 @@ static QuadEqErrors getCorrectCoef(const char* messageLine, long double* result)
         QuadEqErrors error = parseLongDoubleAndCheckValid(line, &coef, &isOk);
         if (error != QUAD_EQ_ERRORS_OK) {
             LOG_ERROR("%s", getErrorMessage(QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG));
-            // printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG));
+            printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG));
         }
 
         if (isOk) {
             if (fabsl(coef) > MAX_COEF_ABS_VALUE) {
                 LOG_ERROR("%s", getErrorMessage(QUAD_EQ_ERRORS_VALUE_IS_TOO_BIG));
-                // printError("%s", getErrorMessage(QUAD_EQ_ERRORS_VALUE_IS_TOO_BIG));
+                printError("%s", getErrorMessage(QUAD_EQ_ERRORS_VALUE_IS_TOO_BIG));
             } else {
                 isGoodNumber = true;
             }
         } else {
             LOG_ERROR("%s", getErrorMessage(QUAD_EQ_ERRORS_INCORRECT_COEF_FORMAT));
-            // printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INCORRECT_COEF_FORMAT));
+            printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INCORRECT_COEF_FORMAT));
         }
     } while (!isGoodNumber); // until user will input correct coefficient
 

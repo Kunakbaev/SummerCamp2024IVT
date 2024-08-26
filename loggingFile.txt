@@ -1,0 +1,11 @@
+2024-08-26 18:32:18:955 | source/main.cpp:main:(38)                             DEBUG  :    i am debug
+2024-08-26 18:32:18:956 | source/main.cpp:main:(39)                             INFO   :    i am info
+2024-08-26 18:32:18:956 | source/main.cpp:main:(40)                             WARNING:    i am warning
+2024-08-26 18:32:18:956 | source/main.cpp:main:(41)                             ERROR  :    i am error
+2024-08-26 18:32:18:956 | source/main.cpp:main:(46)                             DEBUG  :    ["i am debug macros" : i am debug macros] [a : 10] [f : 1] [pie : 3.14159] 
+Equation is expected to look like this: A * x ^ 2 + B * x + C, where A, B, C are some rational coefficients
+Print coefficient A: Print coefficient B: Print coefficient C: Your equation is: 1 * x ^ 2 + 4 * x + 2
+Coordinate X of top of parabola: -2
+Coordinate Y of top of parabola: -2
+Value at point 5: 47
+Number of solutions: 2, solutions of equation : { -3.414213562, -0.5857864376 }

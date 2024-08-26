@@ -15,8 +15,8 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "../LoggerLib/colourfulPrintLib/colourfullPrint.h"
-#include "../LoggerLib/logLib.h"
+#include "../LoggerLib/include/colourfullPrint.hpp"
+#include "../LoggerLib/include/logLib.hpp"
 #include "../include/quadraticEquation.hpp"
 #include "../include/testsGenerator.hpp"
 
@@ -73,7 +73,8 @@ const Test* getMyTests(Tester* tester) {
     \brief return if answers are equal
     \param[in] one, two answers from getSolutions func and tests
     \result are two answer equal
-*/                                         // FIXME: принято  vvv src                               ref
+*/
+                                        // FIXME: принято  vvv src                               ref
 static bool checkIfAnswerEqual(const QuadraticEquationAnswer* mine, const QuadraticEquationAnswer* corr) {
     ///\throw mine should not be NULL
     ///\throw corr should not be NULL
@@ -111,9 +112,9 @@ CheckOnTestsOutput checkOnTests(const Tester* tester) {
     assert(tester != NULL);
     assert(tester->tests != NULL);
 
-    CheckOnTestsOutput result = {}; //FIXME:
+    CheckOnTestsOutput result = {};
     for (int i = 0; i < tester->cntOfTests; ++i) {
-        QuadraticEquationAnswer answer = {}; //FIXME:
+        QuadraticEquationAnswer answer = {};
         Test test = tester->tests[i];
         (*tester->GetSolutionsFunc)(&test.equation, &answer);
         if (!checkIfAnswerEqual(&answer, &test.answer)) {
@@ -158,7 +159,7 @@ void printAllTests(const Tester* tester) {
     assert(tester != NULL);
     assert(tester->tests != NULL);
 
-    printf("All tests:\n"); // FIXME;
+    printf("All tests:\n");
     for (int i = 0; i < tester->cntOfTests; ++i)
         printTest(tester, &tester->tests[i]);
 }
@@ -175,7 +176,7 @@ void printTestWithInd(const Tester* tester, int testIndex) {
 
     if (testIndex >= tester->cntOfTests) {
         LOG_ERROR("%s", TOO_FEW_TESTS_ERROR);
-        //printError("%s", TOO_FEW_TESTS_ERROR);
+        printError("%s", TOO_FEW_TESTS_ERROR);
         return;
     }
     printTest(tester, &tester->tests[testIndex]);
@@ -208,14 +209,14 @@ static bool isValidTest(const Test* test) {
             error = getPointValue(&test->equation, test->answer.root_1, &val);
             if (error) {
                 LOG_ERROR("%s", getErrorMessage(error));
-                //printError("%s", getErrorMessage(error));
+                printError("%s", getErrorMessage(error));
             }
             if (sign(val)) return false;
         case ONE_ROOT:
             error = getPointValue(&test->equation, test->answer.root_2, &val);
             if (error) {
                 LOG_ERROR("%s", getErrorMessage(error));
-                // printError("%s", getErrorMessage(error));
+                printError("%s", getErrorMessage(error));
             }
             if (sign(val)) return false;
 
@@ -227,7 +228,7 @@ static bool isValidTest(const Test* test) {
         default:
             assert(false);
             LOG_ERROR("%s", ILLEGAL_ARG_ERROR);
-            // printError("%s", ILLEGAL_ARG_ERROR);
+            printError("%s", ILLEGAL_ARG_ERROR);
             break;
     }
 
@@ -252,17 +253,13 @@ static int getCntOfTestsInSourceFile(FILE* source) {
 
     if (source == NULL) {
         LOG_ERROR("%s", INVALID_FILE_ERROR);
-        //printError("%s", INVALID_FILE_ERROR);
+        printError("%s", INVALID_FILE_ERROR);
         return -1;
     }
 
     int cntOfTests = 0;
     char line[LINE_BUFFER_SIZE] = {};
-    // strchr;
-    //FIXME: strch check for \n in line
-    //FIXME: change tests to const
     while (fgets(line, sizeof(line), source)) {
-        //printf("line : %s\n", line);
         if (!isFileLineGood(line))
             return -1;
         cntOfTests += line[0] == BREAK_CHAR;
@@ -281,7 +278,7 @@ static void modifyCurrentTest(Test* currentTest, int varInd, long double number)
 
         default:
             LOG_ERROR("%s", ILLEGAL_ARG_ERROR);
-            // printError("%s", ILLEGAL_ARG_ERROR);
+            printError("%s", ILLEGAL_ARG_ERROR);
             assert(false);
             break;
     }
@@ -295,7 +292,7 @@ static void chooseNumOfSols(QuadEqRootState* numOfSols, int varInd) {
 
         default:
             LOG_ERROR("%s", ILLEGAL_ARG_ERROR);
-            //printError("%s", ILLEGAL_ARG_ERROR);
+            printError("%s", ILLEGAL_ARG_ERROR);
             assert(false);
             break;
     }
@@ -311,7 +308,7 @@ static void readTestsFromSourceFile(Tester* tester, FILE* source, int cntOfTests
     rewind(source);
     if (source == NULL) {
         LOG_ERROR("%s", INVALID_FILE_ERROR);
-        //printError("%s", INVALID_FILE_ERROR);
+        printError("%s", INVALID_FILE_ERROR);
         return;
     }
 
@@ -381,7 +378,7 @@ static void readTests(Tester* tester, const char* testsFileSource) {
     FILE* source = fopen(testsFileSource, "r");
     if (source == NULL) {
         LOG_ERROR("%s", INVALID_FILE_ERROR);
-        //printError("%s", INVALID_FILE_ERROR);
+        printError("%s", INVALID_FILE_ERROR);
         return;
     }
 
@@ -420,8 +417,8 @@ void validateTester(Tester* tester, const char* testsFileSource) {
 
             LOG_ERROR("Test: %d\n", i);
             LOG_ERROR("%s", VALIDATION_FAIL_ERROR);
-            // printError("Test: %d\n", i);
-            // printError("%s", VALIDATION_FAIL_ERROR);
+            printError("Test: %d\n", i);
+            printError("%s", VALIDATION_FAIL_ERROR);
             return;
         }
     }
