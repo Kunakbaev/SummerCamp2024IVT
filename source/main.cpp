@@ -9,47 +9,47 @@
 #include <string.h>
 #include <assert.h>
 #include <stdlib.h>
-#include "../include/colourfullPrint.hpp"
+#include "../LoggerLib/colourfulPrintLib/colourfullPrint.h"
 #include "../include/testsGenerator.hpp"
 #include "../include/quadraticEquation.hpp"
 #include "../include/terminalArgs.hpp"
 
-
-
-// -u user input
-// -o specify output file
-// -h helping hint
-// --help
-// --output
-// --user
+extern "C" {
+    #include "../LoggerLib/logLib.h"
+}
 
 
 // ----------------------------- MAIN ----------------------------------------
-// ANSII colors
-
 
 
 void quadraticEquationShowcase(struct QuadraticEquation* equation, const char* outputFile);
 int runOnTests(char* testsFileSource);
-
-
 
 int main(int argc, const char* const argv[]) {
 #ifdef RUN_ON_TESTS
     return runOnTests(NULL);
 #endif
 
-    // changeTextColor(BLUE_COLOR);
-    // colourfullPrint("fdsakl\n");
-    // colourfullPrint("Hello world: %d %d\n", 10, 20);
-    // changeTextColor(YELLOW_COLOR);
-    // colourfullPrint("Hello world: %d %d %s\n", 10, 20, " I am green");
+    // ----------------------     LOGGER INIT      ----------------------------------
+
+    setLoggingLevel(DEBUG);
+    //stateLogFile("../loggingFile.txt");
+    LOG_DEBUG("i am debug\n");
+    LOG_INFO("i am info\n");
+    LOG_WARNING("i am warning\n");
+    LOG_ERROR("i am error\n");
+
+
+
+
+
+
+    // -----------------------------    GETING ARGS FROM CONSOLE     ----------------------------------
 
     // for (int i = 0; i < argc; ++i) {
     //     printf("%s\n", argv[i]);
     // }
 
-    // usecase of QuadraticEquation class
     struct QuadraticEquation equation = {};
 
     ArgsManager manager = {argc, argv};
@@ -62,15 +62,16 @@ int main(int argc, const char* const argv[]) {
     }
 
     const char* outputFile = parseOutputFile(&manager);
-    //printf("outpuFtile : %s\n", outputFile);
 
     bool isTestRun = false;
     char* testsFileSource = parseTestsArgs(&manager, &isTestRun);
-    printf("isTest : %d, TestSource : %s\n", isTestRun, testsFileSource);
+    //printf("isTest : %d, TestSource : %s\n", isTestRun, testsFileSource);
     if (isTestRun) {
         int code = runOnTests(testsFileSource);
         free(testsFileSource);
         testsFileSource = NULL;
+
+        destructLogger();
         return code;
     }
     free(testsFileSource);
@@ -78,12 +79,13 @@ int main(int argc, const char* const argv[]) {
 
     if (!parseUserInput(&manager, &equation))
         readEquation(&equation);
-
     quadraticEquationShowcase(&equation, outputFile);
 
+    destructLogger();
     return 0;
 }
 
+// usecase of QuadraticEquation class
 void quadraticEquationShowcase(struct QuadraticEquation* equation, const char* outputFile) {
     assert(equation != NULL);
 
@@ -113,8 +115,6 @@ int runOnTests(char* testsFileSource) {
     CheckOnTestsOutput result = checkOnTests(&tester);
     free(tester.membuffer);
     tester.membuffer = NULL;
-    // if (testsFileSource != NULL)
-    //     free((void*)tester.tests);
 
     return result.state;
 }

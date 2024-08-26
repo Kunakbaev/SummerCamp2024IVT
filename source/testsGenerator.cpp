@@ -15,7 +15,8 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "../include/colourfullPrint.hpp"
+#include "../LoggerLib/colourfulPrintLib/colourfullPrint.h"
+#include "../LoggerLib/logLib.h"
 #include "../include/quadraticEquation.hpp"
 #include "../include/testsGenerator.hpp"
 
@@ -90,7 +91,7 @@ static bool checkIfAnswerEqual(const QuadraticEquationAnswer* mine, const Quadra
             return (sign(mine->root_2 - corr->root_2) == 0);
         default:
             assert(false);
-            printError("%s", ILLEGAL_ARG_ERROR);
+            LOG_ERROR("%s", ILLEGAL_ARG_ERROR);
             break;
     }
     return false;
@@ -170,7 +171,8 @@ void printTestWithInd(const Tester* tester, int testIndex) {
     assert(tester != NULL && tester->tests != NULL);
 
     if (testIndex >= tester->cntOfTests) {
-        printError("%s", TOO_FEW_TESTS_ERROR);
+        LOG_ERROR("%s", TOO_FEW_TESTS_ERROR);
+        //printError("%s", TOO_FEW_TESTS_ERROR);
         return;
     }
     printTest(tester, &tester->tests[testIndex]);
@@ -201,13 +203,17 @@ static bool isValidTest(const Test* test) {
 
         case TWO_ROOTS:
             error = getPointValue(&test->equation, test->answer.root_1, &val);
-            if (error)
-                printError("%s", getErrorMessage(error));
+            if (error) {
+                LOG_ERROR("%s", getErrorMessage(error));
+                //printError("%s", getErrorMessage(error));
+            }
             if (sign(val)) return false;
         case ONE_ROOT:
             error = getPointValue(&test->equation, test->answer.root_2, &val);
-            if (error)
-                printError("%s", getErrorMessage(error));
+            if (error) {
+                LOG_ERROR("%s", getErrorMessage(error));
+                // printError("%s", getErrorMessage(error));
+            }
             if (sign(val)) return false;
 
             if (test->answer.numOfSols == ONE_ROOT &&
@@ -217,7 +223,8 @@ static bool isValidTest(const Test* test) {
 
         default:
             assert(false);
-            printError("%s", ILLEGAL_ARG_ERROR);
+            LOG_ERROR("%s", ILLEGAL_ARG_ERROR);
+            // printError("%s", ILLEGAL_ARG_ERROR);
             break;
     }
 
@@ -241,7 +248,8 @@ static int getCntOfTestsInSourceFile(FILE* source) {
     assert(source != NULL);
 
     if (source == NULL) {
-        printError("%s", INVALID_FILE_ERROR);
+        LOG_ERROR("%s", INVALID_FILE_ERROR);
+        //printError("%s", INVALID_FILE_ERROR);
         return -1;
     }
 
@@ -269,7 +277,8 @@ static void modifyCurrentTest(Test* currentTest, int varInd, long double number)
         case 4: currentTest->answer.root_2 = number; break;
 
         default:
-            printError("%s", ILLEGAL_ARG_ERROR);
+            LOG_ERROR("%s", ILLEGAL_ARG_ERROR);
+            // printError("%s", ILLEGAL_ARG_ERROR);
             assert(false);
             break;
     }
@@ -282,7 +291,8 @@ static void chooseNumOfSols(QuadEqRootState* numOfSols, int varInd) {
         case 5: *numOfSols = TWO_ROOTS; break;
 
         default:
-            printError("%s", ILLEGAL_ARG_ERROR);
+            LOG_ERROR("%s", ILLEGAL_ARG_ERROR);
+            //printError("%s", ILLEGAL_ARG_ERROR);
             assert(false);
             break;
     }
@@ -297,7 +307,8 @@ static void readTestsFromSourceFile(Tester* tester, FILE* source, int cntOfTests
 
     rewind(source);
     if (source == NULL) {
-        printError("%s", INVALID_FILE_ERROR);
+        LOG_ERROR("%s", INVALID_FILE_ERROR);
+        //printError("%s", INVALID_FILE_ERROR);
         return;
     }
 
@@ -366,7 +377,8 @@ static void readTests(Tester* tester, const char* testsFileSource) {
 
     FILE* source = fopen(testsFileSource, "r");
     if (source == NULL) {
-        printError("%s", INVALID_FILE_ERROR);
+        LOG_ERROR("%s", INVALID_FILE_ERROR);
+        //printError("%s", INVALID_FILE_ERROR);
         return;
     }
 
@@ -402,8 +414,11 @@ void validateTester(Tester* tester, const char* testsFileSource) {
         const Test* test = (&tester->tests[i]);
         if (!isValidTest(test)) {
             printTest(tester, test);
-            printError("Test: %d\n", i);
-            printError("%s", VALIDATION_FAIL_ERROR);
+
+            LOG_ERROR("Test: %d\n", i);
+            LOG_ERROR("%s", VALIDATION_FAIL_ERROR);
+            // printError("Test: %d\n", i);
+            // printError("%s", VALIDATION_FAIL_ERROR);
             return;
         }
     }

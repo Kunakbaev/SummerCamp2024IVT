@@ -15,6 +15,7 @@ BUILD_DIR        := building
 RUN_TESTS_DEFINE := -DRUN_ON_TESTS
 DEBUG            := 1
 ASSERT_DEFINE    :=
+LOGGER_LIB       := LoggerLib
 
 ifeq ($(DEBUG), 0)
 	ASSERT_DEFINE = -DNDEBUG
@@ -28,9 +29,15 @@ SRC := $(wildcard ./$(SOURCE_DIR)/*.cpp)
 OBJ := $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(notdir ${SRC}))
 
 # running all commands without output (@ at the beginning)
-$(LIB_RUN_NAME): $(OBJ)
+$(LIB_RUN_NAME): $(OBJ) $(BUILD_DIR)/logLib.o $(BUILD_DIR)/colourfulPrint.o
 	@$(CC) $^ -o $(BUILD_DIR)/$(LIB_RUN_NAME) $(CFLAGS)
-#
+
+$(BUILD_DIR)/logLib.o: $(LOGGER_LIB)/logLib.c
+	@$(CC) -c $^ $(CFLAGS) -o $@ $(ASSERT_DEFINE)
+
+$(BUILD_DIR)/colourfulPrint.o: $(LOGGER_LIB)/colourfulPrintLib/colourfullPrint.c
+	@$(CC) -c $^ $(CFLAGS) -o $@ $(ASSERT_DEFINE)
+
 $(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp $(BUILD_DIR)
 	@$(CC) -c $< $(CFLAGS) -o $@ $(ASSERT_DEFINE)
 
@@ -52,8 +59,14 @@ run: $(LIB_RUN_NAME)
 OBJ_TESTS := $(patsubst %.cpp, $(BUILD_DIR)/TESTS_%.o, $(notdir ${SRC}))
 
 # running all commands without output (@ at the beginning)
-$(TESTS_RUN_NAME): $(OBJ_TESTS)
+$(TESTS_RUN_NAME): $(OBJ_TESTS) $(BUILD_DIR)/TESTS_logLib.o $(BUILD_DIR)/TESTS_colourfulPrint.o
 	@$(CC) $^ -o $(BUILD_DIR)/$(TESTS_RUN_NAME) $(CFLAGS) $(RUN_TESTS_DEFINE)
+
+$(BUILD_DIR)/TESTS_logLib.o: $(LOGGER_LIB)/logLib.c
+	@$(CC) -c $^ $(CFLAGS) -o $@ $(ASSERT_DEFINE)
+
+$(BUILD_DIR)/TESTS_colourfulPrint.o: $(LOGGER_LIB)/colourfulPrintLib/colourfullPrint.c
+	@$(CC) -c $^ $(CFLAGS) -o $@ $(ASSERT_DEFINE)
 
 $(BUILD_DIR)/TESTS_%.o: $(SOURCE_DIR)/%.cpp $(BUILD_DIR)
 	@$(CC) -c $< $(CFLAGS) -o $@ $(ASSERT_DEFINE) $(RUN_TESTS_DEFINE)

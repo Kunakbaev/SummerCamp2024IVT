@@ -16,8 +16,12 @@
 #include <errno.h>
 #include <ctype.h>
 
-#include "../include/colourfullPrint.hpp"
+#include "../LoggerLib/colourfulPrintLib/colourfullPrint.h"
 #include "../include/quadraticEquation.hpp"
+
+extern "C" {
+    #include "../LoggerLib/logLib.h"
+}
 
 /*
 #define LOG_AND_RETURN(...) printError("Error occured, in FILE: %s, FUNCTION: %s, at LINE: %d\n", __FILE__, __FUNCTION__, __LINE__); \
@@ -26,8 +30,7 @@
 
 #define LOG_AND_RETURN(ERROR)                                                                                    \
     do {                                                                                                         \
-        printError("Error occured, in FILE: %s, FUNCTION: %s, at LINE: %d\n", __FILE__, __FUNCTION__, __LINE__); \
-        printError("%s", getErrorMessage(ERROR));                                                                \
+        LOG_ERROR("%s", getErrorMessage(ERROR));                                                                 \
         return ERROR;                                                                                            \
     } while(0)
 
@@ -159,23 +162,29 @@ static QuadEqErrors getCorrectCoef(const char* messageLine, long double* result)
 
         // if line was too long, error occurs
         if (inputLineLen - 1 > MAX_INPUT_LINE_LEN) {
-            printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG));
+            LOG_ERROR("%s", getErrorMessage(QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG));
+            // printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG));
             continue;
         }
 
         bool isOk = false;
         // checks if line is a valid long double, if it is result is saved in coef
         QuadEqErrors error = parseLongDoubleAndCheckValid(line, &coef, &isOk);
-        if (error != QUAD_EQ_ERRORS_OK)
-            printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG));
+        if (error != QUAD_EQ_ERRORS_OK) {
+            LOG_ERROR("%s", getErrorMessage(QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG));
+            // printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INPUT_LINE_TOO_LONG));
+        }
 
         if (isOk) {
-            if (fabsl(coef) > MAX_COEF_ABS_VALUE)
-                printError("%s", getErrorMessage(QUAD_EQ_ERRORS_VALUE_IS_TOO_BIG));
-            else
+            if (fabsl(coef) > MAX_COEF_ABS_VALUE) {
+                LOG_ERROR("%s", getErrorMessage(QUAD_EQ_ERRORS_VALUE_IS_TOO_BIG));
+                // printError("%s", getErrorMessage(QUAD_EQ_ERRORS_VALUE_IS_TOO_BIG));
+            } else {
                 isGoodNumber = true;
+            }
         } else {
-            printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INCORRECT_COEF_FORMAT));
+            LOG_ERROR("%s", getErrorMessage(QUAD_EQ_ERRORS_INCORRECT_COEF_FORMAT));
+            // printError("%s", getErrorMessage(QUAD_EQ_ERRORS_INCORRECT_COEF_FORMAT));
         }
     } while (!isGoodNumber); // until user will input correct coefficient
 
@@ -458,8 +467,9 @@ QuadEqErrors printSolutions(const struct QuadraticEquationAnswer* answer, int ou
         if (outFile == NULL)
             LOG_AND_RETURN(QUAD_EQ_ERRORS_INVALID_FILE);
 
-        changeTextColor(YELLOW_COLOR);
-        colourfullPrint("Output of solutions goes to file: %s\n", outputFile);
+        LOG_WARNING("Output of solutions goes to file: %s\n", outputFile);
+        // changeTextColor(YELLOW_COLOR);
+        // colourfullPrint("Output of solutions goes to file: %s\n", outputFile);
         stream = outFile;
     }
 

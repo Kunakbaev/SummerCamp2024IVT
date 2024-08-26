@@ -10,7 +10,8 @@
 #include <ctype.h>
 
 #include "../include/terminalArgs.hpp"
-#include "../include/colourfullPrint.hpp"
+#include "../LoggerLib/colourfulPrintLib/colourfullPrint.h"
+#include "../LoggerLib/logLib.h"
 
 /// @brief error occures if output file is not specified
 const char* const FILE_ARGUMENTS_ERROR       = "Error: file arguments are invalid\n";
@@ -69,7 +70,8 @@ void validateManager(const ArgsManager* manager) {
     for (int i = 1; i < manager->argc; ++i) {
         const char* flag = manager->argv[i];
         if (isParamFlag(flag) && !isKnownFlag(flag)) {
-            printError("%s", UNKNOWN_FLAGS_ERROR);
+            LOG_ERROR("%s", UNKNOWN_FLAGS_ERROR);
+            // printError("%s", UNKNOWN_FLAGS_ERROR);
             return;
         }
     }
@@ -136,7 +138,8 @@ const char* parseOutputFile(const ArgsManager* manager) {
 
     const int numNeededArgs = 1;
     if (!checkGoodParams(manager, ind, numNeededArgs)) {
-        printError("%s", FILE_ARGUMENTS_ERROR);
+        LOG_ERROR("%s", FILE_ARGUMENTS_ERROR);
+        //printError("%s", FILE_ARGUMENTS_ERROR);
         return NULL;
     }
 
@@ -159,7 +162,8 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
 
     const int numNeededArgs = 1;
     if (!checkGoodParams(manager, ind, numNeededArgs)) {
-        printError("%s", USER_INPUT_ARGUMENTS_ERROR);
+        LOG_ERROR("%s", USER_INPUT_ARGUMENTS_ERROR);
+        // printError("%s", USER_INPUT_ARGUMENTS_ERROR);
         return false;
     }
 
@@ -170,7 +174,8 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
     for (int i = 0; i < (int)strlen(line); ++i)
         cntBlanks += isblank(line[i]);
     if (cntBlanks != 2) {
-        printError("%s", USER_INPUT_ARGUMENTS_ERROR);
+        LOG_ERROR("%s", USER_INPUT_ARGUMENTS_ERROR);
+        //printError("%s", USER_INPUT_ARGUMENTS_ERROR);
         return false;
     }
     strcat(line, " ");
@@ -203,11 +208,13 @@ bool parseUserInput(const ArgsManager* manager, QuadraticEquation* eq) {
         QuadEqErrors error = parseLongDoubleAndCheckValid(word, arr[argInd], &isOk);
 
         if (error) {
-            printError("%s", getErrorMessage(error));
+            LOG_ERROR("%s", getErrorMessage(error));
+            // printError("%s", getErrorMessage(error));
             return false;
         }
         if (!isOk) {
-            printError("%s", INCORRECT_USER_INPUT_ERROR);
+            LOG_ERROR("%s", getErrorMessage(error));
+            // printError("%s", INCORRECT_USER_INPUT_ERROR);
             return false;
         }
         ++argInd;
